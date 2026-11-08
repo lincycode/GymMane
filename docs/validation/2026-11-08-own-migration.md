@@ -57,6 +57,8 @@
 
 文档核对已完成：PRODUCT.md 记录批准范围，DESIGN.md 与设计元数据记录真实主题和组件，未改主题源码。模拟器分辨率、密度和系统字号已恢复为初始值。
 
+最终安装后的 Android 应用信息页已核对 EnoGym 名称及融入 E 的铜色跑者图标，截图为 `artifacts/qa/2026-11-08/screens/enogym-system-app-icon.png`。隔离模拟器已关闭。
+
 最终 arm64 APK：`artifacts/apk/EnoGym-2.1.0-own.4-arm64-v8a-release.apk`。SHA-256：`0b4b9eaf5b0ee806de97b692d2b6817914549a6ac810fade4bf0d8cb7c0ccd8f`。该包仅更新同包同签名的个人版，不能覆盖原作者安装包或 EnoLift。
 
 ## 工具链与证据
@@ -65,6 +67,13 @@
 - Gradle 8.14 保持上游版本；镜像下载后核对[官方校验值](https://gradle.org/release-checksums/)：`efe9a3d147d948d7528a9887fa35abcf24ca1a43ad06439996490f77569b02d1`。
 - 网络镜像、依赖缓存和模拟器配置仅放在被忽略的 `.toolchain/`，不改变提交中的依赖版本或仓库地址。
 - 详细日志及合成测试 fixture 位于 `artifacts/qa/2026-11-08/`，不入 Git；生成入口为 `test/support/qa_fixture.dart`，不属于生产初始化流程。
+
+## 上游维护演练
+
+- 实现已本地提交为 `961c6d1`，通过 fast-forward 纳入 `own`；`main` 保持 `46d51f2`，无个人改动。
+- 从 `own` 创建 `codex/sync-v2.1.0-rehearsal`，合并稳定标签 `v2.1.0`，结果为 `Already up to date`；已验证该标签是当前版本祖先，工作树与已验收实现完全一致，然后回到 `own` 并删除临时分支。
+- 此次演练验证分支流程及现有基线，未模拟新版本冲突。收尾时再次获取上游因连接速率超时失败，保留之前核实的本地基线；不能据此声称当前远端仍无新提交。日志为 `artifacts/qa/2026-11-08/final-upstream-fetch.txt`。
+- 个人提交未 push，未创建 PR、发布标签或公开发布 APK。
 
 ## 使用路径与后续边界
 
