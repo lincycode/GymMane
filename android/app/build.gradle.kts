@@ -1,5 +1,4 @@
 import java.util.Properties
-import java.io.FileInputStream
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 
 plugins {
@@ -8,10 +7,30 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+val ownProperties = Properties().apply {
+    rootProject.file("../own.properties").inputStream().use { load(it) }
+}
 val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("key.properties")
+val keystorePropertiesFile = file(
+    System.getenv("GYMMANE_SIGNING_PROPERTIES")
+        ?: "${System.getProperty("user.home")}/.local/share/gymmane-own/signing.properties"
+)
 if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+}
+fun validateOwnReleaseSigning() {
+    require(keystorePropertiesFile.isFile) {
+        "EnoGym release signing is missing. Run python3 scripts/setup-own-signing.py first."
+    }
+    for (name in listOf("keyAlias", "keyPassword", "storeFile", "storePassword")) {
+        require(!keystoreProperties.getProperty(name).isNullOrBlank()) { "Missing release signing field: $name" }
+    }
+    require(file(keystoreProperties.getProperty("storeFile")).isFile) { "Release keystore is missing." }
+}
+gradle.taskGraph.whenReady {
+    if (allTasks.any { it.project == project && it.name.contains("release", ignoreCase = true) }) {
+        validateOwnReleaseSigning()
+    }
 }
 
 android {
@@ -30,11 +49,13 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.gymmane.app"
+        applicationId = ownProperties.getProperty("applicationId")
         minSdk = 24
         targetSdk = 36
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionCode = ownProperties.getProperty("versionCode").toInt()
+        versionName = ownProperties.getProperty("versionName")
+        manifestPlaceholders["ownAppName"] = ownProperties.getProperty("appName")
+        resValue("string", "own_app_name", ownProperties.getProperty("appName"))
     }
 
     dependenciesInfo {
@@ -54,12 +75,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            manifestPlaceholders["ownAppName"] = "${ownProperties.getProperty("appName")} Debug"
+        }
         release {
-            signingConfig = if (keystorePropertiesFile.exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 }

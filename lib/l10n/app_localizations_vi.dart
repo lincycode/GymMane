@@ -1377,7 +1377,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get importHint =>
-      'Chọn bản sao lưu .zip (hoặc .json cũ hơn) đã xuất từ GymMane. Thao tác này thay thế dữ liệu hiện tại, kể cả ảnh và video.';
+      'Chọn bản sao lưu .zip (hoặc .json cũ hơn) đã xuất từ EnoGym. Thao tác này thay thế dữ liệu hiện tại, kể cả ảnh và video.';
 
   @override
   String get import => 'Nhập';
@@ -1419,7 +1419,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get aboutGymmane => 'Giới thiệu GymMane';
+  String get aboutGymmane => 'Giới thiệu EnoGym';
 
   @override
   String get yourProfile => 'HỒ SƠ CỦA BẠN';
@@ -2172,7 +2172,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get aiIntro =>
-      'GymMane không bao giờ kết nối với AI. Bạn lấy danh sách bài tập ra, dán vào trợ lý mà bạn vẫn dùng, rồi mang câu trả lời của nó trở lại. Không gì tự rời khỏi điện thoại.';
+      'EnoGym không bao giờ kết nối với AI. Bạn lấy danh sách bài tập ra, dán vào trợ lý mà bạn vẫn dùng, rồi mang câu trả lời của nó trở lại. Không gì tự rời khỏi điện thoại.';
 
   @override
   String aiMissing(int n) {
@@ -2197,7 +2197,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get awardFirstStepName => 'Bước đầu tiên';
 
   @override
-  String get awardFirstStepLine => 'Chào mừng đến với GymMane. Huy chương này là quà tặng.';
+  String get awardFirstStepLine => 'Chào mừng đến với EnoGym. Huy chương này là quà tặng.';
 
   @override
   String get awardFirstWorkoutName => 'Buổi tập đầu tiên';
@@ -2791,7 +2791,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String shareMessage(String name) {
-    return '$name: mở tệp bằng GymMane để thêm vào.';
+    return '$name: mở tệp bằng EnoGym để thêm vào.';
   }
 
   @override
@@ -2799,7 +2799,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get importPasteHint =>
-      'Dán giáo án tập vào đây: giáo án được chia sẻ từ GymMane, câu trả lời của AI, JSON hoặc CSV.';
+      'Dán giáo án tập vào đây: giáo án được chia sẻ từ EnoGym, câu trả lời của AI, JSON hoặc CSV.';
 
   @override
   String get pasteAction => 'Dán';
@@ -2827,11 +2827,11 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get nothingToImport => 'Không có gì ở đây mà GymMane có thể nhập';
+  String get nothingToImport => 'Không có gì ở đây mà EnoGym có thể nhập';
 
   @override
   String get aiStepCopy =>
-      'Sao chép yêu cầu. Nó chứa danh sách bài tập của bạn và định dạng mà GymMane đọc được.';
+      'Sao chép yêu cầu. Nó chứa danh sách bài tập của bạn và định dạng mà EnoGym đọc được.';
 
   @override
   String get aiStepAsk =>
@@ -2981,7 +2981,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get shareIntroBody =>
-      'Gửi cho bạn tập, bạn bè hoặc gia đình. Họ sẽ nhận một tệp nhỏ mở được bằng GymMane và thêm vào chỉ với một lần chạm, kèm các hiệp và mức tạ.';
+      'Gửi cho bạn tập, bạn bè hoặc gia đình. Họ sẽ nhận một tệp nhỏ mở được bằng EnoGym và thêm vào chỉ với một lần chạm, kèm các hiệp và mức tạ.';
 
   @override
   String get removedFromRoutine => 'Đã gỡ khỏi giáo án tập';
@@ -3132,7 +3132,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get stepsInfoLocal =>
-      'Số bước chỉ nằm trên điện thoại của bạn. GymMane không bao giờ kết nối internet.';
+      'Số bước chỉ nằm trên điện thoại của bạn. EnoGym không bao giờ kết nối internet.';
 
   @override
   String get stepsInfoOff => 'Tắt bất cứ lúc nào trong Cài đặt hoặc trong Health Connect.';
@@ -4509,7 +4509,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nutritionAboutWhat =>
-      'Cách đơn giản để ghi bữa ăn, nước, đạm và thực phẩm bổ sung ngay cạnh các buổi tập. GymMane trước hết là ứng dụng tập gym: Dinh dưỡng có mặt để bạn giữ mọi thứ ở một chỗ, không phải để thay thế một ứng dụng ăn kiêng chuyên dụng.';
+      'Cách đơn giản để ghi bữa ăn, nước, đạm và thực phẩm bổ sung ngay cạnh các buổi tập. EnoGym trước hết là ứng dụng tập gym: Dinh dưỡng có mặt để bạn giữ mọi thứ ở một chỗ, không phải để thay thế một ứng dụng ăn kiêng chuyên dụng.';
 
   @override
   String get nutritionAboutScanTitle => 'Không bao giờ quét mã';
@@ -4523,7 +4523,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nutritionAboutLocal =>
-      'Hơn 500 thực phẩm có ảnh đi kèm sẵn trong ứng dụng. Bạn có thể tự thêm, đổi ảnh và sửa giá trị của chúng. Tất cả đều nằm trên điện thoại của bạn, như phần còn lại của GymMane.';
+      'Hơn 500 thực phẩm có ảnh đi kèm sẵn trong ứng dụng. Bạn có thể tự thêm, đổi ảnh và sửa giá trị của chúng. Tất cả đều nằm trên điện thoại của bạn, như phần còn lại của EnoGym.';
 
   @override
   String get nutritionAboutBetaTitle => 'Vẫn đang beta';
@@ -4584,7 +4584,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get notifSuppTap => 'Đánh dấu trong GymMane sau khi bạn đã dùng.';
+  String get notifSuppTap => 'Đánh dấu trong EnoGym sau khi bạn đã dùng.';
 
   @override
   String get suppNoneToday => 'Hôm nay không cần dùng gì.';
@@ -5470,7 +5470,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get ladderHint =>
-      'Sắp xếp các bậc từ dễ nhất đến khó nhất. Khi bạn tập 3 hiệp 8 lần lặp hai buổi liên tiếp (5 với các bài chậm), GymMane sẽ đề xuất bậc tiếp theo.';
+      'Sắp xếp các bậc từ dễ nhất đến khó nhất. Khi bạn tập 3 hiệp 8 lần lặp hai buổi liên tiếp (5 với các bài chậm), EnoGym sẽ đề xuất bậc tiếp theo.';
 
   @override
   String get ladderBuiltIn =>
@@ -6434,7 +6434,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get perfSheetHint =>
-      'GymMane dùng bao nhiêu tài nguyên điện thoại. Bạn có thể thay đổi từng phần bên dưới.';
+      'EnoGym dùng bao nhiêu tài nguyên điện thoại. Bạn có thể thay đổi từng phần bên dưới.';
 
   @override
   String get perfLite => 'Tiết kiệm';
@@ -6975,7 +6975,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get autoProgressHint =>
-      'Khi bạn bắt đầu buổi tập, GymMane sẽ điền bước tiếp theo cho từng bài tập. Với Thêm lần lặp, bạn thêm một lần lặp mỗi hiệp cho đến 12, sau đó mức tạ tăng lên và bạn bắt đầu lại từ 8. Bạn vẫn có thể điều chỉnh từng bài tập trong trang của nó.';
+      'Khi bạn bắt đầu buổi tập, EnoGym sẽ điền bước tiếp theo cho từng bài tập. Với Thêm lần lặp, bạn thêm một lần lặp mỗi hiệp cho đến 12, sau đó mức tạ tăng lên và bạn bắt đầu lại từ 8. Bạn vẫn có thể điều chỉnh từng bài tập trong trang của nó.';
 
   @override
   String get noteFolders => 'Thư mục';
@@ -7387,4 +7387,77 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mealAiNothingChosen => 'Turn on at least one food';
+
+  @override
+  String get ownManagePlan => 'Manage training plan';
+
+  @override
+  String get ownFromTemplate => 'Use a plan template';
+
+  @override
+  String get ownNewRoutine => 'New workout routine';
+
+  @override
+  String get ownWeeklySchedule => 'Weekly schedule';
+
+  @override
+  String get ownRotationOrder => 'Rotation order';
+
+  @override
+  String get ownSavedWeeks => 'Saved weekly plans';
+
+  @override
+  String get ownMyRoutines => 'My workout routines';
+
+  @override
+  String get ownPlanTemplates => 'Plan templates';
+
+  @override
+  String get ownPreviewTemplate => 'Preview template';
+
+  @override
+  String ownTemplateCreates(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n workout routines',
+      one: '1 workout routine',
+    );
+    return 'Creates $_temp0. No workouts are logged.';
+  }
+
+  @override
+  String get ownTemplateSchedule => 'Also fill my empty weekly schedule';
+
+  @override
+  String get ownTemplateKeepWeek => 'Only adds workout routines. Your existing schedule stays unchanged.';
+
+  @override
+  String get ownTemplateKeepRotation =>
+      'Only adds workout routines. Add them to your rotation when you are ready.';
+
+  @override
+  String get ownTemplateMissing =>
+      'Some exercises could not be matched. Nothing will be added until they are available.';
+
+  @override
+  String get ownTemplateAdd => 'Add workout routines';
+
+  @override
+  String get ownAttribution => 'Based on GymMane by InlitX';
+
+  @override
+  String get ownSourceCode => 'Personal version source';
+
+  @override
+  String get ownMaintainer => 'Customized and maintained by';
+
+  @override
+  String get ownOriginalAuthor => 'Original author';
+
+  @override
+  String get ownOriginalSource => 'Original project source';
+
+  @override
+  String get ownSupportOriginal => 'Support the original author';
 }

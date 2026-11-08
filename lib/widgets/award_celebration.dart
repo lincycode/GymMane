@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+import '../app/own_build.dart';
 import '../catalog/awards.dart';
 import '../catalog/medal_look.dart';
 import '../l10n/l10n.dart';
@@ -277,7 +278,7 @@ class _SaveCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(28, 36, 28, 32),
               child: Column(
                 children: [
-                  Text('GymMane', style: AppTheme.f(17, weight: FontWeight.w800, color: gc.text)),
+                  Text(ownAppName, style: AppTheme.f(17, weight: FontWeight.w800, color: gc.text)),
                   const Spacer(),
                   Medal(id: id, size: 208),
                   const SizedBox(height: 36),

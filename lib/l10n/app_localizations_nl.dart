@@ -1415,7 +1415,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get importHint =>
-      'Kies een .zip-back-up (of oudere .json) die uit GymMane is geëxporteerd. Dit vervangt je huidige gegevens, inclusief media.';
+      'Kies een .zip-back-up (of oudere .json) die uit EnoGym is geëxporteerd. Dit vervangt je huidige gegevens, inclusief media.';
 
   @override
   String get import => 'Importeren';
@@ -1468,7 +1468,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get aboutGymmane => 'Over GymMane';
+  String get aboutGymmane => 'Over EnoGym';
 
   @override
   String get yourProfile => 'JE PROFIEL';
@@ -2075,7 +2075,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get planNothing => 'Geen oefening uit dit bestand komt overeen met je bibliotheek';
 
   @override
-  String get planFailed => 'Dit bestand is geen routine die GymMane kan lezen';
+  String get planFailed => 'Dit bestand is geen routine die EnoGym kan lezen';
 
   @override
   String get routineGroup => 'Groep';
@@ -2230,7 +2230,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get aiIntro =>
-      'GymMane communiceert nooit rechtstreeks met AI. Je exporteert je oefeningenlijst, plakt die in de assistent die je al gebruikt en importeert daarna het antwoord. Niets verlaat je telefoon vanzelf.';
+      'EnoGym communiceert nooit rechtstreeks met AI. Je exporteert je oefeningenlijst, plakt die in de assistent die je al gebruikt en importeert daarna het antwoord. Niets verlaat je telefoon vanzelf.';
 
   @override
   String aiMissing(int n) {
@@ -2256,7 +2256,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get awardFirstStepName => 'Eerste stap';
 
   @override
-  String get awardFirstStepLine => 'Welkom bij GymMane. Deze krijg je cadeau.';
+  String get awardFirstStepLine => 'Welkom bij EnoGym. Deze krijg je cadeau.';
 
   @override
   String get awardFirstWorkoutName => 'Eerste training';
@@ -2857,15 +2857,14 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String shareMessage(String name) {
-    return '$name: open het bestand met GymMane om het toe te voegen.';
+    return '$name: open het bestand met EnoGym om het toe te voegen.';
   }
 
   @override
   String get importRoutines => 'Routines importeren';
 
   @override
-  String get importPasteHint =>
-      'Plak hier een routine: gedeeld vanuit GymMane, een AI-antwoord, JSON of CSV.';
+  String get importPasteHint => 'Plak hier een routine: gedeeld vanuit EnoGym, een AI-antwoord, JSON of CSV.';
 
   @override
   String get pasteAction => 'Plakken';
@@ -2897,11 +2896,11 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get nothingToImport => 'Niets hier dat GymMane kan importeren';
+  String get nothingToImport => 'Niets hier dat EnoGym kan importeren';
 
   @override
   String get aiStepCopy =>
-      'Kopieer het verzoek. Het bevat je oefeningenlijst en het formaat dat GymMane leest.';
+      'Kopieer het verzoek. Het bevat je oefeningenlijst en het formaat dat EnoGym leest.';
 
   @override
   String get aiStepAsk => 'Plak het in een AI en zeg wat je wilt: dagen per week, doel, hoeveel weken.';
@@ -3050,7 +3049,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get shareIntroBody =>
-      'Stuur hem naar je partner, een vriend of je familie. Ze krijgen een klein bestand dat in GymMane opent en hem met één tik toevoegt, met sets en gewichten.';
+      'Stuur hem naar je partner, een vriend of je familie. Ze krijgen een klein bestand dat in EnoGym opent en hem met één tik toevoegt, met sets en gewichten.';
 
   @override
   String get removedFromRoutine => 'Uit de routine gehaald';
@@ -3201,7 +3200,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get stepsInfoLocal =>
-      'Je stappen blijven op je telefoon. GymMane maakt nooit verbinding met internet.';
+      'Je stappen blijven op je telefoon. EnoGym maakt nooit verbinding met internet.';
 
   @override
   String get stepsInfoOff => 'Altijd uit te zetten, in Instellingen of in Health Connect.';
@@ -4616,7 +4615,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get nutritionAboutWhat =>
-      'Een eenvoudige manier om maaltijden, water, eiwit en supplementen bij te houden, direct naast je workouts. GymMane is in de eerste plaats een gym-app: voeding is er zodat je alles op één plek hebt, niet om een echte dieet-app te vervangen.';
+      'Een eenvoudige manier om maaltijden, water, eiwit en supplementen bij te houden, direct naast je workouts. EnoGym is in de eerste plaats een gym-app: voeding is er zodat je alles op één plek hebt, niet om een echte dieet-app te vervangen.';
 
   @override
   String get nutritionAboutScanTitle => 'Geen scanner, nooit';
@@ -4630,7 +4629,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get nutritionAboutLocal =>
-      'De app bevat meer dan 500 voedingsmiddelen met foto. Je kunt je eigen toevoegen, hun foto’s veranderen en hun waarden aanpassen. Alles blijft op je telefoon, net als de rest van GymMane.';
+      'De app bevat meer dan 500 voedingsmiddelen met foto. Je kunt je eigen toevoegen, hun foto’s veranderen en hun waarden aanpassen. Alles blijft op je telefoon, net als de rest van EnoGym.';
 
   @override
   String get nutritionAboutBetaTitle => 'Nog in bèta';
@@ -4696,7 +4695,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get notifSuppTap => 'Tick it off in GymMane once you\'ve taken it.';
+  String get notifSuppTap => 'Tick it off in EnoGym once you\'ve taken it.';
 
   @override
   String get suppNoneToday => 'Nothing to take today.';
@@ -5586,7 +5585,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get ladderHint =>
-      'Zet de stappen van makkelijk naar moeilijk. Doe je twee sessies op rij 3 sets van 8 (5 bij langzame), dan stelt GymMane de volgende voor.';
+      'Zet de stappen van makkelijk naar moeilijk. Doe je twee sessies op rij 3 sets van 8 (5 bij langzame), dan stelt EnoGym de volgende voor.';
 
   @override
   String get ladderBuiltIn =>
@@ -6573,7 +6572,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get perfSetting => 'Performance';
 
   @override
-  String get perfSheetHint => 'How much of your phone GymMane uses. You can change each part below.';
+  String get perfSheetHint => 'How much of your phone EnoGym uses. You can change each part below.';
 
   @override
   String get perfLite => 'Saver';
@@ -7114,7 +7113,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get autoProgressHint =>
-      'When you start a workout, GymMane fills in the next step for each exercise. With Add reps you add one rep per set up to 12, then the weight goes up and you start again at 8. You can still tune each exercise on its page.';
+      'When you start a workout, EnoGym fills in the next step for each exercise. With Add reps you add one rep per set up to 12, then the weight goes up and you start again at 8. You can still tune each exercise on its page.';
 
   @override
   String get noteFolders => 'Folders';
@@ -7534,4 +7533,77 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get mealAiNothingChosen => 'Turn on at least one food';
+
+  @override
+  String get ownManagePlan => 'Manage training plan';
+
+  @override
+  String get ownFromTemplate => 'Use a plan template';
+
+  @override
+  String get ownNewRoutine => 'New workout routine';
+
+  @override
+  String get ownWeeklySchedule => 'Weekly schedule';
+
+  @override
+  String get ownRotationOrder => 'Rotation order';
+
+  @override
+  String get ownSavedWeeks => 'Saved weekly plans';
+
+  @override
+  String get ownMyRoutines => 'My workout routines';
+
+  @override
+  String get ownPlanTemplates => 'Plan templates';
+
+  @override
+  String get ownPreviewTemplate => 'Preview template';
+
+  @override
+  String ownTemplateCreates(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n workout routines',
+      one: '1 workout routine',
+    );
+    return 'Creates $_temp0. No workouts are logged.';
+  }
+
+  @override
+  String get ownTemplateSchedule => 'Also fill my empty weekly schedule';
+
+  @override
+  String get ownTemplateKeepWeek => 'Only adds workout routines. Your existing schedule stays unchanged.';
+
+  @override
+  String get ownTemplateKeepRotation =>
+      'Only adds workout routines. Add them to your rotation when you are ready.';
+
+  @override
+  String get ownTemplateMissing =>
+      'Some exercises could not be matched. Nothing will be added until they are available.';
+
+  @override
+  String get ownTemplateAdd => 'Add workout routines';
+
+  @override
+  String get ownAttribution => 'Based on GymMane by InlitX';
+
+  @override
+  String get ownSourceCode => 'Personal version source';
+
+  @override
+  String get ownMaintainer => 'Customized and maintained by';
+
+  @override
+  String get ownOriginalAuthor => 'Original author';
+
+  @override
+  String get ownOriginalSource => 'Original project source';
+
+  @override
+  String get ownSupportOriginal => 'Support the original author';
 }

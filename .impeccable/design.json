@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-08T15:11:36.253030+00:00",
+  "title": "Design System: EnoGym",
+  "extensions": {
+    "nativePlatform": {
+      "framework": "Flutter",
+      "target": "Android",
+      "units": "DESIGN.md 的 px 表示 Flutter logical pixels；文本仍受原生文字缩放影响。",
+      "sourceOfTruth": [
+        "lib/theme/app_colors.dart",
+        "lib/theme/app_theme.dart",
+        "lib/widgets/ui_kit.dart"
+      ],
+      "scope": "2.1.0-own.4 incumbent refinement。没有合成色阶、HTML/CSS 控件副本或新增断点。",
+      "previewPolicy": "原生组件仅记录源码位置；components 留空，不把 CSS 模拟图当成 Flutter 的实际结果。"
+    },
+    "colorMeta": {
+      "light-ember": {
+        "role": "primary",
+        "displayName": "浅色主操作"
+      },
+      "dark-ember": {
+        "role": "primary",
+        "displayName": "深色主操作"
+      },
+      "light-accent": {
+        "role": "primary",
+        "displayName": "浅色铜色强调"
+      },
+      "dark-accent": {
+        "role": "primary",
+        "displayName": "深色铜色强调"
+      },
+      "light-sage": {
+        "role": "secondary",
+        "displayName": "浅色成功反馈"
+      },
+      "dark-sage": {
+        "role": "secondary",
+        "displayName": "深色成功反馈"
+      }
+    },
+    "typographyMeta": {
+      "d": {
+        "displayName": "AppTheme.d",
+        "purpose": "共享显示文字工厂；字号必须由调用方传入。"
+      },
+      "f": {
+        "displayName": "AppTheme.f",
+        "purpose": "共享标题与界面文字工厂；调用方可覆盖字重和行高。"
+      },
+      "s": {
+        "displayName": "AppTheme.s",
+        "purpose": "共享正文工厂；三个工厂均使用 Nunito。"
+      }
+    },
+    "shadows": [
+      {
+        "name": "navBar",
+        "value": "BoxShadow(color: Color(0x66000000), blurRadius: 28, offset: Offset(0, 10))",
+        "purpose": "app_shell.dart 中已有的底栏浮起阴影；Flutter 表达式，不是 CSS 换算。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "pressable-down",
+        "value": "90ms / Curves.easeOut / scale 0.965",
+        "purpose": "ui_kit.dart Pressable 默认按下反馈。"
+      },
+      {
+        "name": "pressable-release",
+        "value": "260ms / Curves.easeOutBack / scale 1",
+        "purpose": "ui_kit.dart Pressable 默认松开反馈；不表示帧率验收。"
+      },
+      {
+        "name": "segToggle",
+        "value": "320ms / Curves.easeOutCubic",
+        "purpose": "ui_kit.dart SegToggle 的选中底片与文字变化。"
+      }
+    ],
+    "nativeComponents": [
+      {
+        "name": "PrimaryButton",
+        "kind": "button",
+        "source": "lib/widgets/ui_kit.dart",
+        "description": "黑白主操作配对；主题与已记录的共享尺寸由 Flutter 实现管理。"
+      },
+      {
+        "name": "GhostButton",
+        "kind": "button",
+        "source": "lib/widgets/ui_kit.dart",
+        "description": "bgRaised2 上的次要 pill 操作；沿用 Pressable 反馈。"
+      },
+      {
+        "name": "SearchField",
+        "kind": "input",
+        "source": "lib/widgets/ui_kit.dart",
+        "description": "圆形端部输入；text 正文、textSecondary 提示、accent 光标。"
+      },
+      {
+        "name": "SoftCard",
+        "kind": "card",
+        "source": "lib/widgets/ui_kit.dart",
+        "description": "主题内容面与边界；保留调用方的 padding、radius 覆盖。"
+      },
+      {
+        "name": "Pill / SegToggle",
+        "kind": "chip",
+        "source": "lib/widgets/ui_kit.dart",
+        "description": "Pill 色彩由调用方传入；SegToggle 的选中项使用 ember / onEmber。"
+      },
+      {
+        "name": "_NavBar",
+        "kind": "nav",
+        "source": "lib/app/app_shell.dart",
+        "description": "保留四个位置、中央训练动作、Phosphor 选中态和 GlassSurface；不增加计划标签。"
+      },
+      {
+        "name": "AppSheet / ProgramTemplateSheet",
+        "kind": "custom",
+        "source": "lib/widgets/ui_kit.dart; lib/screens/program_template_sheet.dart",
+        "description": "共享顶部圆角与安全区；模板正文滚动，确认操作处于滚动区外。"
+      }
+    ]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "延续 GymMane 的熟悉训练界面",
+    "overview": "EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用铜色跑者与躯干负空间 E；这次身份调整没有建立第二套视觉体系。\n\n本文件记录 `2.1.0-own.4` 已实现的共享规则，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。",
+    "keyCharacteristics": [
+      "保留浅色、深色与 AMOLED 三套既有主题。",
+      "主操作使用黑白反差，铜色承担强调与品牌识别。",
+      "内容按圆角容器分组，浮层和底部导航保留原有层次。",
+      "品牌图形与个人维护归属并存，原作者署名持续可见。"
+    ],
+    "rules": [
+      {
+        "name": "The Theme Roles Rule",
+        "body": "组件从当前 `context.gc` 取色；品牌 PNG 的铜色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。",
+        "section": "colors"
+      },
+      {
+        "name": "The Required Labels Rule",
+        "body": "本轮计划分组与 About 归属字段使用 `textSecondary`；新增必要标签不能因沿用 `textTertiary` 就省略对实际背景的可读性检查。",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do 沿用当前主题、Nunito、Phosphor 与现有共享组件，保持原训练、计时和成就界面的视觉连续性。",
+      "Do 保留 EnoGym / Enoch 身份、跑者 E 素材来源及原作者与原项目署名。",
+      "Do 对新必要文字按实际主题和背景检查可读性，并保留可访问名称与稳定操作定位。"
+    ],
+    "donts": [
+      "Don't 因个人品牌更新而替换 GymMane 的主题、字体、导航或训练流程。",
+      "Don't 把本轮页面顺序、局部字号或验证范围误写成全应用规则或完整无障碍合规结论。",
+      "Don't 将旧组件的低对比度三级文字、装饰性眉题或字符图标提升为新增界面规范。"
+    ]
+  }
+}

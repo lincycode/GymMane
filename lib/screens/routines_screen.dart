@@ -19,6 +19,7 @@ import '../widgets/svg_icon.dart';
 import '../widgets/ui_kit.dart';
 import 'circuit_screen.dart';
 import 'plan_import_sheet.dart';
+import 'program_template_sheet.dart';
 
 class RoutinesScreen extends StatelessWidget {
   const RoutinesScreen({super.key});
@@ -64,6 +65,38 @@ class RoutinesScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 22),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                FilledButton.icon(
+                  key: const ValueKey('plan-create-from-template'),
+                  onPressed: () => _openTemplates(context),
+                  icon: const Icon(PhosphorIconsRegular.stack, size: 18),
+                  label: Text(t.ownFromTemplate),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: gc.ember,
+                    foregroundColor: gc.onEmber,
+                    minimumSize: const Size(0, 48),
+                    textStyle: AppTheme.f(14, weight: FontWeight.w700),
+                  ),
+                ),
+                OutlinedButton.icon(
+                  key: const ValueKey('plan-create-routine'),
+                  onPressed: () => fit.openRoutine(fit.createRoutine()),
+                  icon: const Icon(PhosphorIconsRegular.plus, size: 18),
+                  label: Text(t.ownNewRoutine),
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: gc.bgRaised2,
+                    foregroundColor: gc.text,
+                    side: BorderSide.none,
+                    minimumSize: const Size(0, 48),
+                    textStyle: AppTheme.f(14, weight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
             Row(children: [
               Expanded(
                 child: AnimatedSwitcher(
@@ -77,7 +110,7 @@ class RoutinesScreen extends StatelessWidget {
                   child: Padding(
                     key: ValueKey(fit.rotation),
                     padding: const EdgeInsetsDirectional.only(start: 4),
-                    child: Text((fit.rotation ? t.rotationTitle : t.weeklyPlan).toUpperCase(),
+                    child: Text((fit.rotation ? t.ownRotationOrder : t.ownWeeklySchedule).toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: _label(gc)),
@@ -130,7 +163,9 @@ class RoutinesScreen extends StatelessWidget {
                               child: Column(children: [for (int i = 0; i < 7; i++) _dayRow(context, gc, i)]),
                             ),
                             if (fit.activeRoutines.isNotEmpty) ...[
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 20),
+                              Text(t.ownSavedWeeks, style: _label(gc)),
+                              const SizedBox(height: 8),
                               _plansRow(context, gc),
                             ],
                           ],
@@ -141,7 +176,7 @@ class RoutinesScreen extends StatelessWidget {
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 4),
-              child: Text(t.yourRoutines.toUpperCase(), style: _label(gc)),
+              child: Text(t.ownMyRoutines.toUpperCase(), style: _label(gc)),
             ),
             const SizedBox(height: 12),
             if (fit.activeRoutines.isEmpty)
@@ -175,17 +210,6 @@ class RoutinesScreen extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 16),
-            PrimaryButton(
-              label: t.newRoutine,
-              onTap: () => fit.openRoutine(fit.createRoutine()),
-            ),
-            const SizedBox(height: 10),
-            GhostButton(
-              label: t.templates,
-              icon: PhosphorIconsRegular.stack,
-              onTap: () => _openTemplates(context),
-            ),
-            const SizedBox(height: 10),
             GhostButton(
               label: t.importRoutines,
               icon: PhosphorIconsRegular.downloadSimple,
@@ -207,7 +231,7 @@ class RoutinesScreen extends StatelessWidget {
   }
 
   TextStyle _label(GymColors gc) =>
-      AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4);
+      AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textSecondary, letterSpacing: 1.4);
 
   void _shareMenu(BuildContext context) {
     final gc = context.gc;
@@ -431,7 +455,7 @@ class RoutinesScreen extends StatelessWidget {
             children: [
               const SheetHandle(),
               const SizedBox(height: 16),
-              SheetTitle(t.templates, subtitle: t.templatesHint),
+              SheetTitle(t.ownPlanTemplates, subtitle: t.templatesHint),
               const SizedBox(height: 16),
               for (final template in kProgramTemplates)
                 _templateCard(context, gc, sheet, template),
@@ -444,49 +468,54 @@ class RoutinesScreen extends StatelessWidget {
 
   Widget _templateCard(
       BuildContext context, GymColors gc, BuildContext sheet, ProgramTemplate template) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        final made = fit.applyTemplate(template);
-        Navigator.pop(sheet);
-        if (made == 0 || !context.mounted) return;
-        showNotchToast(context, t.templateAdded(made),
-            subtitle: template.name, icon: PhosphorIconsFill.stack, accent: context.gc.sage);
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: gc.bgRaised2,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(color: gc.emberSoft, borderRadius: BorderRadius.circular(12)),
-              child: Icon(PhosphorIconsRegular.stack, size: 20, color: gc.ember),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(template.name,
-                      style: AppTheme.f(15, weight: FontWeight.w700, color: gc.text, letterSpacing: 0.5)),
-                  const SizedBox(height: 2),
-                  Text(t.templateBlurb(template.id),
-                      style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textSecondary, height: 1.35)),
-                  const SizedBox(height: 4),
-                  Text(t.dayCount(template.days.length),
-                      style: AppTheme.f(11, weight: FontWeight.w500, color: gc.textTertiary)),
-                ],
+    return Semantics(
+      button: true,
+      label: '${t.ownPreviewTemplate} ${template.name}',
+      child: GestureDetector(
+        key: ValueKey('plan-template-${template.id}'),
+        behavior: HitTestBehavior.opaque,
+        onTap: () async {
+          final made = await showProgramTemplatePreview(context, template);
+          if (made == null || made == 0 || !context.mounted || !sheet.mounted) return;
+          Navigator.pop(sheet);
+          showNotchToast(context, t.templateAdded(made),
+              icon: PhosphorIconsFill.stack, accent: context.gc.sage);
+        },
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: gc.bgRaised2,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(color: gc.emberSoft, borderRadius: BorderRadius.circular(12)),
+                child: Icon(PhosphorIconsRegular.stack, size: 20, color: gc.ember),
               ),
-            ),
-            const SizedBox(width: 8),
-            Icon(PhosphorIconsRegular.plus, size: 16, color: gc.textSecondary),
-          ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(template.name,
+                        style: AppTheme.f(15, weight: FontWeight.w700, color: gc.text, letterSpacing: 0.5)),
+                    const SizedBox(height: 2),
+                    Text(t.templateBlurb(template.id),
+                        style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textSecondary, height: 1.35)),
+                    const SizedBox(height: 4),
+                    Text(t.dayCount(template.days.length),
+                        style: AppTheme.f(11, weight: FontWeight.w500, color: gc.textTertiary)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(PhosphorIconsRegular.caretRight, size: 16, color: gc.textSecondary),
+            ],
+          ),
         ),
       ),
     );

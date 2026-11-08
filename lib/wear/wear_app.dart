@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import '../app/own_build.dart';
 import '../l10n/l10n.dart';
 import '../state/fit_state.dart';
 import '../theme/app_theme.dart';
@@ -14,7 +15,7 @@ class WearApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: fit,
       builder: (context, _) => MaterialApp(
-        title: 'GymMane',
+        title: ownAppName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.dark,
         darkTheme: AppTheme.dark,

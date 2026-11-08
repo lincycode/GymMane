@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app/own_build.dart';
 import '../catalog/exercise_catalog.dart';
 import '../l10n/l10n.dart';
 import '../state/fit_state.dart';
@@ -10,7 +11,7 @@ import '../theme/app_theme.dart';
 import '../widgets/entrance.dart';
 import '../widgets/ui_kit.dart';
 
-const kAppVersion = '2.1.0';
+const kAppVersion = ownAppVersion;
 const _kAuthor = 'InlitX';
 const _kAuthorUrl = 'https://github.com/InlitX';
 const _kRepoUrl = 'https://github.com/InlitX/GymMane';
@@ -41,6 +42,10 @@ class AboutScreen extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             _hero(gc),
+            const SizedBox(height: 16),
+            Text('${t.ownMaintainer} · $ownMaintainer',
+                textAlign: TextAlign.center,
+                style: AppTheme.f(14, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
             const SizedBox(height: 20),
             _group(gc, [
               (PhosphorIconsRegular.gift, t.freeForever, t.freeForeverWhy),
@@ -62,6 +67,10 @@ class AboutScreen extends StatelessWidget {
                 style: AppTheme.f(12.5, weight: FontWeight.w500, color: gc.textTertiary, height: 1.6)),
             const SizedBox(height: 20),
             _credits(gc),
+            const SizedBox(height: 16),
+            Text(t.ownAttribution,
+                textAlign: TextAlign.center,
+                style: AppTheme.f(14, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
           ]),
         ),
       ),
@@ -106,7 +115,7 @@ class AboutScreen extends StatelessWidget {
             bottom: 14,
             child: Opacity(
               opacity: 0.6,
-              child: Image.asset('assets/img/runner.png', fit: BoxFit.fitHeight),
+              child: Image.asset('assets/brand/enogym_foreground.png', fit: BoxFit.fitHeight),
             ),
           ),
           Padding(
@@ -115,8 +124,8 @@ class AboutScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('GymMane',
-                    style: AppTheme.f(33, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.5)),
+                Text(ownAppName,
+                    style: AppTheme.f(26, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.5)),
                 const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
@@ -184,9 +193,10 @@ class AboutScreen extends StatelessWidget {
 
   Widget _credits(GymColors gc) {
     final rows = <(IconData, String, String, String, Color?)>[
-      (PhosphorIconsFill.heart, t.madeWithLoveBy, _kAuthor, _kAuthorUrl, gc.accent),
-      (PhosphorIconsRegular.githubLogo, t.sourceCode, 'InlitX/GymMane', _kRepoUrl, null),
-      (PhosphorIconsRegular.coffee, t.buyCoffee, 'ko-fi.com/inlitx', _kKofiUrl, null),
+      (PhosphorIconsRegular.githubLogo, t.ownSourceCode, 'lincycode/GymMane', ownSourceUrl, null),
+      (PhosphorIconsFill.heart, t.ownOriginalAuthor, _kAuthor, _kAuthorUrl, gc.accent),
+      (PhosphorIconsRegular.githubLogo, t.ownOriginalSource, 'InlitX/GymMane', _kRepoUrl, null),
+      (PhosphorIconsRegular.coffee, t.ownSupportOriginal, 'ko-fi.com/inlitx', _kKofiUrl, null),
     ];
     return Container(
       clipBehavior: Clip.antiAlias,
@@ -225,7 +235,7 @@ class AboutScreen extends StatelessWidget {
                           children: [
                             Text(rows[i].$2.toUpperCase(),
                                 style: AppTheme.f(10,
-                                    weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.3)),
+                                    weight: FontWeight.w700, color: gc.textSecondary, letterSpacing: 1.3)),
                             const SizedBox(height: 4),
                             Text(rows[i].$3,
                                 style: AppTheme.f(15.5, weight: FontWeight.w700, color: gc.text)),

@@ -6,6 +6,7 @@ import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'app_shell.dart';
+import 'own_build.dart';
 
 class GymManeApp extends StatefulWidget {
   const GymManeApp({super.key});
@@ -39,7 +40,7 @@ class _GymManeAppState extends State<GymManeApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'GymMane',
+        title: ownAppName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         darkTheme: _look.$3 ? AppTheme.amoled : AppTheme.dark,

@@ -127,7 +127,7 @@ void main() {
 
   test('la lista para la IA lleva cabecera y ejercicios', () {
     final text = fit.planRequestText();
-    expect(text.contains('GymMane'), isTrue);
+    expect(text.contains('EnoGym'), isTrue);
     expect(text.contains('Barbell Bench Press'), isTrue);
     expect(text.split('\n').length, greaterThan(50));
   });

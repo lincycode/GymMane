@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -eu
+git diff --cached --check
+python3 scripts/check-staged-files.py

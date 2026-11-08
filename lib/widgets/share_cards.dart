@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../app/own_build.dart';
 import '../l10n/l10n.dart';
 import '../models/exercise.dart';
 import '../models/progress_shot.dart';
@@ -45,7 +46,7 @@ class ShareCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('GymMane', style: AppTheme.f(14, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.2)),
+              Text(ownAppName, style: AppTheme.f(14, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.2)),
               const Spacer(),
               Text(t.shortDateYear(DateTime.now()),
                   style: AppTheme.f(11, weight: FontWeight.w600, color: gc.textTertiary)),

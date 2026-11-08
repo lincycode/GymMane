@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../app/own_build.dart';
 import '../l10n/l10n.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
@@ -78,7 +79,7 @@ class HeatmapWidgetView extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text('GymMane',
+                  child: Text(ownAppName,
                       maxLines: 1,
                       overflow: TextOverflow.clip,
                       softWrap: false,

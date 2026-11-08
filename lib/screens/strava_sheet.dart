@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../app/own_build.dart';
 import '../l10n/l10n.dart';
 import '../models/workout.dart';
 import '../services/fit_export.dart';
@@ -223,7 +224,7 @@ Future<void> shareWorkoutFit(LoggedSession s) async {
     final dir = await getTemporaryDirectory();
     final d = s.date;
     final stamp = '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-    final file = File('${dir.path}/GymMane $stamp.fit');
+    final file = File('${dir.path}/$ownAppName $stamp.fit');
     await file.writeAsBytes(workoutFit(s, pounds: fit.isLb));
     await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: t.exportForStravaHint));
   } catch (_) {}

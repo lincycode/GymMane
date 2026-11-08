@@ -49,6 +49,17 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 14),
             ],
             _away(_weekCard(context, gc)),
+            const SizedBox(height: 8),
+            Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: TextButton.icon(
+                key: const ValueKey('home-manage-plan'),
+                onPressed: fit.goRoutines,
+                icon: const Icon(PhosphorIconsRegular.calendarBlank, size: 18),
+                label: Text(t.ownManagePlan),
+                style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
+              ),
+            ),
             if (fit.stepsOn && fit.stepsAvailable) ...[
               const SizedBox(height: 14),
               _away(StepsCard()),
@@ -118,15 +129,6 @@ class HomeScreen extends StatelessWidget {
             _away(Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Expanded(
-                  child: HomeFolder(
-                    title: _tc(t.routines),
-                    detail: t.routineCount(fit.activeRoutines.length),
-                    peek: const RoutinesPeek(),
-                    onTap: fit.goRoutines,
-                  ),
-                ),
-                const SizedBox(width: 10),
                 Expanded(
                   child: HomeFolder(
                     title: _tc(t.tools),

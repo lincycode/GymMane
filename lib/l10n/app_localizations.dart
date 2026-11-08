@@ -2595,7 +2595,7 @@ abstract class AppLocalizations {
   /// No description provided for @importHint.
   ///
   /// In en, this message translates to:
-  /// **'Choose a .zip (or older .json) backup exported from GymMane. This replaces your current data, media included.'**
+  /// **'Choose a .zip (or older .json) backup exported from EnoGym or GymMane. This replaces your current data, media included.'**
   String get importHint;
 
   /// No description provided for @import.
@@ -2667,7 +2667,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutGymmane.
   ///
   /// In en, this message translates to:
-  /// **'About GymMane'**
+  /// **'About EnoGym'**
   String get aboutGymmane;
 
   /// No description provided for @yourProfile.
@@ -4077,7 +4077,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiIntro.
   ///
   /// In en, this message translates to:
-  /// **'GymMane never talks to an AI. You take your exercise list out, you paste it into whatever assistant you already use, and you bring its answer back in. Nothing leaves the phone on its own.'**
+  /// **'EnoGym never talks to an AI. You take your exercise list out, you paste it into whatever assistant you already use, and you bring its answer back in. Nothing leaves the phone on its own.'**
   String get aiIntro;
 
   /// No description provided for @aiMissing.
@@ -4113,7 +4113,7 @@ abstract class AppLocalizations {
   /// No description provided for @awardFirstStepLine.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to GymMane. This one is on the house.'**
+  /// **'Welcome to EnoGym. This one is on the house.'**
   String get awardFirstStepLine;
 
   /// No description provided for @awardFirstWorkoutName.
@@ -5187,7 +5187,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareMessage.
   ///
   /// In en, this message translates to:
-  /// **'{name}: open the file with GymMane to add it.'**
+  /// **'{name}: open the file with EnoGym to add it.'**
   String shareMessage(String name);
 
   /// No description provided for @importRoutines.
@@ -5199,7 +5199,7 @@ abstract class AppLocalizations {
   /// No description provided for @importPasteHint.
   ///
   /// In en, this message translates to:
-  /// **'Paste a routine here: one shared from GymMane, an AI answer, JSON or CSV.'**
+  /// **'Paste a routine here: one shared from EnoGym, an AI answer, JSON or CSV.'**
   String get importPasteHint;
 
   /// No description provided for @pasteAction.
@@ -5241,13 +5241,13 @@ abstract class AppLocalizations {
   /// No description provided for @nothingToImport.
   ///
   /// In en, this message translates to:
-  /// **'Nothing here GymMane can import'**
+  /// **'Nothing here EnoGym can import'**
   String get nothingToImport;
 
   /// No description provided for @aiStepCopy.
   ///
   /// In en, this message translates to:
-  /// **'Copy the request. It carries your exercise list and the format GymMane reads.'**
+  /// **'Copy the request. It carries your exercise list and the format EnoGym reads.'**
   String get aiStepCopy;
 
   /// No description provided for @aiStepAsk.
@@ -5517,7 +5517,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareIntroBody.
   ///
   /// In en, this message translates to:
-  /// **'Send it to your partner, a friend or your family. They get a small file that opens in GymMane and adds it in one tap, with its sets and weights.'**
+  /// **'Send it to your partner, a friend or your family. They get a small file that opens in EnoGym and adds it in one tap, with its sets and weights.'**
   String get shareIntroBody;
 
   /// No description provided for @removedFromRoutine.
@@ -5787,7 +5787,7 @@ abstract class AppLocalizations {
   /// No description provided for @stepsInfoLocal.
   ///
   /// In en, this message translates to:
-  /// **'Your steps stay on your phone. GymMane never connects to the internet.'**
+  /// **'Your steps stay on your phone. EnoGym never connects to the internet.'**
   String get stepsInfoLocal;
 
   /// No description provided for @stepsInfoOff.
@@ -8175,7 +8175,7 @@ abstract class AppLocalizations {
   /// No description provided for @nutritionAboutWhat.
   ///
   /// In en, this message translates to:
-  /// **'A simple way to log meals, water, protein and supplements right next to your workouts. GymMane is a gym app first: Nutrition is here so you can keep everything in one place, not to replace a dedicated diet app.'**
+  /// **'A simple way to log meals, water, protein and supplements right next to your workouts. EnoGym is a gym app first: Nutrition is here so you can keep everything in one place, not to replace a dedicated diet app.'**
   String get nutritionAboutWhat;
 
   /// No description provided for @nutritionAboutScanTitle.
@@ -8199,7 +8199,7 @@ abstract class AppLocalizations {
   /// No description provided for @nutritionAboutLocal.
   ///
   /// In en, this message translates to:
-  /// **'More than 500 foods with photos come inside the app. You can add your own, change their photos and edit their values. It all stays on your phone, like the rest of GymMane.'**
+  /// **'More than 500 foods with photos come inside the app. You can add your own, change their photos and edit their values. It all stays on your phone, like the rest of EnoGym.'**
   String get nutritionAboutLocal;
 
   /// No description provided for @nutritionAboutBetaTitle.
@@ -8307,7 +8307,7 @@ abstract class AppLocalizations {
   /// No description provided for @notifSuppTap.
   ///
   /// In en, this message translates to:
-  /// **'Tick it off in GymMane once you\'ve taken it.'**
+  /// **'Tick it off in EnoGym once you\'ve taken it.'**
   String get notifSuppTap;
 
   /// No description provided for @suppNoneToday.
@@ -9915,7 +9915,7 @@ abstract class AppLocalizations {
   /// No description provided for @ladderHint.
   ///
   /// In en, this message translates to:
-  /// **'Order the steps from easiest to hardest. When you do 3 sets of 8 two sessions in a row (5 on slow ones), GymMane offers the next step.'**
+  /// **'Order the steps from easiest to hardest. When you do 3 sets of 8 two sessions in a row (5 on slow ones), EnoGym offers the next step.'**
   String get ladderHint;
 
   /// No description provided for @ladderBuiltIn.
@@ -11595,7 +11595,7 @@ abstract class AppLocalizations {
   /// No description provided for @perfSheetHint.
   ///
   /// In en, this message translates to:
-  /// **'How much of your phone GymMane uses. You can change each part below.'**
+  /// **'How much of your phone EnoGym uses. You can change each part below.'**
   String get perfSheetHint;
 
   /// No description provided for @perfLite.
@@ -12441,7 +12441,7 @@ abstract class AppLocalizations {
   /// No description provided for @autoProgressHint.
   ///
   /// In en, this message translates to:
-  /// **'When you start a workout, GymMane fills in the next step for each exercise. With Add reps you add one rep per set up to 12, then the weight goes up and you start again at 8. You can still tune each exercise on its page.'**
+  /// **'When you start a workout, EnoGym fills in the next step for each exercise. With Add reps you add one rep per set up to 12, then the weight goes up and you start again at 8. You can still tune each exercise on its page.'**
   String get autoProgressHint;
 
   /// No description provided for @noteFolders.
@@ -13115,6 +13115,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Turn on at least one food'**
   String get mealAiNothingChosen;
+
+  /// No description provided for @ownManagePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage training plan'**
+  String get ownManagePlan;
+
+  /// No description provided for @ownFromTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a plan template'**
+  String get ownFromTemplate;
+
+  /// No description provided for @ownNewRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'New workout routine'**
+  String get ownNewRoutine;
+
+  /// No description provided for @ownWeeklySchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly schedule'**
+  String get ownWeeklySchedule;
+
+  /// No description provided for @ownRotationOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotation order'**
+  String get ownRotationOrder;
+
+  /// No description provided for @ownSavedWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved weekly plans'**
+  String get ownSavedWeeks;
+
+  /// No description provided for @ownMyRoutines.
+  ///
+  /// In en, this message translates to:
+  /// **'My workout routines'**
+  String get ownMyRoutines;
+
+  /// No description provided for @ownPlanTemplates.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan templates'**
+  String get ownPlanTemplates;
+
+  /// No description provided for @ownPreviewTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview template'**
+  String get ownPreviewTemplate;
+
+  /// No description provided for @ownTemplateCreates.
+  ///
+  /// In en, this message translates to:
+  /// **'Creates {n, plural, =1{1 workout routine} other{{n} workout routines}}. No workouts are logged.'**
+  String ownTemplateCreates(int n);
+
+  /// No description provided for @ownTemplateSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Also fill my empty weekly schedule'**
+  String get ownTemplateSchedule;
+
+  /// No description provided for @ownTemplateKeepWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Only adds workout routines. Your existing schedule stays unchanged.'**
+  String get ownTemplateKeepWeek;
+
+  /// No description provided for @ownTemplateKeepRotation.
+  ///
+  /// In en, this message translates to:
+  /// **'Only adds workout routines. Add them to your rotation when you are ready.'**
+  String get ownTemplateKeepRotation;
+
+  /// No description provided for @ownTemplateMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Some exercises could not be matched. Nothing will be added until they are available.'**
+  String get ownTemplateMissing;
+
+  /// No description provided for @ownTemplateAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add workout routines'**
+  String get ownTemplateAdd;
+
+  /// No description provided for @ownAttribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on GymMane by InlitX'**
+  String get ownAttribution;
+
+  /// No description provided for @ownSourceCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal version source'**
+  String get ownSourceCode;
+
+  /// No description provided for @ownMaintainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customized and maintained by'**
+  String get ownMaintainer;
+
+  /// No description provided for @ownOriginalAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Original author'**
+  String get ownOriginalAuthor;
+
+  /// No description provided for @ownOriginalSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Original project source'**
+  String get ownOriginalSource;
+
+  /// No description provided for @ownSupportOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Support the original author'**
+  String get ownSupportOriginal;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

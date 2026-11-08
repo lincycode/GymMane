@@ -14,6 +14,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app/own_build.dart';
 import '../l10n/l10n.dart';
 import '../models/profile.dart';
 import '../services/alarm_store.dart';
@@ -667,7 +668,7 @@ class SettingsScreen extends StatelessWidget {
               (PhosphorIconsRegular.bug, t.reportBug, () => _open(context, _kBugUrl)),
               (PhosphorIconsRegular.lightbulb, t.requestFeature, () => _open(context, _kFeatureUrl)),
               (PhosphorIconsRegular.githubLogo, t.starOnGithub, () => _open(context, _kRepoUrl)),
-              (PhosphorIconsRegular.coffee, t.buyCoffee, () => _open(context, _kKofiUrl)),
+              (PhosphorIconsRegular.coffee, t.ownSupportOriginal, () => _open(context, _kKofiUrl)),
           ], hints: [t.supportHintBug, t.supportHintFeature, t.supportHintStar, t.supportHintCoffee]),
           const SizedBox(height: 28),
           Center(
@@ -1095,7 +1096,7 @@ class SettingsScreen extends StatelessWidget {
     await file.writeAsString(fit.exportCsv());
     if (!context.mounted) return;
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], subject: 'GymMane workouts'),
+      ShareParams(files: [XFile(file.path)], subject: '$ownAppName workouts'),
     );
   }
 
@@ -1134,7 +1135,7 @@ class SettingsScreen extends StatelessWidget {
     await file.writeAsBytes(await buildBackupZip(), flush: true);
     if (!context.mounted) return;
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], subject: 'GymMane backup'),
+      ShareParams(files: [XFile(file.path)], subject: '$ownAppName backup'),
     );
   }
 

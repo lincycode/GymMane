@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../app/own_build.dart';
 import '../l10n/l10n.dart';
 import '../services/plan_share.dart';
 import '../state/fit_state.dart';
@@ -228,7 +229,7 @@ class _AiPlanScreenState extends State<AiPlanScreen> {
       await file.writeAsString(fit.planRequestText());
       if (!mounted) return;
       await SharePlus.instance.share(
-        ShareParams(files: [XFile(file.path)], subject: 'GymMane exercises'),
+        ShareParams(files: [XFile(file.path)], subject: '$ownAppName exercises'),
       );
     } catch (_) {}
   }

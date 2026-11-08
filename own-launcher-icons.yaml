@@ -1,0 +1,8 @@
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: assets/brand/enogym_legacy.png
+  adaptive_icon_background: '#0C0B0A'
+  adaptive_icon_foreground: assets/brand/enogym_foreground.png
+  adaptive_icon_foreground_inset: 16
+  min_sdk_android: 24

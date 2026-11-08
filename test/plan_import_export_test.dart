@@ -139,10 +139,10 @@ void main() {
       expect(text.trimRight().endsWith('%%EOF'), isTrue);
       expect(RegExp(r'/Type /Page ').allMatches(text).length, 1);
       String hex(String v) => '<FEFF${v.codeUnits.map((u) => u.toRadixString(16).padLeft(4, '0').toUpperCase()).join()}>';
-      expect(text, contains('/Author ${hex('InlitX')}'));
+      expect(text, contains('/Author ${hex('Enoch')}'));
       expect(text, contains('/Lang (es)'));
-      expect(text, contains('<dc:creator><rdf:Seq><rdf:li>InlitX</rdf:li></rdf:Seq></dc:creator>'));
-      expect(text, contains('<xmp:CreatorTool>GymMane</xmp:CreatorTool>'));
+      expect(text, contains('<dc:creator><rdf:Seq><rdf:li>Enoch</rdf:li></rdf:Seq></dc:creator>'));
+      expect(text, contains('<xmp:CreatorTool>EnoGym</xmp:CreatorTool>'));
       final xref = int.parse(RegExp(r'startxref\n(\d+)').firstMatch(text)!.group(1)!);
       expect(text.substring(xref, xref + 4), 'xref');
       for (final m in RegExp(r'(\d{10}) 00000 n ').allMatches(text)) {

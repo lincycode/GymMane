@@ -72,3 +72,11 @@ site/
 # OS junk
 Thumbs.db
 desktop.ini
+
+# Personal build tools and verification artifacts
+/.toolchain/
+/artifacts/
+/android/own-signing.properties
+
+# Local design review captures
+/.impeccable/review/

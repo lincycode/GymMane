@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../app/own_build.dart';
 import '../catalog/awards.dart';
 import '../l10n/l10n.dart';
 import '../models/exercise.dart';
@@ -296,7 +297,7 @@ class _RecapScreenState extends State<RecapScreen> {
         _Page.sleep => t.recapTickSleep,
         _Page.food => t.recapTickFood,
         _Page.habit => t.weekday(_recap.favDay ?? 1),
-        _Page.share => 'GymMane',
+        _Page.share => ownAppName,
       };
 
   Future<void> _share() async {
@@ -313,7 +314,7 @@ class _RecapScreenState extends State<RecapScreen> {
       final file = File('${dir.path}/gymmane-${_recap.month.year}-${_recap.month.month}-$_variant.png');
       await file.writeAsBytes(data.buffer.asUint8List(), flush: true);
       if (!mounted) return;
-      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], subject: 'GymMane'));
+      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], subject: ownAppName));
     } catch (_) {
       if (mounted) {
         showNotchToast(context, t.shareFailed, icon: PhosphorIconsFill.warningCircle, accent: context.gc.warn);
@@ -1994,10 +1995,10 @@ class RecapCard extends StatelessWidget {
   Widget _mark(GymColors gc) => Row(mainAxisSize: MainAxisSize.min, children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: Image.asset('assets/img/app_icon.png', width: 20, height: 20),
+          child: Image.asset('assets/brand/enogym_icon.png', width: 20, height: 20),
         ),
         const SizedBox(width: 7),
-        Text('GymMane', style: AppTheme.f(14, weight: FontWeight.w900, color: gc.text, letterSpacing: -0.2, height: 1)),
+        Text(ownAppName, style: AppTheme.f(14, weight: FontWeight.w900, color: gc.text, letterSpacing: -0.2, height: 1)),
       ]);
 
   Widget _stat(GymColors gc, String value, String unit, String label, {double size = 28, bool soft = false}) => Column(

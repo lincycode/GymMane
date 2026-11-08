@@ -50,7 +50,7 @@ class _ReportDoc extends _PlanDoc {
     _newPage();
     final logo = Rect.fromLTWH(_x(_margin, 26), _y, 26, 26);
     _add((c) => _logo(c, logo));
-    _text('GymMane', _st(14, weight: FontWeight.w900), _margin + 34, _y + 4, 140);
+    _text(ownAppName, _st(14, weight: FontWeight.w900), _margin + 34, _y + 4, 140);
     final who = [if (fit.profile.name.trim().isNotEmpty) fit.profile.name.trim(), t.shortDateYear(now)].join(' · ');
     _text(who, _st(9, color: _faint), _pageW - _margin - 220, _y + 8, 220, align: TextAlign.end);
     _y += 50;

@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart' show listEquals, setEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../app/own_build.dart';
 import '../widgets/glass.dart';
 import '../catalog/exercise_catalog.dart';
 import '../catalog/program_templates.dart';
@@ -22,6 +23,7 @@ import '../models/nutrition.dart';
 import '../models/place.dart';
 import '../models/profile.dart';
 import '../models/progression.dart';
+import '../models/program_preview.dart';
 import '../models/progress_shot.dart';
 import '../models/workout.dart';
 import '../services/alarm_store.dart';
@@ -989,32 +991,31 @@ class FitState extends FitCore
 
   Exercise? matchExerciseByName(String name) => matchExercise(name, allExercises);
 
-  int applyTemplate(ProgramTemplate template) {
-    final planWasEmpty = weeklyPlan.isEmpty;
+  ProgramPreview previewTemplate(ProgramTemplate template) => resolveProgramTemplate(template, matchExerciseByName);
+
+  bool get canScheduleTemplate =>
+      !rotation && weeklyPlan.isEmpty && planExtras.values.every((ids) => ids.isEmpty) && planMoves.isEmpty;
+
+  int applyTemplate(ProgramTemplate template, {bool? schedule}) {
+    final preview = previewTemplate(template);
+    if (!preview.canApply) return 0;
+    final assignWeek = (schedule ?? canScheduleTemplate) && canScheduleTemplate;
     var made = 0;
     final sameDay = <String, String>{};
-    for (final day in template.days) {
-      final ids = <String, int>{};
-      for (final (name, sets) in day.exercises) {
-        final ex = matchExerciseByName(name);
-        if (ex == null || ids.containsKey(ex.id)) continue;
-        ids[ex.id] = sets;
-      }
-      if (ids.isEmpty) continue;
-      final key = '${day.name}|${ids.entries.map((e) => '${e.key}:${e.value}').join(',')}';
-      final twin = sameDay[key];
+    for (final day in preview.days) {
+      final twin = sameDay[day.identity];
       if (twin != null) {
-        if (planWasEmpty && day.weekday != null) weeklyPlan[day.weekday!] = twin;
+        if (assignWeek && day.weekday != null) weeklyPlan[day.weekday!] = twin;
         continue;
       }
       final id = createRoutine(day.name);
-      sameDay[key] = id;
+      sameDay[day.identity] = id;
       setRoutineGroup(id, template.name);
-      for (final entry in ids.entries) {
-        toggleRoutineExercise(id, entry.key);
-        bumpRoutineSets(id, entry.key, entry.value - kDefaultRoutineSets);
+      for (final (exercise, sets) in day.exercises) {
+        toggleRoutineExercise(id, exercise.id);
+        bumpRoutineSets(id, exercise.id, sets - kDefaultRoutineSets);
       }
-      if (planWasEmpty && day.weekday != null) weeklyPlan[day.weekday!] = id;
+      if (assignWeek && day.weekday != null) weeklyPlan[day.weekday!] = id;
       made++;
     }
     if (made == 0) return 0;
@@ -1060,7 +1061,7 @@ class FitState extends FitCore
     final recent = sessions.where((s) => s.date.isAfter(month)).length;
     final records = personalRecords.take(5).toList();
     final lines = <String>[
-      'GymMane · ${activePlace?.name ?? t.placeAll}',
+      '$ownAppName · ${activePlace?.name ?? t.placeAll}',
       t.planAboutMe,
       '- ${t.planBody(profile.sex == 'female' ? t.female : t.male, profile.age, heightLabel(profile.heightCm), weightLabel(profile.weightKg))}',
       '- ${t.planDays(weeklyTarget)}',

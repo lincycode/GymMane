@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../app/own_build.dart';
 import '../models/nutrition.dart';
 import 'food_library.dart';
 
@@ -967,7 +968,7 @@ String buildMealAiPrompt(MealAiBrief b) {
       ? 'a full day of eating, spread over these meals: $mealList'
       : 'ONE meal only: ${b.mealLabel} (id "${b.mealId}")';
   final lines = <String>[
-    'You are the nutrition assistant of GymMane, an offline fitness app. A program, not a person, will read your reply, so the format below is strict.',
+    'You are the nutrition assistant of $ownAppName, an offline fitness app. A program, not a person, will read your reply, so the format below is strict.',
     '',
     'REQUEST',
     '- I want $what.',

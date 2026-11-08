@@ -1,3 +1,5 @@
+> **EnoGym** — 个人维护分支，基于 GymMane v2.1.0。构建、签名、计划改动与上游同步见 [个人版维护说明](docs/OWN.md)。以下保留原项目介绍；个人版使用独立包名与签名，不能安装原作者 APK 来更新。
+
 <div align="center">
 
 <img src="docs/screenshots/banner-en.png" alt="GymMane — Lift. Log it. Grow." width="860" />

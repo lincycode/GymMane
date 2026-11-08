@@ -51,6 +51,8 @@ flutter:
   generate: true
 
   assets:
+    - assets/brand/enogym_foreground.png
+    - assets/brand/enogym_icon.png
     - assets/img/
     - assets/art/
     - assets/audio/

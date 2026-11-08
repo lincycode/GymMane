@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../app/own_build.dart';
 import '../catalog/body_art.dart';
 import '../catalog/exercise_catalog.dart';
 import '../l10n/l10n.dart';
@@ -397,7 +398,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 2,
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text('GymMane',
+                  child: Text(ownAppName,
                       style: AppTheme.f(44, weight: FontWeight.w800, color: gc.text, height: 1)),
                 ),
               ),

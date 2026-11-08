@@ -347,7 +347,7 @@ class MainActivity : FlutterActivity() {
             val values = ContentValues().apply {
                 put(MediaStore.Images.Media.DISPLAY_NAME, name)
                 put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-                put(MediaStore.Images.Media.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/GymMane")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/${getString(R.string.own_app_name)}")
                 put(MediaStore.Images.Media.IS_PENDING, 1)
             }
             val resolver = contentResolver
@@ -362,7 +362,7 @@ class MainActivity : FlutterActivity() {
 
         val dir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "GymMane",
+            getString(R.string.own_app_name),
         )
         if (!dir.exists() && !dir.mkdirs()) return false
         val file = File(dir, name)
