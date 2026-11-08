@@ -1,6 +1,6 @@
 # EnoGym 维护说明
 
-个人版以 GymMane v2.1.0（46d51f25415fe59415b330b851942e65923674ca）为基线，保留上游 Flutter 结构与离线数据格式。原版 README 和 CONTRIBUTING 继续适用；以下记录个人版差异。
+个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 532827f4b04d7af14b9031ac489f0fcce0dd1c74（2026-11-08 核实），保留上游 Flutter 结构与离线数据格式。原版 README 和 CONTRIBUTING 继续适用；以下记录个人版差异。
 
 ## 使用与范围
 
@@ -16,18 +16,17 @@
 
 显示名为 **EnoGym**，定制与维护为 **Enoch**。关于页保留「基于 InlitX 开发的 GymMane」、原作者与原项目链接；不能把原有代码和素材的作者改署为个人原创。
 
-启动器图标保留原铜色跑者轮廓，在躯干融入负空间 E。新素材在 `assets/brand/`；原始 `assets/icon/`、训练插图、字体和成就系统保留。新图标由图像生成工具基于原图修改；该派生素材随项目 GPLv3 与附加署名条款分发，具体来源记录在 PNG 元数据中。平台缩放与底色合成不改变图案。
+启动器图标采用 Enoch 于 2026-11-08 提供的第二张设计：米白跑者与斜体 E 融合，右下角为红色点缀。原稿完整保存在 `assets/brand/enogym_source.png`。内置图像工具只用于分离前景，去掉外部白边和预绘制圆角背景；Android 使用深色底和系统图标遮罩，避免双重圆角或白边。前景、图内负空间与红色元素的构图保留，平台缩放不重绘图案。PNG 元数据记录来源与处理方式。原始 `assets/icon/`、训练插图、字体和成就系统保留，项目许可证与原作者署名保留。
 
 重新生成图标：
 
 ```bash
 .toolchain/flutter/bin/dart --packages=.dart_tool/package_config.json scripts/generate_brand_assets.dart
 bash scripts/flutter.sh pub run flutter_launcher_icons -f own-launcher-icons.yaml
+.toolchain/flutter/bin/dart --packages=.dart_tool/package_config.json scripts/generate_brand_assets.dart --stamp-android
 ```
 
-PNG 来源元数据中的历史脚本名 `generate-brand-assets.dart` 对应当前 `generate_brand_assets.dart`；重命名未改变图案。
-
-图标工具使用锁文件中已有的 `image` 传递依赖，不增加应用依赖。生成后补充派生 PNG 的来源元数据，检查深浅背景和实际桌面大小。应用、分享卡片、小组件、通知及导出文档显示 EnoGym；内部存储键、备份格式和组件类名保持原值，旧备份仍可读取。既有用户资料不自动改名，新用户默认名称为 Enoch。
+图标工具使用锁文件中已有的 `image` 传递依赖，不增加应用依赖。`--stamp-android` 补充平台 PNG 的来源元数据，检查深浅背景和实际桌面大小。应用、分享卡片、小组件、通知及导出文档显示 EnoGym；内部存储键、备份格式和组件类名保持原值，旧备份仍可读取。既有用户资料不自动改名，新用户默认名称为 Enoch。
 
 ## 构建
 
@@ -48,7 +47,7 @@ bash scripts/build-own.sh release
 
 Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`，与官方 `com.gymmane.app` 及 EnoLift 隔离。Kotlin namespace 继续为 `com.gymmane.app`；它是组件类路径，不是安装包身份。小组件使用完整类名与当前应用 Context，通知使用显式目标组件，不能批量改掉这些引用。
 
-产物位于 `artifacts/apk/`。正式构建缺少专用签名会失败，不退回 Debug 签名。测试包与正式包不共享数据。
+产物位于 `artifacts/apk/`。一加 Ace 6T 使用最新版本的 `arm64-v8a-release.apk`；`armeabi-v7a` 面向旧款 32 位设备，`x86_64` 面向相应模拟器，不是额外功能版本。旧版本保留供回溯，日常只安装本次交付的最新 arm64 包。正式构建缺少专用签名会失败，不退回 Debug 签名。测试包与正式包不共享数据。
 
 ## 上游同步
 
@@ -58,7 +57,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 - own: 已验证个人版。
 - codex/功能名、codex/sync-版本: 短期开发与同步分支。
 
-先提交当前工作，再获取更新。main 可以跟随上游最新代码，个人版优先合并稳定标签。
+先提交当前工作，再获取更新。main 可以跟随上游最新代码，个人版通常优先合并稳定标签；本轮按明确要求合入 main 的 532827f，并记录完整提交身份。
 
 ```bash
 git fetch upstream --tags

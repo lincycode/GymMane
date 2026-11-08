@@ -79,13 +79,13 @@ components:
 
 **Creative North Star: "延续 GymMane 的熟悉训练界面"**
 
-EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用铜色跑者与躯干负空间 E；这次身份调整没有建立第二套视觉体系。
+EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用 Enoch 提供的米白跑者 E 与红色点缀；这次身份调整没有建立第二套视觉体系。
 
-本文件记录 `2.1.0-own.4` 已实现的共享规则，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。
+本文件记录 `2.1.0-own.5` 已实现的共享规则，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。
 
 **Key Characteristics:**
 - 保留浅色、深色与 AMOLED 三套既有主题。
-- 主操作使用黑白反差，铜色承担强调与品牌识别。
+- 主操作使用黑白反差，铜色仍承担界面强调，图标使用米白与红色。
 - 内容按圆角容器分组，浮层和底部导航保留原有层次。
 - 品牌图形与个人维护归属并存，原作者署名持续可见。
 
@@ -105,7 +105,7 @@ EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内
 
 浅色是暖灰底与白色内容面；深色和 AMOLED 使用各自的近黑底与灰色内容面。`text` 承担正文，`textSecondary` 承担次要但必须辨识的字段与说明。边界使用主题 `border`。
 
-**The Theme Roles Rule.** 组件从当前 `context.gc` 取色；品牌 PNG 的铜色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。
+**The Theme Roles Rule.** 组件从当前 `context.gc` 取色；品牌 PNG 的米白与红色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。
 
 **The Required Labels Rule.** 本轮计划分组与 About 归属字段使用 `textSecondary`；新增必要标签不能因沿用 `textTertiary` 就省略对实际背景的可读性检查。
 
@@ -127,7 +127,7 @@ Display、正文和圆润标题均使用项目内置 Nunito，`disp`、`sans`、
 
 ## Shapes
 
-`SoftCard`、sheet 与 pill 使用上方记录的共享默认圆角。About 分组使用 20，模板列表项使用 16；这是既有调用方式，不应为了整齐而全部归一。sheet 只对顶部圆角处理。保留真实的 Phosphor 和已有 SVG path 图标；跑者 E 使用 `assets/brand/enogym_foreground.png`。
+`SoftCard`、sheet 与 pill 使用上方记录的共享默认圆角。About 分组使用 20，模板列表项使用 16；这是既有调用方式，不应为了整齐而全部归一。sheet 只对顶部圆角处理。保留真实的 Phosphor 和已有 SVG path 图标；启动器前景使用 `assets/brand/enogym_foreground.png`，关于页使用同一高清前景加深色底，保证浅色主题辨识度和大尺寸清晰度。
 
 ## Components
 

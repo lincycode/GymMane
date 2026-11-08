@@ -115,7 +115,13 @@ class AboutScreen extends StatelessWidget {
             bottom: 14,
             child: Opacity(
               opacity: 0.6,
-              child: Image.asset('assets/brand/enogym_foreground.png', fit: BoxFit.fitHeight),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(22),
+                child: ColoredBox(
+                  color: const Color(0xFF0C0B0A),
+                  child: Image.asset('assets/brand/enogym_foreground.png', fit: BoxFit.fitHeight),
+                ),
+              ),
             ),
           ),
           Padding(
