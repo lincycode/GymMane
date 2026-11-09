@@ -47,7 +47,7 @@ bash scripts/build-own.sh release
 
 Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`，与官方 `com.gymmane.app` 及 EnoLift 隔离。Kotlin namespace 继续为 `com.gymmane.app`；它是组件类路径，不是安装包身份。小组件使用完整类名与当前应用 Context，通知使用显式目标组件，不能批量改掉这些引用。
 
-产物位于 `artifacts/apk/`。一加 Ace 6T 使用最新版本的 `arm64-v8a-release.apk`；`armeabi-v7a` 面向旧款 32 位设备，`x86_64` 面向相应模拟器，不是额外功能版本。旧版本保留供回溯，日常只安装本次交付的最新 arm64 包。正式构建缺少专用签名会失败，不退回 Debug 签名。测试包与正式包不共享数据。
+个人打包脚本只构建一加 Ace 6T 使用的 `arm64-v8a` 包。正式产物位于 `artifacts/apk/EnoGym-<版本>-Ace6T-arm64-v8a-release.apk`。正式构建缺少专用签名会失败，不退回 Debug 签名。测试包与正式包不共享数据。
 
 ## 上游同步
 
