@@ -4,7 +4,6 @@ import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'headphones.dart';
@@ -93,9 +92,6 @@ class Beeper {
   Future<void> go({required bool sound}) => _play(_TickKind.go, sound);
 
   Future<void> _play(_TickKind kind, bool sound) async {
-    try {
-      kind == _TickKind.go ? HapticFeedback.heavyImpact() : HapticFeedback.selectionClick();
-    } catch (_) {}
     if (!sound || !await _ready()) return;
     await _route();
     final path = kind == _TickKind.go ? _go : _tick;

@@ -23,6 +23,7 @@ class ProgressReminder {
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority,
         playSound: NotifSound.plays(SoundGroup.other),
+        enableVibration: false,
         sound: NotifSound.soundOf(SoundGroup.other),
       );
 
@@ -74,6 +75,7 @@ class ProgressReminder {
             importance: Importance.defaultImportance,
             priority: Priority.defaultPriority,
             playSound: NotifSound.plays(SoundGroup.other),
+            enableVibration: false,
             sound: NotifSound.soundOf(SoundGroup.other),
           ),
           iOS: _darwin,
@@ -96,7 +98,7 @@ class ProgressReminder {
         priority: live ? Priority.low : Priority.defaultPriority,
         playSound: !live && NotifSound.plays(SoundGroup.food),
         sound: live ? null : NotifSound.soundOf(SoundGroup.food),
-        enableVibration: !live,
+        enableVibration: false,
         ongoing: live,
         autoCancel: !live,
         onlyAlertOnce: live,

@@ -18,9 +18,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetPlugin
 import java.util.Calendar
@@ -232,7 +229,6 @@ abstract class VesselWidgetProvider(private val prefix: String, private val prev
             .putString(PENDING, if (pending.isEmpty()) entry else "$pending;$entry")
             .putInt("${prefix}_shown", before + state.step)
             .commit()
-        tick(context)
         val ids = AppWidgetManager.getInstance(context).getAppWidgetIds(ComponentName(context, javaClass))
         animate(context, ids, state, before, before + state.step, finish)
     }
@@ -293,24 +289,6 @@ abstract class VesselWidgetProvider(private val prefix: String, private val prev
             value = if (t >= 1f) toValue else fromValue + ((toValue - fromValue) * min(1f, t * 1.6f)).roundToInt()
             step(level, value, t >= 1f)
             return t >= 1f
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun tick(context: Context) {
-        runCatching {
-            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-            } else {
-                context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(12, 80))
-            } else {
-                vibrator.vibrate(12)
-            }
         }
     }
 

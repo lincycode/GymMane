@@ -2007,6 +2007,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Pause';
 
   @override
@@ -2702,11 +2707,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get alarmStyleQuiet => 'Lautlos beachten';
 
   @override
-  String get alarmStyleVibrate => 'Nur vibrieren';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '„Immer klingeln“ nutzt die Weckerlautstärke, auch im Lautlos-Modus. „Lautlos beachten“ nutzt die Benachrichtigungslautstärke und vibriert nur, wenn dein Handy stumm ist.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Vorschläge für dich';

@@ -2003,6 +2003,11 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Rust';
 
   @override
@@ -2696,11 +2701,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get alarmStyleQuiet => 'Stille modus volgen';
 
   @override
-  String get alarmStyleVibrate => 'Alleen trillen';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      'Altijd afgaan gebruikt het alarmvolume, ook op stil. Stille modus volgen gebruikt het meldingsvolume en trilt alleen als je telefoon op stil staat.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Voorgesteld voor jou';

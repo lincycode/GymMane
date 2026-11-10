@@ -1997,6 +1997,11 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Recupero';
 
   @override
@@ -2688,11 +2693,11 @@ class AppLocalizationsIt extends AppLocalizations {
   String get alarmStyleQuiet => 'Rispetta il silenzioso';
 
   @override
-  String get alarmStyleVibrate => 'Solo vibrazione';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '«Suona sempre» usa il volume della sveglia, anche in silenzioso. «Rispetta il silenzioso» usa quello delle notifiche e, se il telefono è muto, vibra soltanto.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Suggeriti per te';

@@ -736,8 +736,6 @@
   "alarmStyleTitle": "À la fin du repos",
   "alarmStyleLoud": "Toujours sonner",
   "alarmStyleQuiet": "Respecter le mode silencieux",
-  "alarmStyleVibrate": "Vibrer seulement",
-  "alarmStyleHint": "« Toujours sonner » utilise le volume de l'alarme, même en silencieux. « Respecter le mode silencieux » utilise le volume des notifications et vibre seulement quand le téléphone est muet.",
   "suggestedPicks": "Suggérés pour toi",
   "moreOptions": "Plus d'options",
   "suggestInWorkouts": "Suggérer dans les séances rapides",

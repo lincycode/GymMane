@@ -1094,8 +1094,9 @@ mixin WorkoutState on FitCore, SettingsState, LibraryState, PlacesState, StatsSt
     if (s == null) return;
     _restTimer?.cancel();
     s.restFrozen = null;
-    s.restEndsAt = DateTime.now().add(Duration(seconds: seconds));
-    RestAlarm.instance.schedule(Duration(seconds: seconds));
+    final endsAt = DateTime.now().add(Duration(seconds: seconds));
+    s.restEndsAt = endsAt;
+    RestAlarm.instance.schedule(endsAt);
     _restTimer = Timer.periodic(const Duration(seconds: 1), (t) {
       final live = session;
       if (live == null || live.restEndsAt == null) {
@@ -1322,7 +1323,7 @@ mixin WorkoutState on FitCore, SettingsState, LibraryState, PlacesState, StatsSt
 
   void _runHold() {
     _holdTimer?.cancel();
-    final sound = alarmStyle != 'vibrate';
+    final sound = alarmStyle != 'silent';
     var shownLead = holdLead;
     var shown = holdRemaining;
     _holdTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {

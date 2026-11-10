@@ -608,7 +608,7 @@ class _CircuitPlayerState extends State<_CircuitPlayer> {
   Circuit get _c => widget.circuit;
   _Phase get _phase => _phases[_index];
   bool get _paused => _pausedAt != null;
-  bool get _sound => fit.alarmStyle != 'vibrate';
+  bool get _sound => fit.alarmStyle != 'silent';
 
   int get _elapsedMs {
     final now = _pausedAt ?? DateTime.now();

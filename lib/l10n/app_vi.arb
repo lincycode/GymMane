@@ -795,8 +795,6 @@
   "alarmStyleTitle": "Khi hết giờ nghỉ",
   "alarmStyleLoud": "Luôn đổ chuông",
   "alarmStyleQuiet": "Theo chế độ im lặng",
-  "alarmStyleVibrate": "Chỉ rung",
-  "alarmStyleHint": "Luôn đổ chuông dùng âm lượng báo thức, kể cả khi đang im lặng. Theo chế độ im lặng dùng âm lượng thông báo và chỉ rung khi điện thoại tắt tiếng.",
   "suggestedPicks": "Gợi ý cho bạn",
   "moreOptions": "Thêm tùy chọn",
   "suggestInWorkouts": "Gợi ý trong buổi tập nhanh",

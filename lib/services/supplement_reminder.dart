@@ -26,6 +26,7 @@ class SupplementReminder {
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority,
         playSound: NotifSound.plays(SoundGroup.food),
+        enableVibration: false,
         sound: NotifSound.soundOf(SoundGroup.food),
       );
 

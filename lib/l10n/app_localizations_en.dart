@@ -1998,6 +1998,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Resting';
 
   @override
@@ -2689,11 +2694,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alarmStyleQuiet => 'Follow silent mode';
 
   @override
-  String get alarmStyleVibrate => 'Vibrate only';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      'Always ring uses the alarm volume, even on silent. Follow silent mode uses the notification volume and just vibrates when your phone is muted.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Suggested for you';
@@ -3705,7 +3710,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alarmSoundRowHint => 'What plays when the rest ends';
 
   @override
-  String get alarmStyleRowHint => 'Whether it rings in silent mode';
+  String get alarmStyleRowHint => 'Choose whether to play a sound';
 
   @override
   String get recommendedRowHint => 'Exercises we suggest on Home';

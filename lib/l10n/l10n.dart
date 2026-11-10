@@ -132,6 +132,12 @@ extension GymL10n on AppLocalizations {
         _ => toolHintWarmup,
       };
 
+  String templateTitle(String id, String fallback) =>
+      appLanguage == 'zh' ? kTemplateTitleZh[id] ?? fallback : fallback;
+
+  String templateDayName(String name) =>
+      appLanguage == 'zh' ? kTemplateDayZh[name] ?? name : name;
+
   String templateBlurb(String id) => switch (id) {
         'fullbody' => tplFullbody,
         'ppl' => tplPpl,

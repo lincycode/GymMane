@@ -1953,6 +1953,11 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => '휴식 중';
 
   @override
@@ -2629,11 +2634,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get alarmStyleQuiet => '무음 모드 따르기';
 
   @override
-  String get alarmStyleVibrate => '진동만';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '\'항상 울림\'은 무음 상태에서도 알람 볼륨을 사용합니다. \'무음 모드 따르기\'는 알림 볼륨을 사용하고, 휴대폰이 무음이면 진동만 합니다.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => '추천 운동';

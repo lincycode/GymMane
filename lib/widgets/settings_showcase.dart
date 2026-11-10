@@ -245,10 +245,10 @@ class AlertsShowcase extends StatelessWidget {
         ]),
       ]),
     );
-    final vibrate = _Tile(
+    final silent = _Tile(
       w: 150,
       h: 110,
-      child: Center(child: Icon(PhosphorIconsRegular.vibrate, size: 48, color: gc.textSecondary)),
+      child: Center(child: Icon(PhosphorIconsRegular.bellSlash, size: 48, color: gc.textSecondary)),
     );
     final live = _note(
       gc,
@@ -338,7 +338,7 @@ class AlertsShowcase extends StatelessWidget {
     return _Collage(
       offset: const Offset(22, -8),
       columns: [
-        _stack(20, [bell, sound, vibrate, _iconTile(gc, PhosphorIconsRegular.bellSlash, '22:00', '', gc.textSecondary),
+        _stack(20, [bell, sound, silent, _iconTile(gc, PhosphorIconsRegular.bellSlash, '22:00', '', gc.textSecondary),
             _iconTile(gc, PhosphorIconsRegular.alarm, '7:00', '', gc.accent)]),
         _stack(0, [
           restNote,
@@ -356,7 +356,7 @@ class AlertsShowcase extends StatelessWidget {
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               for (final (icon, on) in [
                 (PhosphorIconsRegular.speakerSlash, false),
-                (PhosphorIconsRegular.vibrate, true),
+                (PhosphorIconsRegular.bellSimple, true),
                 (PhosphorIconsRegular.speakerHigh, false),
               ])
                 Container(

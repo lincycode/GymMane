@@ -736,8 +736,6 @@
   "alarmStyleTitle": "休憩が終わったら",
   "alarmStyleLoud": "常に鳴らす",
   "alarmStyleQuiet": "マナーモードに従う",
-  "alarmStyleVibrate": "バイブのみ",
-  "alarmStyleHint": "「常に鳴らす」はマナーモードでもアラーム音量で鳴ります。「マナーモードに従う」は通知音量を使い、消音中はバイブだけになります。",
   "suggestedPicks": "あなたへのおすすめ",
   "moreOptions": "その他のオプション",
   "suggestInWorkouts": "クイックトレーニングで提案する",

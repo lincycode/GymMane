@@ -736,8 +736,6 @@
   "alarmStyleTitle": "Wenn die Pause endet",
   "alarmStyleLoud": "Immer klingeln",
   "alarmStyleQuiet": "Lautlos beachten",
-  "alarmStyleVibrate": "Nur vibrieren",
-  "alarmStyleHint": "„Immer klingeln“ nutzt die Weckerlautstärke, auch im Lautlos-Modus. „Lautlos beachten“ nutzt die Benachrichtigungslautstärke und vibriert nur, wenn dein Handy stumm ist.",
   "suggestedPicks": "Vorschläge für dich",
   "moreOptions": "Weitere Optionen",
   "suggestInWorkouts": "In schnellen Trainings vorschlagen",

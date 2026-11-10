@@ -32,6 +32,7 @@ Future<void> main() async {
   await MediaStore.init();
   await AlarmStore.init();
   await RestAlarm.instance.init();
+  await RestAlarm.instance.retireVibratingChannels();
   fit.loadFromStore();
   fit.syncPhotoReminder();
   fit.syncMeasureReminder();

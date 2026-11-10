@@ -25,7 +25,7 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.ByteArrayOutputStream
 
 object LiveNotifier {
-    private const val ID = 1003
+    private const val ID = 1006
     private const val CHANNEL = "live_workout_v2"
     private const val ACTION = "com.gymmane.app.LIVE_ACTION"
     private const val FLASH_MS = 1600L
@@ -82,7 +82,6 @@ object LiveNotifier {
         val actions = (a[if (restOver) "afterRest" else "actions"] as? List<*>)?.mapNotNull { it as? Map<*, *> } ?: emptyList()
         val accent = ctx.getColor(if (paused) R.color.live_pause else R.color.live_accent)
         val green = ctx.getColor(R.color.live_done)
-        val left = if (resting) ((restEnd - now + 999) / 1000).coerceAtLeast(0) else 0L
         val frozen = (a["elapsed"] as? Number)?.toLong() ?: 0L
 
         val open = PendingIntent.getActivity(
@@ -92,7 +91,7 @@ object LiveNotifier {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         val b = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ensureChannel(nm, a)
+            ensureChannel(ctx, nm, a)
             Notification.Builder(ctx, CHANNEL)
         } else {
             @Suppress("DEPRECATION")
@@ -124,14 +123,18 @@ object LiveNotifier {
             val elapsed = if (paused || startedAt <= 0) frozen else ((now - startedAt) / 1000).coerceAtLeast(0)
             b.setContentTitle(name)
             b.setContentText(if (countdown && restLabel.isNotEmpty()) "$restLabel · $detail" else detail)
-            b.setShowWhen(false)
+            val showCountdown = countdown && flash == null
+            if (showCountdown) {
+                b.setWhen(restEnd).setShowWhen(true).setUsesChronometer(true).setChronometerCountDown(true)
+            } else {
+                b.setShowWhen(false)
+            }
             val (fill, ink) = when {
                 flash != null -> R.color.live_done to R.color.live_on_done
                 paused -> R.color.live_pause to R.color.live_on_pause
-                countdown -> R.color.live_accent to R.color.live_on_accent
                 else -> R.color.live_idle to R.color.live_ink
             }
-            b.setLargeIcon(badge(ctx, flash ?: clock(if (countdown) left else elapsed), ctx.getColor(fill), ctx.getColor(ink)))
+            if (!showCountdown) b.setLargeIcon(badge(ctx, flash ?: clock(elapsed), ctx.getColor(fill), ctx.getColor(ink)))
             val style = Notification.ProgressStyle()
                 .setStyledByProgress(true)
                 .setProgressTrackerIcon(Icon.createWithResource(ctx, R.drawable.ic_live_tracker))
@@ -145,7 +148,7 @@ object LiveNotifier {
             }
             b.setStyle(style)
             b.extras.putBoolean("android.requestPromotedOngoing", true)
-            val shortText = flash ?: if (countdown) clock(left) else chip
+            val shortText = flash ?: if (countdown) null else chip
             if (shortText != null) b.setShortCriticalText(shortText)
         } else {
             val clockAt = if (resting) restEnd else startedAt
@@ -160,9 +163,7 @@ object LiveNotifier {
 
         var wait = Long.MAX_VALUE
         if (Build.VERSION.SDK_INT >= 36 && !paused) {
-            if (resting && left > 0) {
-                wait = ((restEnd - now) % 1000L).let { if (it <= 0L) 1000L else it } + 15L
-            } else if (!resting && startedAt > 0) {
+            if (!resting && startedAt > 0) {
                 wait = 1000L - (now - startedAt).mod(1000L) + 15L
             }
         }
@@ -257,15 +258,14 @@ object LiveNotifier {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun ensureChannel(nm: NotificationManager, a: Map<*, *>) {
-        if (nm.getNotificationChannel(CHANNEL) != null) return
+    private fun ensureChannel(ctx: Context, nm: NotificationManager, a: Map<*, *>) {
+        val name = a["channel"] as? String ?: ctx.getString(R.string.own_app_name)
+        val details = a["channelWhy"] as? String
+        val existing = nm.getNotificationChannel(CHANNEL)
+        if (existing != null && existing.name.toString() == name && existing.description == details) return
         nm.deleteNotificationChannel("live_workout")
-        val ch = NotificationChannel(
-            CHANNEL,
-            a["channel"] as? String ?: "Workout",
-            NotificationManager.IMPORTANCE_DEFAULT,
-        ).apply {
-            description = a["channelWhy"] as? String
+        val ch = NotificationChannel(CHANNEL, name, NotificationManager.IMPORTANCE_DEFAULT).apply {
+            description = details
             setSound(null, null)
             enableVibration(false)
             setShowBadge(false)
@@ -277,7 +277,14 @@ object LiveNotifier {
     fun cancel(ctx: Context) {
         main.removeCallbacks(tick)
         last = null
-        ctx.getSystemService(NotificationManager::class.java)?.cancel(ID)
+        ctx.getSystemService(NotificationManager::class.java)?.let { nm ->
+            nm.cancel(ID)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                nm.activeNotifications.any { it.id == 1003 && it.notification.channelId == CHANNEL }
+            ) {
+                nm.cancel(1003)
+            }
+        }
     }
 }
 

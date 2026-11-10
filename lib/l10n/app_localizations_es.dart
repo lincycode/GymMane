@@ -1998,6 +1998,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Descansando';
 
   @override
@@ -2689,11 +2694,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get alarmStyleQuiet => 'Respetar silencio';
 
   @override
-  String get alarmStyleVibrate => 'Solo vibrar';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '«Sonar siempre» usa el volumen de alarma, incluso en silencio. «Respetar el modo silencio» usa el de notificaciones y, si el móvil está silenciado, solo vibra.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Sugeridos para ti';

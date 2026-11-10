@@ -28,6 +28,7 @@ class TrainReminder {
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority,
         playSound: NotifSound.plays(SoundGroup.train),
+        enableVibration: false,
         sound: NotifSound.soundOf(SoundGroup.train),
       );
 

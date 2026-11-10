@@ -4,10 +4,12 @@ import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gymmane/catalog/exercise_catalog.dart';
+import 'package:gymmane/catalog/program_templates.dart';
 import 'package:gymmane/l10n/catalog_es.dart';
 import 'package:gymmane/l10n/l10n.dart';
 import 'package:gymmane/models/exercise.dart';
 import 'package:gymmane/models/workout.dart';
+import 'package:gymmane/services/food_library.dart';
 import 'package:gymmane/services/local_store.dart';
 import 'package:gymmane/state/fit_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,7 +43,8 @@ void main() {
         File('test/pending_translation_keys.txt').readAsLinesSync().where((k) => k.isNotEmpty).toSet();
     for (final code in appLanguages.where((c) => c != 'en')) {
       final keys = arb(code).keys.where((k) => !k.startsWith('@')).toSet();
-      expect(template.difference(keys).difference(beta).difference(pending), isEmpty,
+      final missing = template.difference(keys);
+      expect(code == 'zh' ? missing : missing.difference(beta).difference(pending), isEmpty,
           reason: 'faltan claves en $code');
       expect(keys.difference(template), isEmpty, reason: 'claves de más en $code');
     }
@@ -56,6 +59,29 @@ void main() {
           reason: 'catalogName es lo que tienen que llamar las pantallas, no e.name');
     }
     expect(fit.personalRecords, isA<List<PersonalRecord>>());
+  });
+
+  test('Simplified Chinese covers the exercise, template and dish catalogs', () {
+    setAppLanguage('zh');
+    final han = RegExp(r'[一-龯]');
+    for (final e in kExercises) {
+      expect(t.catalogName(e.id, e.name), contains(han), reason: e.id);
+      final steps = t.catalogSteps(e.id, e.steps);
+      expect(steps, hasLength(e.steps.length), reason: e.id);
+      expect(steps, everyElement(contains(han)), reason: e.id);
+    }
+    for (final template in kProgramTemplates) {
+      expect(t.templateTitle(template.id, template.name), contains(han), reason: template.id);
+      for (final day in template.days) {
+        expect(t.templateDayName(day.name), contains(han), reason: day.name);
+      }
+    }
+    FoodLibrary.parseDishes(File('assets/data/dishes.tsv').readAsStringSync());
+    addTearDown(FoodLibrary.dishes.clear);
+    expect(FoodLibrary.dishes, isNotEmpty);
+    for (final dish in FoodLibrary.dishes) {
+      expect(dish.nameFor('zh'), contains(han), reason: dish.id);
+    }
   });
 
   test('an unknown language falls back to English instead of crashing', () {

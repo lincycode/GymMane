@@ -736,8 +736,6 @@
   "alarmStyleTitle": "휴식이 끝나면",
   "alarmStyleLoud": "항상 울림",
   "alarmStyleQuiet": "무음 모드 따르기",
-  "alarmStyleVibrate": "진동만",
-  "alarmStyleHint": "'항상 울림'은 무음 상태에서도 알람 볼륨을 사용합니다. '무음 모드 따르기'는 알림 볼륨을 사용하고, 휴대폰이 무음이면 진동만 합니다.",
   "suggestedPicks": "추천 운동",
   "moreOptions": "더 보기",
   "suggestInWorkouts": "빠른 운동에서 추천",

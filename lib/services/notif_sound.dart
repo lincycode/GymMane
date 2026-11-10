@@ -24,6 +24,7 @@ class NotifSound {
   }
 
   static String channelOf(String base, SoundGroup g) {
+    base = 'no_vibration_$base';
     final u = uriOf(g);
     if (u.isEmpty) return base;
     if (u == silent) return '${base}_silent';
@@ -84,7 +85,8 @@ class NotifSound {
       final channels = await android?.getNotificationChannels() ?? const [];
       for (final c in channels) {
         if (keep.contains(c.id)) continue;
-        if (bases.any((b) => c.id == b || c.id.startsWith('${b}_'))) {
+        if (bases.any((b) => c.id == b || c.id.startsWith('${b}_') ||
+            c.id == 'no_vibration_$b' || c.id.startsWith('no_vibration_${b}_'))) {
           await android?.deleteNotificationChannel(channelId: c.id);
         }
       }

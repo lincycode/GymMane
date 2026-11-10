@@ -237,7 +237,7 @@ class FitState extends FitCore
     demoLoop = data['demoLoop'] as String? ?? 'always';
     sessionLayout = data['layout'] == 'list' ? 'list' : 'cards';
     heatmapRange = data['heatRange'] == 'year' ? 'year' : 'weeks';
-    alarmStyle = data['alarmStyle'] as String? ?? 'quiet';
+    alarmStyle = RestAlarm.normalizeStyle(data['alarmStyle']);
     RestAlarm.instance.style = alarmStyle;
     Beeper.instance.loud = alarmStyle == 'loud';
     noSuggest
@@ -1014,9 +1014,9 @@ class FitState extends FitCore
         if (assignWeek && day.weekday != null) weeklyPlan[day.weekday!] = twin;
         continue;
       }
-      final id = createRoutine(day.name);
+      final id = createRoutine(t.templateDayName(day.name));
       sameDay[day.identity] = id;
-      setRoutineGroup(id, template.name);
+      setRoutineGroup(id, t.templateTitle(template.id, template.name));
       for (final (exercise, sets) in day.exercises) {
         toggleRoutineExercise(id, exercise.id);
         bumpRoutineSets(id, exercise.id, sets - kDefaultRoutineSets);

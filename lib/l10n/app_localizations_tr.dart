@@ -2000,6 +2000,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Dinlenme';
 
   @override
@@ -2698,11 +2703,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get alarmStyleQuiet => 'Sessiz modu izle';
 
   @override
-  String get alarmStyleVibrate => 'Sadece titret';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '\"Her zaman çal\" sessizde bile alarm sesini kullanır. \"Sessiz modu izle\" bildirim sesini kullanır ve telefon sessizdeyken sadece titrer.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Senin için önerilenler';

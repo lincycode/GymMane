@@ -6,10 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.provider.MediaStore
 import android.view.InputDevice
 import android.view.MotionEvent
@@ -27,18 +25,14 @@ class MainActivity : FlutterActivity() {
     private var rotaryChannel: MethodChannel? = null
     private var openChannel: MethodChannel? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        window.decorView.isHapticFeedbackEnabled = false
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val messenger = flutterEngine.dartExecutor.binaryMessenger
-
-        MethodChannel(messenger, "gymmane/haptics").setMethodCallHandler { call, result ->
-            if (call.method != "buzz") {
-                result.notImplemented()
-                return@setMethodCallHandler
-            }
-            buzz()
-            result.success(null)
-        }
 
         val incoming = MethodChannel(messenger, "gymmane/incoming")
         incoming.setMethodCallHandler { call, result ->
@@ -326,21 +320,6 @@ class MainActivity : FlutterActivity() {
         }
     } catch (e: Exception) {
         null
-    }
-
-    @Suppress("DEPRECATION")
-    private fun buzz() {
-        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            (getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-        } else {
-            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        }
-        val pattern = longArrayOf(0, 350, 180, 350, 180, 600)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
-        } else {
-            vibrator.vibrate(pattern, -1)
-        }
     }
 
     private fun savePng(bytes: ByteArray, name: String): Boolean {

@@ -99,7 +99,7 @@ class LiveWorkout {
             ('pause', '▶  ${t.liveResume}')
           else ...[
             if (resting) ...[
-              ('add', '+15 s'),
+              ('add', t.liveAddSeconds(15)),
               ('skip', '${t.liveSkipRest}  ›'),
             ] else if (pendingIdx >= 0)
               ('done', '✓  ${t.liveDoneSet}')
@@ -146,7 +146,7 @@ class LiveWorkout {
         'done': finished,
         'progress': position,
         'chip': paused ? '❚❚' : chip,
-        'flash': flashing ? '+15 s' : null,
+        'flash': flashing ? t.liveAddSeconds(15) : null,
         'flashId': _flashes,
         'channel': t.liveChannel,
         'channelWhy': t.liveChannelWhy,

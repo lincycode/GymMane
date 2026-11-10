@@ -514,16 +514,16 @@ class SettingsScreen extends StatelessWidget {
                   _choiceRow(
                     context,
                     gc,
-                    PhosphorIconsRegular.vibrate,
+                    PhosphorIconsRegular.bellSimple,
                     t.alarmStyleTitle,
                     [
                       ('loud', t.alarmStyleLoud, PhosphorIconsRegular.bellRinging),
                       ('quiet', t.alarmStyleQuiet, PhosphorIconsRegular.bellSimpleSlash),
-                      ('vibrate', t.alarmStyleVibrate, PhosphorIconsRegular.vibrate),
+                      ('silent', t.alarmStyleNotificationOnly, PhosphorIconsRegular.bellSlash),
                     ],
                     () => fit.alarmStyle,
                     fit.setAlarmStyle,
-                    hint: t.alarmStyleHint,
+                    hint: t.alarmStyleSoundHint,
                     rowHint: t.alarmStyleRowHint,
                   ),
                   GestureDetector(
@@ -761,7 +761,7 @@ class SettingsScreen extends StatelessWidget {
         (t.trainReminder, PhosphorIconsRegular.bellSimple),
         (t.notifSoundSetting, PhosphorIconsRegular.musicNotes),
         (t.alarmSound, PhosphorIconsRegular.speakerHigh),
-        (t.alarmStyleTitle, PhosphorIconsRegular.vibrate),
+        (t.alarmStyleTitle, PhosphorIconsRegular.bellSimple),
         (t.toastSoundSetting, PhosphorIconsRegular.bellSimple),
       ]),
       _Category('home', PhosphorIconsRegular.house, _sectionTitle('home'), [

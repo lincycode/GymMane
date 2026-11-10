@@ -72,12 +72,18 @@ void main() {
     });
 
     test('the rest alarm style is kept and handed to the alarm', () {
-      fit.setAlarmStyle('vibrate');
-      expect(RestAlarm.instance.style, 'vibrate');
+      fit.setAlarmStyle('silent');
+      expect(RestAlarm.instance.style, 'silent');
       fit.persistNow();
       fit.loadFromStore();
-      expect(fit.alarmStyle, 'vibrate');
+      expect(fit.alarmStyle, 'silent');
       fit.setAlarmStyle('loud');
+    });
+
+    test('legacy vibration-only backups load without sound or vibration', () {
+      fit.applyBackup({'alarmStyle': 'vibrate'});
+      expect(fit.alarmStyle, 'silent');
+      expect(RestAlarm.instance.style, 'silent');
     });
 
     test('height reads in feet and inches for imperial users', () {

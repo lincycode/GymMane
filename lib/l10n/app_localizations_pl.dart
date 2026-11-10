@@ -1999,6 +1999,11 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Przerwa';
 
   @override
@@ -2691,11 +2696,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String get alarmStyleQuiet => 'Szanuj tryb cichy';
 
   @override
-  String get alarmStyleVibrate => 'Tylko wibracje';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '„Zawsze dzwoń” używa głośności alarmu, nawet w trybie cichym. „Szanuj tryb cichy” używa głośności powiadomień i tylko wibruje, gdy telefon jest wyciszony.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Polecane dla ciebie';

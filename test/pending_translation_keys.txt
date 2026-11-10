@@ -74,3 +74,6 @@ ownUpdateDownload
 ownUpdateInstall
 ownOfflineTraining
 ownOfflineTrainingWhy
+alarmStyleNotificationOnly
+alarmStyleSoundHint
+liveAddSeconds

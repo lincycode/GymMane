@@ -2007,6 +2007,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Repos';
 
   @override
@@ -2701,11 +2706,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get alarmStyleQuiet => 'Respecter le mode silencieux';
 
   @override
-  String get alarmStyleVibrate => 'Vibrer seulement';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '« Toujours sonner » utilise le volume de l\'alarme, même en silencieux. « Respecter le mode silencieux » utilise le volume des notifications et vibre seulement quand le téléphone est muet.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Suggérés pour toi';

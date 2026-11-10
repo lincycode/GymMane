@@ -2,7 +2,6 @@ import 'dart:io' show Platform;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' show AppLifecycleState, WidgetsBinding;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
@@ -10,57 +9,37 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../l10n/l10n.dart';
 import 'headphones.dart';
+import 'local_store.dart';
 
 class RestAlarm {
   RestAlarm._();
   static final RestAlarm instance = RestAlarm._();
 
   static const _id = 1001;
-  static const _haptics = MethodChannel('gymmane/haptics');
-  static final _pattern = Int64List.fromList([0, 350, 180, 350, 180, 600]);
+  static String normalizeStyle(Object? value) => switch (value) {
+    'loud' => 'loud',
+    'silent' || 'vibrate' => 'silent',
+    _ => 'quiet',
+  };
 
-  String style = 'loud';
+  String style = 'quiet';
 
-  AndroidNotificationDetails get _android => switch (style) {
-        'quiet' => AndroidNotificationDetails(
-            'rest_timer_quiet',
-            t.notifRestChannel,
-            channelDescription: t.notifRestChannelWhy,
-            importance: Importance.max,
-            priority: Priority.high,
-            category: AndroidNotificationCategory.reminder,
-            playSound: true,
-            enableVibration: true,
-            vibrationPattern: _pattern,
-            audioAttributesUsage: AudioAttributesUsage.notification,
-            visibility: NotificationVisibility.public,
-          ),
-        'vibrate' => AndroidNotificationDetails(
-            'rest_timer_vibrate',
-            t.notifRestChannel,
-            channelDescription: t.notifRestChannelWhy,
-            importance: Importance.max,
-            priority: Priority.high,
-            category: AndroidNotificationCategory.reminder,
-            playSound: false,
-            enableVibration: true,
-            vibrationPattern: _pattern,
-            visibility: NotificationVisibility.public,
-          ),
-        _ => AndroidNotificationDetails(
-            'rest_timer',
-            t.notifRestChannel,
-            channelDescription: t.notifRestChannelWhy,
-            importance: Importance.max,
-            priority: Priority.high,
-            category: AndroidNotificationCategory.alarm,
-            playSound: true,
-            enableVibration: true,
-            audioAttributesUsage: AudioAttributesUsage.alarm,
-            fullScreenIntent: true,
-            visibility: NotificationVisibility.public,
-          ),
-      };
+  bool get _loud => style == 'loud';
+  bool get _sound => style != 'silent';
+
+  AndroidNotificationDetails get _android => AndroidNotificationDetails(
+    'rest_end_$style',
+    t.notifRestChannel,
+    channelDescription: t.notifRestChannelWhy,
+    importance: Importance.max,
+    priority: Priority.high,
+    category: _loud ? AndroidNotificationCategory.alarm : AndroidNotificationCategory.reminder,
+    playSound: _sound,
+    enableVibration: false,
+    audioAttributesUsage: _loud ? AudioAttributesUsage.alarm : AudioAttributesUsage.notification,
+    fullScreenIntent: _loud,
+    visibility: NotificationVisibility.public,
+  );
 
   AndroidNotificationDetails get _androidAlert => AndroidNotificationDetails(
     'rest_timer_alert',
@@ -78,8 +57,8 @@ class RestAlarm {
     presentAlert: true,
     presentBanner: true,
     presentList: true,
-    presentSound: style != 'vibrate',
-    sound: style == 'vibrate' ? null : 'rest_over.wav',
+    presentSound: _sound,
+    sound: _sound ? 'rest_over.wav' : null,
     interruptionLevel: InterruptionLevel.timeSensitive,
   );
 
@@ -134,6 +113,29 @@ class RestAlarm {
     }
   }
 
+  Future<void> retireVibratingChannels() async {
+    const marker = 'non_vibrating_notifications';
+    if (!_ready || !Platform.isAndroid || Store.instance.note(marker) == '1') return;
+    try {
+      final android = _androidPlugin;
+      if (android == null) return;
+      await _plugin.cancel(id: _id);
+      final channels = await android.getNotificationChannels() ?? const [];
+      const legacy = {'rest_timer', 'rest_timer_quiet', 'rest_timer_vibrate'};
+      const reminderBases = ['train_reminder', 'supplement_reminder', 'fasting', 'progress_photo', 'measures'];
+      for (final channel in channels) {
+        final id = channel.id;
+        if (legacy.contains(id) ||
+            (id != 'fasting_live' && reminderBases.any((base) => id == base || id.startsWith('${base}_')))) {
+          await android.deleteNotificationChannel(channelId: id);
+        }
+      }
+      Store.instance.setNote(marker, '1');
+    } catch (e) {
+      debugPrint('Could not retire legacy notification channels: $e');
+    }
+  }
+
   String? _contextFor;
 
   Future<void> _applyAudioContext() async {
@@ -142,7 +144,6 @@ class RestAlarm {
     final phones = await Headphones.connected();
     final key = '$style/$phones';
     if (_contextFor == key) return;
-    final loud = style == 'loud';
     try {
       await player.setAudioContext(
         AudioContext(
@@ -152,13 +153,13 @@ class RestAlarm {
             contentType: AndroidContentType.sonification,
             usageType: phones
                 ? AndroidUsageType.media
-                : loud
+                : _loud
                     ? AndroidUsageType.alarm
                     : AndroidUsageType.notification,
             audioFocus: AndroidAudioFocus.gainTransientMayDuck,
           ),
           iOS: AudioContextIOS(
-            category: loud ? AVAudioSessionCategory.playback : AVAudioSessionCategory.ambient,
+            category: _loud ? AVAudioSessionCategory.playback : AVAudioSessionCategory.ambient,
             options: const {},
           ),
         ),
@@ -166,16 +167,6 @@ class RestAlarm {
       _contextFor = key;
     } catch (e) {
       debugPrint('RestAlarm (contexto de audio): $e');
-    }
-  }
-
-  Future<void> _buzz() async {
-    try {
-      await _haptics.invokeMethod<void>('buzz');
-    } catch (_) {
-      try {
-        HapticFeedback.heavyImpact();
-      } catch (_) {}
     }
   }
 
@@ -222,7 +213,7 @@ class RestAlarm {
   Future<void> fireNow() async {
     final visible = WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
     final custom = customSoundPath?.isNotEmpty ?? false;
-    if (_ready && !visible && !custom && Platform.isAndroid) {
+    if (_ready && !visible && (!custom || !_sound) && Platform.isAndroid) {
       _generation++;
       return;
     }
@@ -240,14 +231,7 @@ class RestAlarm {
         debugPrint('No se pudo mostrar el aviso: $e');
       }
     }
-    if (style == 'loud') {
-      try {
-        HapticFeedback.heavyImpact();
-      } catch (_) {}
-    } else {
-      await _buzz();
-    }
-    if (style == 'vibrate') return;
+    if (!_sound) return;
     final player = _player;
     if (player == null) return;
     try {
@@ -301,20 +285,20 @@ class RestAlarm {
     } catch (_) {}
   }
 
-  Future<void> schedule(Duration after) async {
+  Future<void> schedule(DateTime endsAt) async {
     if (!_ready) return;
     final mine = ++_generation;
 
     await ensurePermission();
     if (mine != _generation) return;
     await _clear();
-    if (mine != _generation) return;
+    if (mine != _generation || !endsAt.isAfter(DateTime.now())) return;
     try {
       await _plugin.zonedSchedule(
         id: _id,
         title: t.restOverTitle,
         body: t.restOverBody,
-        scheduledDate: tz.TZDateTime.now(tz.local).add(after),
+        scheduledDate: tz.TZDateTime.from(endsAt, tz.local),
         notificationDetails: NotificationDetails(android: _android, iOS: _darwin),
         androidScheduleMode: AndroidScheduleMode.alarmClock,
       );

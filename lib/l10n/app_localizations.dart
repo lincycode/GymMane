@@ -3672,6 +3672,12 @@ abstract class AppLocalizations {
   /// **'Set {n} of {total}'**
   String liveSet(int n, int total);
 
+  /// No description provided for @liveAddSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'+{n} s'**
+  String liveAddSeconds(int n);
+
   /// No description provided for @liveResting.
   ///
   /// In en, this message translates to:
@@ -4896,17 +4902,17 @@ abstract class AppLocalizations {
   /// **'Follow silent mode'**
   String get alarmStyleQuiet;
 
-  /// No description provided for @alarmStyleVibrate.
+  /// No description provided for @alarmStyleNotificationOnly.
   ///
   /// In en, this message translates to:
-  /// **'Vibrate only'**
-  String get alarmStyleVibrate;
+  /// **'Notification only'**
+  String get alarmStyleNotificationOnly;
 
-  /// No description provided for @alarmStyleHint.
+  /// No description provided for @alarmStyleSoundHint.
   ///
   /// In en, this message translates to:
-  /// **'Always ring uses the alarm volume, even on silent. Follow silent mode uses the notification volume and just vibrates when your phone is muted.'**
-  String get alarmStyleHint;
+  /// **'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.'**
+  String get alarmStyleSoundHint;
 
   /// No description provided for @suggestedPicks.
   ///
@@ -6669,7 +6675,7 @@ abstract class AppLocalizations {
   /// No description provided for @alarmStyleRowHint.
   ///
   /// In en, this message translates to:
-  /// **'Whether it rings in silent mode'**
+  /// **'Choose whether to play a sound'**
   String get alarmStyleRowHint;
 
   /// No description provided for @recommendedRowHint.

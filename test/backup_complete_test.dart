@@ -280,7 +280,7 @@ void main() {
     fit.setRoutineRest(routine.id, bench.id, 75);
     fit.setExerciseRest(squat.id, 0);
     fit.setHeatTone('green');
-    fit.setAlarmStyle('vibrate');
+    fit.setAlarmStyle('silent');
     fit.setEffortMode('rir');
     fit.setWeekStart(DateTime.sunday);
     fit.setDemoSize('small');
@@ -306,7 +306,7 @@ void main() {
     expect(fit.routineRest(fit.routines.single.id, bench.id), 75);
     expect(fit.restFor(squat.id), 0);
     expect(fit.heatTone, 'green');
-    expect(fit.alarmStyle, 'vibrate');
+    expect(fit.alarmStyle, 'silent');
     expect(fit.usesRir, isTrue);
     expect(fit.weekStartDay, DateTime.sunday);
     expect(fit.demoSize, 'small');

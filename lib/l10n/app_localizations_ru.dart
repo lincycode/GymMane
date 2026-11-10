@@ -2057,6 +2057,11 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Отдых';
 
   @override
@@ -2769,11 +2774,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get alarmStyleQuiet => 'Учитывать беззвучный режим';
 
   @override
-  String get alarmStyleVibrate => 'Только вибрация';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      '«Всегда звонить» использует громкость будильника даже в беззвучном режиме. «Учитывать беззвучный режим» использует громкость уведомлений и только вибрирует, если звук выключен.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Рекомендуем';

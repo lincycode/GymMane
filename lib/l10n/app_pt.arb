@@ -736,8 +736,6 @@
   "alarmStyleTitle": "Quando o descanso acaba",
   "alarmStyleLoud": "Tocar sempre",
   "alarmStyleQuiet": "Respeitar o modo silencioso",
-  "alarmStyleVibrate": "Só vibrar",
-  "alarmStyleHint": "«Tocar sempre» usa o volume de alarme, mesmo no silencioso. «Respeitar o modo silencioso» usa o volume de notificações e, com o celular no mudo, só vibra.",
   "suggestedPicks": "Sugeridos para você",
   "moreOptions": "Mais opções",
   "suggestInWorkouts": "Sugerir em treinos rápidos",

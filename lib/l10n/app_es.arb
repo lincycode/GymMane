@@ -795,8 +795,6 @@
   "alarmStyleTitle": "Al acabar el descanso",
   "alarmStyleLoud": "Sonar siempre",
   "alarmStyleQuiet": "Respetar silencio",
-  "alarmStyleVibrate": "Solo vibrar",
-  "alarmStyleHint": "«Sonar siempre» usa el volumen de alarma, incluso en silencio. «Respetar el modo silencio» usa el de notificaciones y, si el móvil está silenciado, solo vibra.",
   "suggestedPicks": "Sugeridos para ti",
   "moreOptions": "Más opciones",
   "suggestInWorkouts": "Sugerir en entrenos rápidos",

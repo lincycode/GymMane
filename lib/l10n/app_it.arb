@@ -736,8 +736,6 @@
   "alarmStyleTitle": "A fine recupero",
   "alarmStyleLoud": "Suona sempre",
   "alarmStyleQuiet": "Rispetta il silenzioso",
-  "alarmStyleVibrate": "Solo vibrazione",
-  "alarmStyleHint": "«Suona sempre» usa il volume della sveglia, anche in silenzioso. «Rispetta il silenzioso» usa quello delle notifiche e, se il telefono è muto, vibra soltanto.",
   "suggestedPicks": "Suggeriti per te",
   "moreOptions": "Altre opzioni",
   "suggestInWorkouts": "Suggerisci negli allenamenti rapidi",

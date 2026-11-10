@@ -45,6 +45,8 @@ void main() {
     calls.clear();
   }
 
+  DateTime deadline() => DateTime.now().add(const Duration(seconds: 90));
+
   test('init reaches the platform', () async {
     await RestAlarm.instance.init();
     expect(methods(), contains('initialize'));
@@ -52,7 +54,7 @@ void main() {
 
   test('scheduling actually reaches the platform', () async {
     await ready();
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
+    await RestAlarm.instance.schedule(deadline());
     expect(methods(), contains('zonedSchedule'),
         reason: 'si esto falta, para Android el aviso no existe');
   });
@@ -60,45 +62,53 @@ void main() {
   test('it schedules even when the platform claims notifications are off', () async {
     await ready();
     platformSaysEnabled = false;
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
+    await RestAlarm.instance.schedule(deadline());
     expect(methods(), contains('zonedSchedule'),
         reason: 'no nos negamos la alarma a nosotros mismos');
   });
 
   test('the permission is asked once, not on every set', () async {
     await ready();
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
+    await RestAlarm.instance.schedule(deadline());
+    await RestAlarm.instance.schedule(deadline());
+    await RestAlarm.instance.schedule(deadline());
     expect(methods().where((m) => m == 'requestNotificationsPermission').length, lessThanOrEqualTo(1));
   });
 
   test('it uses alarmClock — the mode Doze and MIUI cannot defer', () async {
     await ready();
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
+    await RestAlarm.instance.schedule(deadline());
     final specifics = (scheduleArgs()['platformSpecifics'] as Map).cast<String, dynamic>();
     expect(specifics['scheduleMode'], 'alarmClock');
   });
 
-  test('the alarm lands in the future, in real time', () async {
+  test('the notification is scheduled for the countdown deadline', () async {
     await ready();
-    final before = DateTime.now();
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
+    final end = deadline();
+    await RestAlarm.instance.schedule(end);
 
     final when = DateTime.parse(scheduleArgs()['scheduledDateTimeISO8601'] as String);
-    final delta = when.difference(before).inSeconds;
-    expect(delta, closeTo(90, 5), reason: 'un instante mal calculado = no suena');
+    expect(when.difference(end).inMilliseconds.abs(), lessThan(1000));
   });
 
-  test('the notification is an alarm, so it is loud', () async {
-    await ready();
-    await RestAlarm.instance.schedule(const Duration(seconds: 90));
-    final specifics = (scheduleArgs()['platformSpecifics'] as Map).cast<String, dynamic>();
-    expect(specifics['importance'], Importance.max.value);
-    expect(specifics['playSound'], true);
-    expect(specifics['fullScreenIntent'], true);
-    expect(specifics['channelId'], 'rest_timer');
-  });
+  for (final (style, sound, fullScreen) in [
+    ('loud', true, true),
+    ('quiet', true, false),
+    ('silent', false, false),
+  ]) {
+    test('$style keeps the rest notification without vibration', () async {
+      await ready();
+      RestAlarm.instance.style = style;
+      addTearDown(() => RestAlarm.instance.style = 'quiet');
+      await RestAlarm.instance.schedule(deadline());
+      final specifics = (scheduleArgs()['platformSpecifics'] as Map).cast<String, dynamic>();
+      expect(specifics['importance'], Importance.max.value);
+      expect(specifics['playSound'], sound);
+      expect(specifics['enableVibration'], false);
+      expect(specifics['fullScreenIntent'], fullScreen);
+      expect(specifics['channelId'], 'rest_end_$style');
+    });
+  }
 
   test('cancel reaches the platform', () async {
     await ready();
@@ -108,7 +118,7 @@ void main() {
 
   test('skipping the rest wins the race against a pending schedule', () async {
     await ready();
-    final pending = RestAlarm.instance.schedule(const Duration(seconds: 90));
+    final pending = RestAlarm.instance.schedule(deadline());
     await RestAlarm.instance.cancel();
     await pending;
 

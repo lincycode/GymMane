@@ -68,7 +68,7 @@ class _ProgramTemplateSheetState extends State<ProgramTemplateSheet> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      widget.template.name,
+                      t.templateTitle(widget.template.id, widget.template.name),
                       style: AppTheme.f(22, weight: FontWeight.w800, color: gc.text, height: 1.25),
                     ),
                     const SizedBox(height: 8),
@@ -107,7 +107,9 @@ class _ProgramTemplateSheetState extends State<ProgramTemplateSheet> {
                     for (final day in preview.days) ...[
                       const SizedBox(height: 24),
                       Text(
-                        day.weekday == null ? day.name : '${t.weekday(day.weekday!)} · ${day.name}',
+                        day.weekday == null
+                            ? t.templateDayName(day.name)
+                            : '${t.weekday(day.weekday!)} · ${t.templateDayName(day.name)}',
                         style: AppTheme.f(16, weight: FontWeight.w700, color: gc.text, height: 1.35),
                       ),
                       const SizedBox(height: 8),

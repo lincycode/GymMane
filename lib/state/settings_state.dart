@@ -186,7 +186,7 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   }
 
   void setAlarmStyle(String style) {
-    if (!const ['loud', 'quiet', 'vibrate'].contains(style)) return;
+    if (!const ['loud', 'quiet', 'silent'].contains(style)) return;
     alarmStyle = style;
     RestAlarm.instance.style = style;
     Beeper.instance.loud = style == 'loud';

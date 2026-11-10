@@ -1952,6 +1952,11 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'Đang nghỉ';
 
   @override
@@ -2632,11 +2637,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get alarmStyleQuiet => 'Theo chế độ im lặng';
 
   @override
-  String get alarmStyleVibrate => 'Chỉ rung';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      'Luôn đổ chuông dùng âm lượng báo thức, kể cả khi đang im lặng. Theo chế độ im lặng dùng âm lượng thông báo và chỉ rung khi điện thoại tắt tiếng.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Gợi ý cho bạn';

@@ -736,8 +736,6 @@
   "alarmStyleTitle": "Po końcu przerwy",
   "alarmStyleLoud": "Zawsze dzwoń",
   "alarmStyleQuiet": "Szanuj tryb cichy",
-  "alarmStyleVibrate": "Tylko wibracje",
-  "alarmStyleHint": "„Zawsze dzwoń” używa głośności alarmu, nawet w trybie cichym. „Szanuj tryb cichy” używa głośności powiadomień i tylko wibruje, gdy telefon jest wyciszony.",
   "suggestedPicks": "Polecane dla ciebie",
   "moreOptions": "Więcej opcji",
   "suggestInWorkouts": "Proponuj w szybkich treningach",

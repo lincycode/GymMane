@@ -1940,6 +1940,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => '休憩中';
 
   @override
@@ -2621,10 +2626,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get alarmStyleQuiet => 'マナーモードに従う';
 
   @override
-  String get alarmStyleVibrate => 'バイブのみ';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint => '「常に鳴らす」はマナーモードでもアラーム音量で鳴ります。「マナーモードに従う」は通知音量を使い、消音中はバイブだけになります。';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'あなたへのおすすめ';

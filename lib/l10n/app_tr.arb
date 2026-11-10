@@ -736,8 +736,6 @@
   "alarmStyleTitle": "Dinlenme bitince",
   "alarmStyleLoud": "Her zaman çal",
   "alarmStyleQuiet": "Sessiz modu izle",
-  "alarmStyleVibrate": "Sadece titret",
-  "alarmStyleHint": "\"Her zaman çal\" sessizde bile alarm sesini kullanır. \"Sessiz modu izle\" bildirim sesini kullanır ve telefon sessizdeyken sadece titrer.",
   "suggestedPicks": "Senin için önerilenler",
   "moreOptions": "Daha fazla seçenek",
   "suggestInWorkouts": "Hızlı antrenmanlarda öner",

@@ -470,7 +470,7 @@ class RoutinesScreen extends StatelessWidget {
       BuildContext context, GymColors gc, BuildContext sheet, ProgramTemplate template) {
     return Semantics(
       button: true,
-      label: '${t.ownPreviewTemplate} ${template.name}',
+      label: '${t.ownPreviewTemplate} ${t.templateTitle(template.id, template.name)}',
       child: GestureDetector(
         key: ValueKey('plan-template-${template.id}'),
         behavior: HitTestBehavior.opaque,
@@ -501,7 +501,7 @@ class RoutinesScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(template.name,
+                    Text(t.templateTitle(template.id, template.name),
                         style: AppTheme.f(15, weight: FontWeight.w700, color: gc.text, letterSpacing: 0.5)),
                     const SizedBox(height: 2),
                     Text(t.templateBlurb(template.id),

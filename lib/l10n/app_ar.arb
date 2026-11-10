@@ -736,8 +736,6 @@
   "alarmStyleTitle": "عند انتهاء الراحة",
   "alarmStyleLoud": "رنين دائمًا",
   "alarmStyleQuiet": "اتباع الوضع الصامت",
-  "alarmStyleVibrate": "اهتزاز فقط",
-  "alarmStyleHint": "«رنين دائمًا» يستخدم صوت المنبه حتى في الوضع الصامت. «اتباع الوضع الصامت» يستخدم صوت الإشعارات ويهتز فقط عندما يكون الهاتف صامتًا.",
   "suggestedPicks": "مقترحة لك",
   "moreOptions": "خيارات أخرى",
   "suggestInWorkouts": "اقتراحه في التمارين السريعة",

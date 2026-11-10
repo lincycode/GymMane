@@ -1989,6 +1989,11 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
   String get liveResting => 'در حال استراحت';
 
   @override
@@ -2678,11 +2683,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String get alarmStyleQuiet => 'پیروی از حالت بی‌صدا';
 
   @override
-  String get alarmStyleVibrate => 'فقط لرزش';
+  String get alarmStyleNotificationOnly => 'Notification only';
 
   @override
-  String get alarmStyleHint =>
-      'همیشه زنگ بزن از حجم آلارم استفاده می‌کند، حتی در بی‌صدا. پیروی از بی‌صدا از حجم اعلان استفاده می‌کند و وقتی گوشی بی‌صداست فقط می‌لرزد.';
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'پیشنهادی برای تو';

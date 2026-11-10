@@ -736,8 +736,6 @@
   "alarmStyleTitle": "Als de rust voorbij is",
   "alarmStyleLoud": "Altijd afgaan",
   "alarmStyleQuiet": "Stille modus volgen",
-  "alarmStyleVibrate": "Alleen trillen",
-  "alarmStyleHint": "Altijd afgaan gebruikt het alarmvolume, ook op stil. Stille modus volgen gebruikt het meldingsvolume en trilt alleen als je telefoon op stil staat.",
   "suggestedPicks": "Voorgesteld voor jou",
   "moreOptions": "Meer opties",
   "suggestInWorkouts": "Voorstellen in snelle trainingen",
