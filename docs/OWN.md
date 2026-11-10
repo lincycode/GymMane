@@ -82,7 +82,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
    bash scripts/publish-own-release.sh docs/releases/<版本>.md
    ```
 
-   脚本只接受干净的 `own`，推送本地 `own` 到 `origin/own`，创建携带全部资源的草稿 Release，然后发布为 latest。它不更改 `main` 或默认分支，不强推，不覆盖已有 Release。若草稿阶段失败，检查并补齐该草稿后再发布，避免重复版本。
+   脚本只接受干净的 `own`。它先核对上一版的版本码和签名。若本地更新清单的 SHA-256 与 GitHub 上的资源一致，就用这份副本完成校验。通过后推送 `own` 至 `origin/own`，创建带全部资源的草稿 Release，再发布为 latest。它不更改 `main` 或默认分支，不强推，不覆盖已有 Release。若草稿阶段失败，检查并补齐该草稿后再发布，避免重复版本。
 
 5. 确认 latest API 返回本版，并通过应用使用的资源 API 下载更新清单和 APK，核对 SHA-256。涉及更新器或安装兼容性时，用旧版模拟器走完整的检查、下载和覆盖安装流程，并核对数据。
 
