@@ -150,6 +150,13 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
           children: [
             if (_step == _UpdateStep.checking) Text(t.ownUpdateChecking),
             if (_step == _UpdateStep.current) Text(t.ownUpdateCurrent),
+            if (_error != null && _error != 'cancelled') ...[
+              Semantics(
+                liveRegion: true,
+                child: Text(_message(_error!), style: AppTheme.f(14, color: gc.text, height: 1.5)),
+              ),
+              const SizedBox(height: 16),
+            ],
             if (_update != null) ...[
               Text(
                 _update!.versionName,
@@ -174,13 +181,6 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
               if (_step == _UpdateStep.installing) Text(t.ownUpdateVerifying),
             ],
             if (_step == _UpdateStep.ready) ...[const SizedBox(height: 12), Text(t.ownUpdateReady)],
-            if (_error != null && _error != 'cancelled') ...[
-              const SizedBox(height: 12),
-              Semantics(
-                liveRegion: true,
-                child: Text(_message(_error!), style: AppTheme.f(14, color: gc.text, height: 1.5)),
-              ),
-            ],
             if (!busy) ...[
               const SizedBox(height: 16),
               Text(t.ownUpdatePrivacy, style: AppTheme.f(12, color: gc.textSecondary, height: 1.4)),

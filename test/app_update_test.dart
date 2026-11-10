@@ -36,6 +36,8 @@ Map<String, dynamic> _release() => {
         'name': name,
         'state': 'uploaded',
         'size': 4,
+        'id': name == _apk ? 1 : 2,
+        'url': 'https://api.github.com/repos/$updateRepository/releases/assets/${name == _apk ? 1 : 2}',
         'browser_download_url':
             'https://github.com/$updateRepository/releases/download/enogym-v2.1.0-own.7/$name',
       },
@@ -50,12 +52,23 @@ Map<String, Object> _installed(String path, {int code = 62}) => {
 };
 
 class _Headers extends Fake implements HttpHeaders {
+  final values = <String, Object>{};
   @override
-  void set(String name, Object value, {bool preserveHeaderCase = false}) {}
+  void set(String name, Object value, {bool preserveHeaderCase = false}) {
+    values[name] = value;
+  }
+
+  @override
+  String? value(String name) => values[name] as String?;
 }
 
 class _Response extends Stream<List<int>> implements HttpClientResponse {
-  _Response(this.bytes, {this.statusCode = 200, int? length}) : contentLength = length ?? bytes.length;
+  _Response(this.bytes, {this.statusCode = 200, int? length, String? location})
+    : contentLength = length ?? bytes.length {
+    if (location != null) headers.set(HttpHeaders.locationHeader, location);
+  }
+  @override
+  final headers = _Headers();
   final List<int> bytes;
   @override
   final int statusCode;
@@ -86,10 +99,18 @@ class _Request extends Fake implements HttpClientRequest {
 class _Client extends Fake implements HttpClient {
   _Client(this.responses);
   final List<_Response> responses;
+  final requests = <_Request>[];
+  final urls = <Uri>[];
   @override
   set connectionTimeout(Duration? value) {}
   @override
-  Future<HttpClientRequest> getUrl(Uri url) async => _Request(responses.removeAt(0));
+  Future<HttpClientRequest> getUrl(Uri url) async {
+    urls.add(url);
+    final request = _Request(responses.removeAt(0));
+    requests.add(request);
+    return request;
+  }
+
   @override
   void close({bool force = false}) {}
 }
@@ -97,6 +118,7 @@ class _Client extends Fake implements HttpClient {
 class _Updates extends AppUpdateService {
   AppUpdate? update;
   Object? failure;
+  Object? downloadFailure;
   int installs = 0;
   bool cancelled = false;
   String result = 'opened';
@@ -107,7 +129,11 @@ class _Updates extends AppUpdateService {
   }
 
   @override
-  Future<void> download(AppUpdate update, void Function(int, int) progress) async => progress(4, 4);
+  Future<void> download(AppUpdate update, void Function(int, int) progress) async {
+    if (downloadFailure != null) throw downloadFailure!;
+    progress(4, 4);
+  }
+
   @override
   Future<String> install(AppUpdate update) async {
     installs++;
@@ -165,7 +191,7 @@ void main() {
     final update = parse();
     expect(update.versionCode, 72);
     expect(update.versionName, '2.1.0-own.7');
-    expect(update.apkUrl.host, 'github.com');
+    expect(update.apkUrl.host, 'api.github.com');
   });
 
   test('rejects wrong identity, unsupported ABI, hashes, size and inconsistent tags', () {
@@ -201,6 +227,9 @@ void main() {
     expect(() => parse(null, release), throwsA(isA<UpdateFailure>()));
     expect(() => parse({..._manifest(), 'size': 8}), throwsA(isA<UpdateFailure>()));
     expect(() => parse({..._manifest()}..remove('sha256')), throwsA(isA<UpdateFailure>()));
+    final wrongApi = _release();
+    (wrongApi['assets'] as List)[0]['url'] = 'https://api.github.com/repos/InlitX/GymMane/releases/assets/1';
+    expect(() => parse(null, wrongApi), throwsA(isA<UpdateFailure>()));
     expect(AppUpdateService.allowedDownloadUri(Uri.parse('http://github.com/a')), isFalse);
     expect(AppUpdateService.allowedDownloadUri(Uri.parse('https://github.com.evil.test/a')), isFalse);
     expect(AppUpdateService.allowedDownloadUri(Uri.parse('https://user@github.com/a')), isFalse);
@@ -210,12 +239,24 @@ void main() {
     final client = _Client([
       _Response(utf8.encode(jsonEncode(_release()))),
       _Response(utf8.encode(jsonEncode(_manifest()))),
+      _Response(
+        [],
+        statusCode: 302,
+        location: 'https://release-assets.githubusercontent.com/test.apk?signature=test',
+      ),
       _Response([1, 2, 3, 4]),
     ]);
     await HttpOverrides.runZoned(() async {
       final service = AppUpdateService();
       final update = (await service.check())!;
       await service.download(update, (_, total) => expect(total, 4));
+      expect(client.requests.map((r) => r.headers.value(HttpHeaders.acceptHeader)), [
+        'application/vnd.github+json',
+        'application/octet-stream',
+        'application/octet-stream',
+        'application/octet-stream',
+      ]);
+      expect(client.urls.any((url) => url.host == 'github.com'), isFalse);
       expect(methods, ['info', 'verify']);
       expect(await File('${directory.path}/${update.fileName}').readAsBytes(), [1, 2, 3, 4]);
       await service.download(update, (_, _) => fail('Cached APK must not be downloaded again'));
@@ -334,6 +375,19 @@ void main() {
     setAppLanguage('zh');
     await dialog(tester, _Updates()..failure = const UpdateFailure('network'));
     expect(find.text(t.ownUpdateNetworkError), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('download failure remains visible above long release notes', (tester) async {
+    final service = _Updates()
+      ..update = parse(null, {..._release(), 'body': 'Release notes. ' * 300})
+      ..downloadFailure = const UpdateFailure('network');
+    await dialog(tester, service);
+    await tester.tap(find.byKey(const ValueKey('download-update')));
+    await tester.pumpAndSettle();
+    final bounds = tester.getRect(find.text(t.ownUpdateNetworkError));
+    expect(bounds.top, greaterThan(0));
+    expect(bounds.bottom, lessThan(tester.view.physicalSize.height));
     expect(tester.takeException(), isNull);
   });
 

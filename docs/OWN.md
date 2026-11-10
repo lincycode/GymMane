@@ -55,6 +55,8 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 从 `2.1.0-own.7` 起，设置 → 关于 → 检查更新提供个人版更新。只有点击检查时才请求 GitHub；不后台轮询、不上传训练记录、不内置 GitHub token。上游 CONTRIBUTING 的禁止联网原则在个人版仅对这一功能例外，训练与本地数据功能保持离线。网络失败可重试或打开 Releases 页面。
 
+首次建议安装 `2.1.0-own.8` 或以上。own.7 使用浏览器下载 URL，在本次网络环境中遭遇 GitHub 主站连接超时；own.8 改用公开 Release asset API 和 `Accept: application/octet-stream`，同时校验资源 ID、所属仓库和浏览器 URL，处理官方 CDN 重定向。不添加代理或第三方镜像，仍需设备能访问 GitHub API 和下载 CDN。
+
 更新源固定为公开仓库 `lincycode/GymMane` 的 latest Release。每个 Release 使用 `enogym-v<versionName>` 标签，指向经过验证的 `own` 提交，并包含 arm64 APK、同名 `.sha256` 和 `enogym-update.json`。个人版标签中的 `own` 不代表 GitHub prerelease；正式更新发布为非草稿、非 prerelease。更新清单使用 Android 实际版本码（如 own.7 的 arm64 为 72），不只比较上游版本字符串。
 
 应用检查发布身份、ABI、最低系统版本和大小，流式下载到专用缓存目录，校验 SHA-256、包名、版本和当前签名。安装通过系统安装器确认，首次可能需要允许 EnoGym 安装未知应用，返回后再次点击安装。正在训练时不安装；退出弹窗会取消未完成的下载。已下载且校验通过的包可复用，更新后再次检查会清理旧更新缓存，不接触训练数据。

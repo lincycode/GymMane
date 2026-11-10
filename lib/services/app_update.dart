@@ -57,7 +57,14 @@ class AppUpdate {
     final uri = Uri.parse(matches.single['browser_download_url'] as String);
     final expected = Uri.https('github.com', '/$updateRepository/releases/download/$tag/$name');
     if (uri != expected) throw const UpdateFailure('metadata');
-    return uri;
+    final id = matches.single['id'];
+    final apiUrl = matches.single['url'];
+    if (id is! int || id <= 0 || apiUrl is! String) throw const UpdateFailure('metadata');
+    final apiUri = Uri.parse(apiUrl);
+    if (apiUri != Uri.https('api.github.com', '/repos/$updateRepository/releases/assets/$id')) {
+      throw const UpdateFailure('metadata');
+    }
+    return apiUri;
   }
 
   factory AppUpdate.fromRelease(
@@ -141,13 +148,19 @@ class AppUpdateService {
           uri.host == 'objects.githubusercontent.com');
 
   Future<HttpClientResponse> _get(HttpClient client, Uri uri) async {
+    final asset =
+        uri.host == 'api.github.com' && uri.path.startsWith('/repos/$updateRepository/releases/assets/');
     for (var redirects = 0; redirects <= 5; redirects++) {
       _ensureActive();
       if (!allowedDownloadUri(uri)) throw const UpdateFailure('metadata');
       final request = await client.getUrl(uri).timeout(const Duration(seconds: 25));
       request.followRedirects = false;
       request.headers.set(HttpHeaders.userAgentHeader, 'EnoGym-Updater');
-      request.headers.set(HttpHeaders.acceptHeader, 'application/vnd.github+json');
+      request.headers.set(
+        HttpHeaders.acceptHeader,
+        asset ? 'application/octet-stream' : 'application/vnd.github+json',
+      );
+      request.headers.set('X-GitHub-Api-Version', '2022-11-28');
       request.headers.set(HttpHeaders.acceptEncodingHeader, 'identity');
       final response = await request.close().timeout(const Duration(seconds: 25));
       if ([301, 302, 303, 307, 308].contains(response.statusCode)) {
