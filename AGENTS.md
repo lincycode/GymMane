@@ -11,5 +11,7 @@
 - 个人构建身份由 own.properties 管理。com.echolin.gymmane 使用固定外部 Release 签名；Debug 使用 .debug 后缀。保留 Kotlin namespace，不全库替换包名字符串。
 - 工具链与运行证据放 .toolchain/、artifacts/。维护文档放 docs/，可复用脚本放 scripts/，测试放 test/。
 - 完成修改后审查完整 diff，运行相关测试、分析和构建；UI 修改必须检查实际渲染。区分原版失败、本次回归与未执行检查，不用构建通过替代视觉或真机验收。
-- 本任务已授权本地按功能提交。只暂存本次明确文件，检查暂存 diff，并运行 git diff --cached --check 与 python3 scripts/check-staged-files.py。不自动 push、发 PR、发布 APK、部署或重写历史。
+- 只暂存本次明确文件，检查暂存 diff，运行 `git diff --cached --check` 与 `python3 scripts/check-staged-files.py`，按功能提交。
+- EnoGym 个人版的可安装更新通过验收后，默认推送 `own` 至 `origin/own`，创建带签名 APK、校验文件和更新清单的 GitHub Release，并设为 latest。用户已持续授权，按 [维护说明](docs/OWN.md#应用内更新与发布) 执行并确认应用内更新源可见。仅文档或其他无需更新手机的改动不单独发版。用户当次要求仅本地交付时优先遵循。
+- 上述发布授权限于 EnoGym 个人版。推送其他分支、发 PR、部署、强推或重写历史仍需明确授权。
 - 真机操作先协调设备使用，优先在隔离模拟器验证。不得触碰用户已有应用的数据；测试结束恢复临时调整的设备设置。

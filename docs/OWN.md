@@ -63,7 +63,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 首次使用需手动覆盖安装包含更新功能的 APK。不能卸载清数据，也不能使用原作者包或 Debug 包来覆盖。真实厂商系统的安装授权与后台行为仍需实机验收。
 
-后续发布（需明确授权发布时执行）：
+每次交付通过验证的 EnoGym 个人版更新，都执行以下流程，让手机可以在应用里检查更新。
 
 1. 在 `own` 修改，递增 `own.properties` 的 versionName 和 versionCode，保留包名与固定签名。更新 `docs/releases/<版本>.md`。
 2. 运行相关测试、完整分析，使用 `bash scripts/build-own.sh release --no-pub` 构建。仅在依赖已正确准备后使用 `--no-pub`。验证同签名升级和数据保留，审查并提交相关源码。
@@ -76,7 +76,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
    工具会从 APK 读取包名、版本、最低 SDK、ABI 和签名并核对配置，输出 `artifacts/releases/<版本>/`。`--previous-apk` 用于确认签名连续性。准备应在最后一次提交后执行，以记录正确的源码提交。
 
-4. 需要公开发布时执行：
+4. 推送个人分支并发布：
 
    ```bash
    bash scripts/publish-own-release.sh docs/releases/<版本>.md
@@ -84,7 +84,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
    脚本只接受干净的 `own`，推送本地 `own` 到 `origin/own`，创建携带全部资源的草稿 Release，然后发布为 latest。它不更改 `main` 或默认分支，不强推，不覆盖已有 Release。若草稿阶段失败，检查并补齐该草稿后再发布，避免重复版本。
 
-5. 从 GitHub 实际下载校验文件与 APK，核对哈希；在旧版模拟器中检查、下载并安装，确认更新后版本和数据。真实手机先保留备份再更新。
+5. 确认 latest API 返回本版，并通过应用使用的资源 API 下载更新清单和 APK，核对 SHA-256。涉及更新器或安装兼容性时，用旧版模拟器走完整的检查、下载和覆盖安装流程，并核对数据。
 
 当前沿用本机专用密钥签名，密钥不上传 GitHub。上游 `.github/workflows/build-apk.yml` 的签名路径和版本来源不是个人版发布流程，请勿直接用于发布 EnoGym；个人版目前使用上述脚本。`main` 用来同步上游，`own` 保存个人功能；推送源码不会自动生成可安装的 Release。
 
@@ -111,7 +111,7 @@ git merge --no-ff 上游稳定标签
 
 观察 Releases 及与计划、记录、备份相关的 Issues/PR。只有已落地的提交可合入；紧急 cherry-pick 要记录原始提交和依赖。不要对长期 own 反复 rebase。
 
-代码回退不等于数据回退。升级前导出备份；若上游升级数据格式，不能直接降级 APK，优先修复后继续向前升级。GitHub fork 的创建不代表个人提交已经上传，push 与发布需另行授权。
+代码回退不等于数据回退。升级前导出备份；若上游升级数据格式，不能直接降级 APK，优先修复后继续向前升级。合入个人版的功能更新通过验收后，按上述个人版发布流程交付。
 
 ## 验收与证据
 
