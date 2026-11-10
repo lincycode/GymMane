@@ -1,6 +1,6 @@
 # EnoGym 维护说明
 
-个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 73b2786acda9a7ffeb08b60fa8578bef9b836555（2026-11-10 核实），保留上游 Flutter 结构与离线数据格式。原版 README 和 CONTRIBUTING 继续适用；以下记录个人版差异。
+个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 73b2786acda9a7ffeb08b60fa8578bef9b836555（2026-11-10 核实），保留上游 Flutter 结构与离线数据格式。仓库首页介绍 EnoGym，原版文档见 [InlitX/GymMane](https://github.com/InlitX/GymMane)。以下记录个人版差异。
 
 ## 使用与范围
 
@@ -86,14 +86,14 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 5. 确认 latest API 返回本版，并通过应用使用的资源 API 下载更新清单和 APK，核对 SHA-256。涉及更新器或安装兼容性时，用旧版模拟器走完整的检查、下载和覆盖安装流程，并核对数据。
 
-当前沿用本机专用密钥签名，密钥不上传 GitHub。上游 `.github/workflows/build-apk.yml` 的签名路径和版本来源不是个人版发布流程，请勿直接用于发布 EnoGym；个人版目前使用上述脚本。`main` 用来同步上游，`own` 保存个人功能；推送源码不会自动生成可安装的 Release。
+当前沿用本机专用密钥签名，密钥不上传 GitHub。上游 `.github/workflows/build-apk.yml` 的签名路径和版本来源不是个人版发布流程，请勿直接用于发布 EnoGym；个人版目前使用上述脚本。`own` 是 GitHub 默认分支，承载个人版源码、首页和发布。`main` 用于对照上游。手机更新读取同一仓库的 latest Release。
 
 ## 上游同步
 
 - origin: https://github.com/lincycode/GymMane
 - upstream: https://github.com/InlitX/GymMane
-- main: 上游镜像，不提交个人改动。
-- own: 已验证个人版。
+- `own`：个人版默认分支。GitHub 首页从此分支读取 README。
+- `main`：上游对照分支。本地 `main` 跟踪 `upstream/main`。
 - codex/功能名、codex/sync-版本: 短期开发与同步分支。
 
 先提交当前工作，再获取更新。main 可以跟随上游最新代码，个人版通常优先合并稳定标签；如明确要求合入 main，固定待合并的提交并记录完整提交身份。
