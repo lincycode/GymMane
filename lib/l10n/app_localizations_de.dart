@@ -7677,4 +7677,86 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noteLinkInvalid => 'That address doesn\'t look right';
+
+  @override
+  String get ownCheckUpdates => 'Check for updates';
+
+  @override
+  String get ownUpdateChecking => 'Checking for updates…';
+
+  @override
+  String get ownUpdateCurrent => 'You have the latest version.';
+
+  @override
+  String get ownUpdateNoRelease => 'No EnoGym release has been published yet.';
+
+  @override
+  String get ownUpdateRateLimit => 'Too many requests. Try again later or open the releases page.';
+
+  @override
+  String get ownUpdateMetadataError =>
+      'The update information is incomplete or does not match EnoGym. Try again later.';
+
+  @override
+  String get ownUpdateInvalidApk =>
+      'The APK could not be verified. Installation was blocked. Download it again; your existing data is unchanged.';
+
+  @override
+  String get ownUpdateUnsupported =>
+      'This update requires the EnoGym Android release edition on a supported arm64 device.';
+
+  @override
+  String get ownUpdateForeground => 'Return to EnoGym and tap Install update again.';
+
+  @override
+  String get ownUpdateInstallerError =>
+      'Could not open the system installer. Check system settings or download from the releases page.';
+
+  @override
+  String get ownUpdatePermission => 'Allow EnoGym to install apps, then return and tap Install update again.';
+
+  @override
+  String get ownUpdateTraining =>
+      'Finish your current workout before installing. The downloaded APK will be kept.';
+
+  @override
+  String get ownUpdateNetworkError =>
+      'Could not connect or finish downloading. Check your connection and free space, then retry. Training remains available offline.';
+
+  @override
+  String ownUpdateSize(String size) {
+    return 'APK · $size MB';
+  }
+
+  @override
+  String ownUpdateProgress(int percent) {
+    return 'Downloading · $percent%';
+  }
+
+  @override
+  String get ownUpdateVerifying => 'Verifying the APK…';
+
+  @override
+  String get ownUpdateReady =>
+      'Download verified. The app will close during installation; Android keeps your existing data.';
+
+  @override
+  String get ownUpdatePrivacy =>
+      'Connects to GitHub only to check and download updates. No workout records are uploaded.';
+
+  @override
+  String get ownUpdateReleases => 'Releases';
+
+  @override
+  String get ownUpdateDownload => 'Download update';
+
+  @override
+  String get ownUpdateInstall => 'Install update';
+
+  @override
+  String get ownOfflineTraining => 'Offline training';
+
+  @override
+  String get ownOfflineTrainingWhy =>
+      'Training stays on your phone, with no account. Only manual update checks and downloads use the internet.';
 }

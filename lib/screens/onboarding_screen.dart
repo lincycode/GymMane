@@ -416,7 +416,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 4,
                 _group(gc, [
                   _promise(gc, PhosphorIconsRegular.gift, t.freeForever, t.freeForeverWhy),
-                  _promise(gc, PhosphorIconsRegular.wifiSlash, t.fullyOffline, t.fullyOfflineWhy),
+                  _promise(gc, PhosphorIconsRegular.wifiSlash, t.ownOfflineTraining, t.ownOfflineTrainingWhy),
                   _promise(gc, PhosphorIconsRegular.export, t.yoursToTake, t.yoursToTakeWhy),
                 ]),
               ),

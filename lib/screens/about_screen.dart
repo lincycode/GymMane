@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,6 +11,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/entrance.dart';
 import '../widgets/ui_kit.dart';
+import 'app_update_dialog.dart';
 
 const kAppVersion = ownAppVersion;
 const _kAuthor = 'InlitX';
@@ -47,9 +49,19 @@ class AboutScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppTheme.f(14, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
             const SizedBox(height: 20),
+            if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ...[
+              OutlinedButton.icon(
+                key: const ValueKey('check-app-updates'),
+                onPressed: () => showDialog<void>(context: context, builder: (_) => const AppUpdateDialog()),
+                icon: const Icon(PhosphorIconsRegular.downloadSimple, size: 20),
+                label: Text(t.ownCheckUpdates),
+                style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+              ),
+              const SizedBox(height: 18),
+            ],
             _group(gc, [
               (PhosphorIconsRegular.gift, t.freeForever, t.freeForeverWhy),
-              (PhosphorIconsRegular.wifiSlash, t.fullyOffline, t.fullyOfflineWhy),
+              (PhosphorIconsRegular.wifiSlash, t.ownOfflineTraining, t.ownOfflineTrainingWhy),
               (PhosphorIconsRegular.export, t.yoursToTake, t.yoursToTakeWhy),
             ]),
             const SizedBox(height: 18),

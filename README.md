@@ -1,5 +1,7 @@
 > **EnoGym** — 个人维护分支，基于 GymMane v2.1.0，已合入 main `73b2786`。构建、签名、计划改动与上游同步见 [个人版维护说明](docs/OWN.md)。以下保留原项目介绍；个人版使用独立包名与签名，不能安装原作者 APK 来更新。
 
+> **个人版更新**：从 `2.1.0-own.7` 起，在「设置 → 关于 → 检查更新」手动检查、下载和安装 [EnoGym Releases](https://github.com/lincycode/GymMane/releases)。训练与存储继续离线，不上传训练数据；仅手动更新时连接 GitHub。下文原项目的「无联网权限」介绍不适用于此个人版。首次请覆盖安装个人 Release APK，不要卸载旧版。后续发布步骤见 [更新与发布](docs/OWN.md#应用内更新与发布)。
+
 <div align="center">
 
 <img src="docs/screenshots/banner-en.png" alt="GymMane — Lift. Log it. Grow." width="860" />

@@ -51,6 +51,41 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 个人打包脚本只构建一加 Ace 6T 使用的 `arm64-v8a` 包。正式产物位于 `artifacts/apk/EnoGym-<版本>-Ace6T-arm64-v8a-release.apk`。正式构建缺少专用签名会失败，不退回 Debug 签名。测试包与正式包不共享数据。
 
+## 应用内更新与发布
+
+从 `2.1.0-own.7` 起，设置 → 关于 → 检查更新提供个人版更新。只有点击检查时才请求 GitHub；不后台轮询、不上传训练记录、不内置 GitHub token。上游 CONTRIBUTING 的禁止联网原则在个人版仅对这一功能例外，训练与本地数据功能保持离线。网络失败可重试或打开 Releases 页面。
+
+更新源固定为公开仓库 `lincycode/GymMane` 的 latest Release。每个 Release 使用 `enogym-v<versionName>` 标签，指向经过验证的 `own` 提交，并包含 arm64 APK、同名 `.sha256` 和 `enogym-update.json`。个人版标签中的 `own` 不代表 GitHub prerelease；正式更新发布为非草稿、非 prerelease。更新清单使用 Android 实际版本码（如 own.7 的 arm64 为 72），不只比较上游版本字符串。
+
+应用检查发布身份、ABI、最低系统版本和大小，流式下载到专用缓存目录，校验 SHA-256、包名、版本和当前签名。安装通过系统安装器确认，首次可能需要允许 EnoGym 安装未知应用，返回后再次点击安装。正在训练时不安装；退出弹窗会取消未完成的下载。已下载且校验通过的包可复用，更新后再次检查会清理旧更新缓存，不接触训练数据。
+
+首次使用需手动覆盖安装包含更新功能的 APK。不能卸载清数据，也不能使用原作者包或 Debug 包来覆盖。真实厂商系统的安装授权与后台行为仍需实机验收。
+
+后续发布（需明确授权发布时执行）：
+
+1. 在 `own` 修改，递增 `own.properties` 的 versionName 和 versionCode，保留包名与固定签名。更新 `docs/releases/<版本>.md`。
+2. 运行相关测试、完整分析，使用 `bash scripts/build-own.sh release --no-pub` 构建。仅在依赖已正确准备后使用 `--no-pub`。验证同签名升级和数据保留，审查并提交相关源码。
+3. 加载本机工具环境后准备发布文件：
+
+   ```bash
+   source .toolchain/env.sh
+   python3 scripts/prepare-own-release.py --previous-apk artifacts/apk/上一版.apk
+   ```
+
+   工具会从 APK 读取包名、版本、最低 SDK、ABI 和签名并核对配置，输出 `artifacts/releases/<版本>/`。`--previous-apk` 用于确认签名连续性。准备应在最后一次提交后执行，以记录正确的源码提交。
+
+4. 需要公开发布时执行：
+
+   ```bash
+   bash scripts/publish-own-release.sh docs/releases/<版本>.md
+   ```
+
+   脚本只接受干净的 `own`，推送本地 `own` 到 `origin/own`，创建携带全部资源的草稿 Release，然后发布为 latest。它不更改 `main` 或默认分支，不强推，不覆盖已有 Release。若草稿阶段失败，检查并补齐该草稿后再发布，避免重复版本。
+
+5. 从 GitHub 实际下载校验文件与 APK，核对哈希；在旧版模拟器中检查、下载并安装，确认更新后版本和数据。真实手机先保留备份再更新。
+
+当前沿用本机专用密钥签名，密钥不上传 GitHub。上游 `.github/workflows/build-apk.yml` 的签名路径和版本来源不是个人版发布流程，请勿直接用于发布 EnoGym；个人版目前使用上述脚本。`main` 用来同步上游，`own` 保存个人功能；推送源码不会自动生成可安装的 Release。
+
 ## 上游同步
 
 - origin: https://github.com/lincycode/GymMane

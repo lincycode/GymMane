@@ -13355,6 +13355,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That address doesn\'t look right'**
   String get noteLinkInvalid;
+
+  /// No description provided for @ownCheckUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get ownCheckUpdates;
+
+  /// No description provided for @ownUpdateChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates…'**
+  String get ownUpdateChecking;
+
+  /// No description provided for @ownUpdateCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'You have the latest version.'**
+  String get ownUpdateCurrent;
+
+  /// No description provided for @ownUpdateNoRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'No EnoGym release has been published yet.'**
+  String get ownUpdateNoRelease;
+
+  /// No description provided for @ownUpdateRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Try again later or open the releases page.'**
+  String get ownUpdateRateLimit;
+
+  /// No description provided for @ownUpdateMetadataError.
+  ///
+  /// In en, this message translates to:
+  /// **'The update information is incomplete or does not match EnoGym. Try again later.'**
+  String get ownUpdateMetadataError;
+
+  /// No description provided for @ownUpdateInvalidApk.
+  ///
+  /// In en, this message translates to:
+  /// **'The APK could not be verified. Installation was blocked. Download it again; your existing data is unchanged.'**
+  String get ownUpdateInvalidApk;
+
+  /// No description provided for @ownUpdateUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This update requires the EnoGym Android release edition on a supported arm64 device.'**
+  String get ownUpdateUnsupported;
+
+  /// No description provided for @ownUpdateForeground.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to EnoGym and tap Install update again.'**
+  String get ownUpdateForeground;
+
+  /// No description provided for @ownUpdateInstallerError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the system installer. Check system settings or download from the releases page.'**
+  String get ownUpdateInstallerError;
+
+  /// No description provided for @ownUpdatePermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow EnoGym to install apps, then return and tap Install update again.'**
+  String get ownUpdatePermission;
+
+  /// No description provided for @ownUpdateTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish your current workout before installing. The downloaded APK will be kept.'**
+  String get ownUpdateTraining;
+
+  /// No description provided for @ownUpdateNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect or finish downloading. Check your connection and free space, then retry. Training remains available offline.'**
+  String get ownUpdateNetworkError;
+
+  /// No description provided for @ownUpdateSize.
+  ///
+  /// In en, this message translates to:
+  /// **'APK · {size} MB'**
+  String ownUpdateSize(String size);
+
+  /// No description provided for @ownUpdateProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading · {percent}%'**
+  String ownUpdateProgress(int percent);
+
+  /// No description provided for @ownUpdateVerifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying the APK…'**
+  String get ownUpdateVerifying;
+
+  /// No description provided for @ownUpdateReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Download verified. The app will close during installation; Android keeps your existing data.'**
+  String get ownUpdateReady;
+
+  /// No description provided for @ownUpdatePrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Connects to GitHub only to check and download updates. No workout records are uploaded.'**
+  String get ownUpdatePrivacy;
+
+  /// No description provided for @ownUpdateReleases.
+  ///
+  /// In en, this message translates to:
+  /// **'Releases'**
+  String get ownUpdateReleases;
+
+  /// No description provided for @ownUpdateDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download update'**
+  String get ownUpdateDownload;
+
+  /// No description provided for @ownUpdateInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Install update'**
+  String get ownUpdateInstall;
+
+  /// No description provided for @ownOfflineTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline training'**
+  String get ownOfflineTraining;
+
+  /// No description provided for @ownOfflineTrainingWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Training stays on your phone, with no account. Only manual update checks and downloads use the internet.'**
+  String get ownOfflineTrainingWhy;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

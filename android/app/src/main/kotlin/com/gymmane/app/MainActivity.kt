@@ -150,6 +150,7 @@ class MainActivity : FlutterActivity() {
         BackupBridge.attach(this, MethodChannel(messenger, BackupBridge.CHANNEL))
         SoundBridge.attach(this, MethodChannel(messenger, SoundBridge.CHANNEL))
         VoiceBridge.attach(this, MethodChannel(messenger, VoiceBridge.CHANNEL))
+        UpdateBridge.attach(this, MethodChannel(messenger, UpdateBridge.CHANNEL))
     }
 
     private fun currentDisplay(): android.view.Display? =

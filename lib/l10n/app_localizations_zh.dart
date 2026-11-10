@@ -7379,6 +7379,79 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noteLinkInvalid => '请输入有效的网址';
+
+  @override
+  String get ownCheckUpdates => '检查更新';
+
+  @override
+  String get ownUpdateChecking => '正在检查新版本…';
+
+  @override
+  String get ownUpdateCurrent => '当前已是最新版本。';
+
+  @override
+  String get ownUpdateNoRelease => '暂时没有已发布的 EnoGym 更新。';
+
+  @override
+  String get ownUpdateRateLimit => '检查过于频繁，请稍后重试，或打开发布页面。';
+
+  @override
+  String get ownUpdateMetadataError => '更新信息不完整或不匹配，暂时无法下载。请稍后重试。';
+
+  @override
+  String get ownUpdateInvalidApk => '安装包校验失败，已阻止安装。请重新下载。现有数据未受影响。';
+
+  @override
+  String get ownUpdateUnsupported => '此更新仅适用于支持 arm64 的 EnoGym Android 正式版。';
+
+  @override
+  String get ownUpdateForeground => '请返回 EnoGym 后重新点击安装更新。';
+
+  @override
+  String get ownUpdateInstallerError => '无法打开系统安装器。请检查系统设置，或从发布页面手动下载。';
+
+  @override
+  String get ownUpdatePermission => '请允许 EnoGym 安装应用，返回后再次点击「安装更新」。';
+
+  @override
+  String get ownUpdateTraining => '请先结束当前训练，再安装更新。已下载的安装包会保留。';
+
+  @override
+  String get ownUpdateNetworkError => '无法连接或完成下载。请检查网络和可用空间后重试，训练功能可继续离线使用。';
+
+  @override
+  String ownUpdateSize(String size) {
+    return '安装包 · $size MB';
+  }
+
+  @override
+  String ownUpdateProgress(int percent) {
+    return '正在下载 · $percent%';
+  }
+
+  @override
+  String get ownUpdateVerifying => '正在校验安装包…';
+
+  @override
+  String get ownUpdateReady => '下载完成，校验已通过。安装时应用会关闭，系统会保留现有数据。';
+
+  @override
+  String get ownUpdatePrivacy => '仅检查和下载更新时连接 GitHub，不上传训练记录。';
+
+  @override
+  String get ownUpdateReleases => '发布页面';
+
+  @override
+  String get ownUpdateDownload => '下载更新';
+
+  @override
+  String get ownUpdateInstall => '安装更新';
+
+  @override
+  String get ownOfflineTraining => '离线训练';
+
+  @override
+  String get ownOfflineTrainingWhy => '训练记录保存在本机，无需账号。仅手动检查和下载更新时联网。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
