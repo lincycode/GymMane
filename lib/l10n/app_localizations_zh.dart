@@ -7322,6 +7322,63 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ownSupportOriginal => '支持原作者';
+
+  @override
+  String get cholesterolLabel => '胆固醇';
+
+  @override
+  String get mealAiFlagMatched => '与已保存的食物匹配';
+
+  @override
+  String get mealAiNotSame => '不是同一种食物';
+
+  @override
+  String get homeOrderRow => '首页区块顺序';
+
+  @override
+  String get homeOrderHint => '按住并拖动以调整首页区块顺序。';
+
+  @override
+  String get homeOrderFolders => '快捷入口';
+
+  @override
+  String get equipNew => '新增';
+
+  @override
+  String get equipNewTitle => '新增器械';
+
+  @override
+  String get equipNewHint => '例如：负重腰带';
+
+  @override
+  String get homeOrderWeekdays => '每周训练打卡';
+
+  @override
+  String get repsMaxTitle => '最多次数';
+
+  @override
+  String get repsRangeHint => '长按次数可设置区间，例如 8–12 次。';
+
+  @override
+  String get repsRangeClear => '移除次数区间';
+
+  @override
+  String get noteLinksLabel => '链接';
+
+  @override
+  String get noteLinkAdd => '添加链接';
+
+  @override
+  String get noteLinkEdit => '编辑链接';
+
+  @override
+  String get noteLinkNameHint => '名称';
+
+  @override
+  String get noteLinkUrlHint => '网址';
+
+  @override
+  String get noteLinkInvalid => '请输入有效的网址';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

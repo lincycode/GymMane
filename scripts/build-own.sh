@@ -3,8 +3,9 @@ set -euo pipefail
 GYMMANE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$GYMMANE_ROOT"
 GYMMANE_MODE="${1:-release}"
-if [[ "$GYMMANE_MODE" != release && "$GYMMANE_MODE" != debug ]]; then
-  echo 'Usage: bash scripts/build-own.sh [release|debug]' >&2
+if [[ "$GYMMANE_MODE" != release && "$GYMMANE_MODE" != debug ]] ||
+   [[ "$#" -gt 2 || ( "$#" -eq 2 && "$2" != --no-pub ) ]]; then
+  echo 'Usage: bash scripts/build-own.sh [release|debug] [--no-pub]' >&2
   exit 1
 fi
 GYMMANE_VERSION="$(sed -n 's/^versionName=//p' own.properties)"
@@ -22,7 +23,9 @@ GYMMANE_PUB_ARGS=(--enforce-lockfile)
 if [[ "${GYMMANE_OFFLINE:-0}" == 1 ]]; then
   GYMMANE_PUB_ARGS+=(--offline)
 fi
-bash scripts/flutter.sh pub get "${GYMMANE_PUB_ARGS[@]}"
+if [[ "${2:-}" != --no-pub ]]; then
+  bash scripts/flutter.sh pub get "${GYMMANE_PUB_ARGS[@]}"
+fi
 bash scripts/flutter.sh build apk "--$GYMMANE_MODE" --no-pub --split-per-abi \
   --target-platform android-arm64 \
   --build-name "$GYMMANE_VERSION" --build-number "$GYMMANE_BUILD" \

@@ -464,6 +464,7 @@ class SettingsScreen extends StatelessWidget {
                       hint: t.trainReminderRowHint,
                     ),
                   ),
+                  if (Platform.isAndroid)
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () => showAppSheet<void>(
@@ -564,7 +565,7 @@ class SettingsScreen extends StatelessWidget {
                             const SizedBox(width: 6),
                             Icon(PhosphorIconsBold.caretRight, size: 14, color: gc.textTertiary),
                           ]),
-                          hint: t.healthSettingHint),
+                          hint: health(t.healthSettingHint)),
                     ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -768,7 +769,7 @@ class SettingsScreen extends StatelessWidget {
         (t.homeRecommended, PhosphorIconsRegular.sparkle),
         (t.homeRoutines, PhosphorIconsRegular.folders),
         (t.homeWeekStats, PhosphorIconsRegular.chartBar),
-        (t.stepsSetting, PhosphorIconsRegular.footprints),
+        (health(t.stepsSetting), PhosphorIconsRegular.footprints),
         (t.healthSetting, PhosphorIconsRegular.heartbeat),
         (t.gamificationSetting, PhosphorIconsRegular.medal),
         (t.gymPass, PhosphorIconsRegular.qrCode),

@@ -1373,7 +1373,7 @@ class SessionScreen extends StatelessWidget {
       double minW, {
       required void Function(BuildContext) onEdit,
     }) step = list ? _pillCell : _miniStepper;
-    Widget reps() => step(
+    Widget repsStep() => step(
           gc,
           '${st.reps}',
           () => fit.bumpSessionReps(exIdx, j, -1),
@@ -1389,6 +1389,15 @@ class SessionScreen extends StatelessWidget {
             onSave: (v) => fit.setSessionReps(exIdx, j, v.round()),
           ),
         );
+    Widget reps() {
+      final goal = st.goal;
+      if (goal == null || st.done) return repsStep();
+      return Column(mainAxisSize: MainAxisSize.min, children: [
+        repsStep(),
+        Text(goal, style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary)),
+      ]);
+    }
+
     final exId = fit.session!.exercises[exIdx].id;
     final sided = fit.isSidedReps(exId);
     Widget repsLeft() => step(
@@ -1461,7 +1470,7 @@ class SessionScreen extends StatelessWidget {
                   context,
                   title: t.timeSecondsTitle,
                   value: (st.sec ?? 0).toDouble(),
-                  max: 900,
+                  max: 3600,
                   step: 5,
                   majorEvery: 6,
                   format: (v) => clockLabel(v.round()),

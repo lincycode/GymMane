@@ -85,6 +85,38 @@ android {
     }
 }
 
+abstract class GenerateShortcutResources : DefaultTask() {
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val template: RegularFileProperty
+
+    @get:Input
+    abstract val applicationId: Property<String>
+
+    @get:OutputDirectory
+    abstract val outputDirectory: DirectoryProperty
+
+    @TaskAction
+    fun generate() {
+        val xml = template.get().asFile.readText().replace("@applicationId@", applicationId.get())
+        val output = outputDirectory.file("xml/shortcuts.xml").get().asFile
+        output.parentFile.mkdirs()
+        output.writeText(xml)
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        val variantName = variant.name.replaceFirstChar { it.uppercaseChar() }
+        val shortcuts = tasks.register<GenerateShortcutResources>("generate${variantName}ShortcutResources") {
+            template.set(layout.projectDirectory.file("src/main/shortcuts.xml"))
+            applicationId.set(variant.applicationId)
+            outputDirectory.set(layout.buildDirectory.dir("generated/shortcutResources/${variant.name}"))
+        }
+        variant.sources.res?.addGeneratedSourceDirectory(shortcuts, GenerateShortcutResources::outputDirectory)
+    }
+}
+
 val abiCodes = mapOf("armeabi-v7a" to 1, "arm64-v8a" to 2, "x86_64" to 3)
 android.applicationVariants.configureEach {
     val variant = this

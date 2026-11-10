@@ -1,6 +1,6 @@
 # EnoGym 维护说明
 
-个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 532827f4b04d7af14b9031ac489f0fcce0dd1c74（2026-11-08 核实），保留上游 Flutter 结构与离线数据格式。原版 README 和 CONTRIBUTING 继续适用；以下记录个人版差异。
+个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 73b2786acda9a7ffeb08b60fa8578bef9b836555（2026-11-10 核实），保留上游 Flutter 结构与离线数据格式。原版 README 和 CONTRIBUTING 继续适用；以下记录个人版差异。
 
 ## 使用与范围
 
@@ -41,6 +41,8 @@ python3 scripts/setup-own-signing.py
 bash scripts/build-own.sh release
 ```
 
+上游加入 iOS 工程后，macOS 上的 `flutter pub get` 会同时准备 iOS 插件，需要完整的 Xcode 15 或以上。如果只安装了 Xcode Command Line Tools，且 `pub get` 已显示 `Got dependencies!`、仅在准备 iOS 插件时失败，可用 `bash scripts/build-own.sh release --no-pub` 构建 Android；测试和分析同样可加 `--no-pub`。依赖准备本身失败时需先解决依赖问题。
+
 `setup-own-signing.py` 使用当前 JAVA_HOME。默认签名位置是 `~/.local/share/gymmane-own/`，也可通过 `GYMMANE_SIGNING_PROPERTIES` 指定仓库外的 properties 文件。脚本不会覆盖已有密钥或输出密码。请将整个签名目录安全备份；遗失私钥后无法给既有安装做同签名升级。
 
 `own.properties` 是 applicationId、名称、版本和上游基线的事实来源。发新包先递增 versionCode，再使用构建脚本；脚本把版本传入 Dart 关于页。ABI 分包沿用上游规则：Android 实际版本码 = versionCode × 10 + ABI 编号（arm64 为 2）。
@@ -57,7 +59,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 - own: 已验证个人版。
 - codex/功能名、codex/sync-版本: 短期开发与同步分支。
 
-先提交当前工作，再获取更新。main 可以跟随上游最新代码，个人版通常优先合并稳定标签；本轮按明确要求合入 main 的 532827f，并记录完整提交身份。
+先提交当前工作，再获取更新。main 可以跟随上游最新代码，个人版通常优先合并稳定标签；如明确要求合入 main，固定待合并的提交并记录完整提交身份。
 
 ```bash
 git fetch upstream --tags

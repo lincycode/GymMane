@@ -4,6 +4,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../l10n/l10n.dart';
 import '../models/exercise.dart';
+import '../models/workout.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
@@ -48,32 +49,44 @@ class HomeScreen extends StatelessWidget {
               ScrollAway(radius: 26, child: _hero(context, gc)),
               const SizedBox(height: 14),
             ],
-            _away(_weekCard(context, gc)),
-            const SizedBox(height: 8),
-            Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: TextButton.icon(
-                key: const ValueKey('home-manage-plan'),
-                onPressed: fit.goRoutines,
-                icon: const Icon(PhosphorIconsRegular.calendarBlank, size: 18),
-                label: Text(t.ownManagePlan),
-                style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
-              ),
-            ),
-            if (fit.stepsOn && fit.stepsAvailable) ...[
-              const SizedBox(height: 14),
-              _away(StepsCard()),
-            ],
             if (fit.photoDue) ...[
               const SizedBox(height: 14),
               _away(_photoNudge(gc)),
             ],
+            ..._homeBlocks(context, gc, routines, recommended),
+          ]),
+        ),
+      ),
+      ),
+    );
+  }
+
+  List<Widget> _homeBlocks(BuildContext context, GymColors gc, List<Routine> routines, List<Exercise> recommended) {
+    final blocks = <String, List<Widget>>{
+      'weekdays': [
+        _away(_weekCard(context, gc)),
+        const SizedBox(height: 8),
+        Align(
+          alignment: AlignmentDirectional.centerEnd,
+          child: TextButton.icon(
+            key: const ValueKey('home-manage-plan'),
+            onPressed: fit.goRoutines,
+            icon: const Icon(PhosphorIconsRegular.calendarBlank, size: 18),
+            label: Text(t.ownManagePlan),
+            style: TextButton.styleFrom(minimumSize: const Size(0, 48)),
+          ),
+        ),
+      ],
+      'steps': [
+            if (fit.stepsOn && fit.stepsAvailable) _away(StepsCard()),
+      ],
+      'week': [
             if (fit.showWeekStats) ...[
-              const SizedBox(height: 30),
               _section(gc, t.thisWeek, null, _weekStats(context, gc)),
             ],
+      ],
+      'routines': [
             if (fit.showRoutineRow && routines.isNotEmpty) ...[
-              const SizedBox(height: 30),
               _section(gc, t.routines, fit.goRoutines, LayoutBuilder(
                 builder: (context, box) => SizedBox(
                   height: routineFolderHeight(context),
@@ -94,7 +107,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               )),
             ],
-            const SizedBox(height: 30),
+      ],
+      'activity': [
             _section(gc, t.activityLabel, fit.goProgress, SoftCard(
               radius: 22,
               borderColor: Colors.transparent,
@@ -113,8 +127,9 @@ class HomeScreen extends StatelessWidget {
                       onTapDay: (i) => showDaySheet(context, fit.heatmapWeekDate(i)),
                     ),
             )),
+      ],
+      'recommended': [
             if (fit.showRecommended && recommended.isNotEmpty) ...[
-              const SizedBox(height: 30),
               _section(gc, t.recommended, fit.goExercises, SizedBox(
                 height: 158,
                 child: ListView.separated(
@@ -125,7 +140,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               )),
             ],
-            const SizedBox(height: 30),
+      ],
+      'folders': [
             _away(Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -148,8 +164,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ), dim: 0),
+      ],
+      'nutrition': [
             if (fit.nutritionBeta) ...[
-              const SizedBox(height: 12),
               HomeFolder(
                 title: _tc(t.nutrition),
                 detail: _nutritionDetail,
@@ -158,11 +175,26 @@ class HomeScreen extends StatelessWidget {
                 onTap: fit.goNutrition,
               ),
             ],
-          ]),
-        ),
-      ),
-      ),
-    );
+      ],
+    };
+    final out = <Widget>[];
+    String? last;
+    for (final id in fit.homeOrderShown) {
+      final b = blocks[id];
+      if (b == null || b.isEmpty) continue;
+      final card = id == 'weekdays' || id == 'steps';
+      final gap = last == null
+          ? (fit.photoDue ? (card ? 14.0 : 30.0) : (card ? 0.0 : 16.0))
+          : (card && (last == 'weekdays' || last == 'steps'))
+              ? 14.0
+              : id == 'nutrition' && last == 'folders'
+                  ? 12.0
+                  : 30.0;
+      out.add(SizedBox(height: gap));
+      out.addAll(b);
+      last = id;
+    }
+    return out;
   }
 
   Widget _away(Widget child, {double dim = 0.45}) => ScrollAway(radius: 22, dim: dim, child: child);
@@ -242,8 +274,8 @@ class HomeScreen extends StatelessWidget {
           height: 30,
           child: Row(
             children: [
-              Text(title.toUpperCase(),
-                  style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
+              Text(titleCase(title),
+                  style: AppTheme.f(13, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 0)),
               const Spacer(),
               if (onMore != null)
                 Container(
