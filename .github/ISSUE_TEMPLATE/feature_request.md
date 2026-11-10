@@ -1,16 +1,11 @@
 ---
-name: Feature request
-about: Suggest a feature or improvement
+name: EnoGym 功能建议
+about: 提出个人版的训练或使用改进
 labels: enhancement
 ---
 
-<!--
-Describe what you'd like and where in the app it should go, with as much
-detail as you can — the clearer it is, the easier it is to build.
+**你想完成什么？**
 
-If another app already does it, name it or drop a screenshot. If it's your
-own idea, just describe it well. Write freely.
+**目前哪一步不方便？**
 
-Note: GymMane is fully offline and asks for no INTERNET permission, so
-anything needing a server, an account or cloud sync is out of scope.
--->
+**希望 EnoGym 怎样处理？**

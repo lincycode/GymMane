@@ -1,19 +1,13 @@
 ---
-name: Bug report
-about: Something isn't working right
+name: EnoGym 问题反馈
+about: 记录个人版的异常行为
 labels: bug
 ---
 
-**What's wrong?**
+**EnoGym 版本、设备型号和 Android 版本**
 
+**复现步骤**
 
-**Where in the app** (Train, Session, Progress, Library, Settings…):
+**预期结果与实际结果**
 
-
-**Your phone** (model + Android version):
-
-
-**Photo or video** (if you can, drag it here):
-
-
-<!-- Optional: if you have an idea of what's causing it or how to fix it, tell me here. If not, no worries — I'll look into it. -->
+**截图或录屏（可选，请隐藏个人数据）**
