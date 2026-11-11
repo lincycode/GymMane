@@ -75,17 +75,20 @@ final Map<String, String> _aliasIndex = {
     for (final alias in entry.value) sortedKey(alias): entry.key,
 };
 
+final _han = RegExp(r'[\u3400-\u9fff]');
+
 typedef ExerciseFilter = bool Function(Exercise);
 
 ExerciseFilter exerciseSearch(String query) {
   final plain = query.trim().toLowerCase();
   if (plain.isEmpty) return (_) => true;
-  final key = searchKey(query);
+  // The Latin tokenizer drops Chinese characters. Keep mixed names such as
+  // T杠划船 intact instead of turning them into a fuzzy search for "t".
+  final key = _han.hasMatch(plain) ? '' : searchKey(query);
   final words = [for (final w in key.split(' ')) if (w.isNotEmpty) _stem(w)];
-  final folded = _fold(query);
   final muscles = {
     for (final m in kFilterMuscles)
-      if (folded.length > 2 && (_fold(muscleLabel(m)).startsWith(folded) || _fold(m).startsWith(folded))) m,
+      if (key.length > 2 && (_fold(muscleLabel(m)).startsWith(key) || _fold(m).startsWith(key))) m,
   };
 
   return (e) {
@@ -93,6 +96,7 @@ ExerciseFilter exerciseSearch(String query) {
     final label = exerciseName(e);
     if (e.name.toLowerCase().contains(plain) || label.toLowerCase().contains(plain)) return true;
     if (e.aliases.any((a) => a.toLowerCase().contains(plain))) return true;
+    if (kChineseExerciseSearchAliases[e.id]?.any((a) => a.toLowerCase().contains(plain)) ?? false) return true;
     if (key.isEmpty) return false;
     if (_keyOf(e.name).contains(key) || _keyOf(label).contains(key)) return true;
     if (e.aliases.any((a) => _keyOf(a).contains(key))) return true;

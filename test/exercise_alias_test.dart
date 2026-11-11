@@ -68,6 +68,32 @@ void main() {
     expect(_search('bulgarian split').map((e) => e.name), contains('Dumbbell Single Leg Split Squat'));
   });
 
+  test('Chinese search names resolve to the corresponding exercise variants', () {
+    const queries = {
+      '平板杠铃推胸': ['EIeI8Vf'],
+      '坐姿器械推胸-上斜': ['incline-chest-press-machine'],
+      '引体向上-反手': ['T2mxWqc'],
+      '反手高位下拉': ['reverse-grip-lat-pulldown'],
+      '坐姿划船': ['fUBheHs', '7I6LNUG'],
+      'T杠划船': ['aaXr7ld'],
+      'T型杠划船': ['aaXr7ld'],
+      '坐姿器械内收': ['hip-adduction-machine'],
+      '器械压腿': ['7zdxRTl'],
+      '单侧绳索下拉': ['single-arm-cable-pushdown'],
+    };
+    for (final entry in queries.entries) {
+      expect(_search(entry.key).map((e) => e.id), unorderedEquals(entry.value));
+    }
+    final ids = kExercises.map((e) => e.id).toSet();
+    for (final entry in kChineseExerciseSearchAliases.entries) {
+      expect(ids, contains(entry.key));
+      for (final alias in entry.value) {
+        expect(_search(alias).map((e) => e.id), contains(entry.key), reason: alias);
+      }
+    }
+    expect(matchExercise('坐姿划船', kExercises), isNull);
+  });
+
   test('the plain catalog name still wins on its own', () {
     expect(_search('Barbell Bench Press').map((e) => e.name), contains('Barbell Bench Press'));
     expect(_search('pec deck').single.name, 'Pec Deck');

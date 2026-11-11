@@ -108,6 +108,33 @@ void main() {
       expect(search('bench press'), isNot(contains('Donkey Calf Raise')));
       expect(search('ch'), isNot(contains('Donkey Calf Raise')));
     });
+
+    testWidgets('Chinese aliases find seated rows and T-bar rows in the library and workout picker', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+      addTearDown(() {
+        fit.setExSearch('');
+        setAppLanguage('en');
+      });
+      setAppLanguage('zh');
+      fit.route = 'exercises';
+      await tester.pumpWidget(const GymManeApp());
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(EditableText), '坐姿划船');
+      await tester.pumpAndSettle();
+      expect(find.text('坐姿绳索划船'), findsOneWidget);
+      expect(find.text('坐姿器械划船'), findsOneWidget);
+      expect(find.text('弹力带坐姿划船'), findsOneWidget);
+      expect(fit.trainSearchResults('坐姿划船').map((e) => e.id), unorderedEquals(['fUBheHs', '7I6LNUG', 'banded-row']));
+
+      await tester.enterText(find.byType(EditableText), 'T型杠划船');
+      await tester.pumpAndSettle();
+      expect(find.text('T杠划船'), findsOneWidget);
+      expect(fit.trainSearchResults('T杠划船').map((e) => e.id), ['aaXr7ld']);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
   });
 
   group('ejercicios por zona', () {
