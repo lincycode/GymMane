@@ -215,7 +215,8 @@ void main() {
     }
     expect(tester.getCenter(chips.last).dy, greaterThan(tester.getCenter(chips.first).dy));
     expect(tester.getCenter(chips.last).dy, closeTo(tester.getCenter(chips[2]).dy, 1));
-    expect(tester.getCenter(chips.first).dy, closeTo(resetRect.center.dy, 1));
+    expect(tester.getCenter(chips.last).dy, closeTo(resetRect.center.dy, 1));
+    final shortcutRects = chips.skip(2).map(tester.getRect).toList();
     for (final label in [t.equipment('Barbell'), t.difficulty('Intermediate')]) {
       final chip = find.text(label);
       expect(chip.hitTestable(), findsOneWidget);
@@ -236,6 +237,13 @@ void main() {
     expect(fit.exFrequentOnly, isFalse);
     expect(fit.favorites[bench.id], isTrue);
     expect(_visibleIds().length, fit.allExercises.length);
+    expect(chips.skip(2).map(tester.getRect), orderedEquals(shortcutRects));
+
+    await tester.tap(chips.last);
+    await tester.pumpAndSettle();
+    expect(fit.exFavouritesOnly, isTrue);
+    expect(chips.skip(2).map(tester.getRect), orderedEquals(shortcutRects));
+    expect(tester.getRect(reset), resetRect);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 }

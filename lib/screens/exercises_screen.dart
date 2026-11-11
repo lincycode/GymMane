@@ -360,7 +360,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     ];
     final chips = Wrap(
       spacing: gap,
-      crossAxisAlignment: WrapCrossAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.end,
       children: [
         chipGroup([
           pill(
@@ -375,34 +375,42 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           pill(sheetOn > 0 ? '${t.filters} · $sheetOn' : t.filters, false,
               () => showExerciseFilters(context, onClear: _c.clear)),
         ]),
-        chipGroup([
-          Semantics(
-            button: true,
-            selected: fit.exFrequentOnly,
-            child: pill(t.frequentExercises, fit.exFrequentOnly, _toggleFrequent),
-          ),
-          pill(fit.favouriteCount > 0 ? '${t.favouritesOnly} · ${fit.favouriteCount}' : t.favouritesOnly,
-              fit.exFavouritesOnly, fit.toggleFavouritesFilter),
-        ]),
+        // Keep space for the clear action on this line even when it is hidden.
+        Padding(
+          padding: const EdgeInsetsDirectional.only(end: _clearTargetSize),
+          child: chipGroup([
+            Semantics(
+              button: true,
+              selected: fit.exFrequentOnly,
+              child: pill(t.frequentExercises, fit.exFrequentOnly, _toggleFrequent),
+            ),
+            pill(fit.favouriteCount > 0 ? '${t.favouritesOnly} · ${fit.favouriteCount}' : t.favouritesOnly,
+                fit.exFavouritesOnly, fit.toggleFavouritesFilter),
+          ]),
+        ),
       ],
     );
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Expanded(child: chips),
+      Stack(children: [
+        chips,
         if (showClear)
-          Semantics(
-            button: true,
-            label: t.clearFilters,
-            child: Pressable(
-              onTap: _clearAll,
-              child: SizedBox.square(
-                dimension: _clearTargetSize,
-                child: Center(
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(color: gc.bgRaised2, shape: BoxShape.circle),
-                    child: Center(child: SvgPathIcon(Ic.close, size: 10, color: gc.textSecondary)),
+          PositionedDirectional(
+            end: 0,
+            bottom: 0,
+            child: Semantics(
+              button: true,
+              label: t.clearFilters,
+              child: Pressable(
+                onTap: _clearAll,
+                child: SizedBox.square(
+                  dimension: _clearTargetSize,
+                  child: Center(
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(color: gc.bgRaised2, shape: BoxShape.circle),
+                      child: Center(child: SvgPathIcon(Ic.close, size: 10, color: gc.textSecondary)),
+                    ),
                   ),
                 ),
               ),
