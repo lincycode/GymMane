@@ -165,4 +165,57 @@ void main() {
     expect(fit.exFrequentOnly, isFalse);
     await tester.pumpWidget(const SizedBox.shrink());
   });
+
+  testWidgets('keeps the clear button visible while narrow filter chips scroll', (tester) async {
+    tester.view.physicalSize = const Size(320, 720);
+    tester.view.devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.view.reset);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    final today = DateTime.now();
+    fit.sessions.addAll([
+      _session(shiftDays(today, -2), [_logged(bench)]),
+      _session(shiftDays(today, -1), [_logged(bench)]),
+    ]);
+    fit.setLanguage('zh');
+    fit.setTextSize('large');
+    fit.setExSearch('bench press');
+    fit.setZoneFilter('Chest');
+    fit.setEquipmentFilter('Barbell');
+    fit.setDifficultyFilter('Intermediate');
+    fit.toggleFavorite(bench.id);
+    fit.toggleFavouritesFilter();
+    fit.toggleFrequentExercisesFilter();
+    fit.persistNow();
+    fit.goExercises();
+    await tester.pumpWidget(const GymManeApp());
+    await tester.pumpAndSettle();
+
+    final reset = find.bySemanticsLabel('清除筛选');
+    final strip = find.ancestor(of: find.text('常练'), matching: find.byType(SingleChildScrollView));
+    expect(reset, findsOneWidget);
+    expect(find.text('清除筛选'), findsNothing);
+    final resetRect = tester.getRect(reset);
+    expect(resetRect.right, 300);
+    expect(resetRect.size, const Size(44, 44));
+    final chipX = tester.getTopLeft(find.text('常练')).dx;
+
+    await tester.drag(strip, const Offset(-170, 0));
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(find.text('常练')).dx, lessThan(chipX));
+    expect(tester.getRect(reset), resetRect);
+    await tester.tap(reset);
+    await tester.pumpAndSettle();
+
+    expect(reset, findsNothing);
+    expect(fit.exSearch, isEmpty);
+    expect(fit.exZoneFilter, isNull);
+    expect(fit.exEquipmentFilter, isNull);
+    expect(fit.exDifficultyFilter, isNull);
+    expect(fit.exFavouritesOnly, isFalse);
+    expect(fit.exFrequentOnly, isFalse);
+    expect(fit.favorites[bench.id], isTrue);
+    expect(_visibleIds().length, fit.allExercises.length);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 }

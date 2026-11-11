@@ -34,6 +34,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
 
   static const _span = 110.0;
   static const _btn = 40.0;
+  static const _filterRowHeight = 44.0;
 
   @override
   void initState() {
@@ -64,7 +65,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     final pad = MediaQuery.paddingOf(context).top;
     final searchTop = pad + 12 + 50 + 14;
     final chipsTop = searchTop + 48 + 10;
-    final contentTop = chipsTop + 34 + 12;
+    final contentTop = chipsTop + _filterRowHeight + 8;
 
     return Stack(children: [
               Positioned.fill(
@@ -344,9 +345,9 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       for (final place in fit.places)
         if (place.id == fit.activePlaceId) (place.name, () => fit.setActivePlace('')),
     ];
-    return SingleChildScrollView(
+    final chips = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      clipBehavior: Clip.none,
+      clipBehavior: showClear ? Clip.hardEdge : Clip.none,
       child: Row(children: [
         pill(
           fit.exZoneFilter != null
@@ -373,16 +374,19 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           gap,
           _ActiveFilter(label: label, onTap: off),
         ],
+      ]),
+    );
+    return SizedBox(
+      height: _filterRowHeight,
+      child: Row(children: [
+        Expanded(child: chips),
         if (showClear) ...[
           gap,
-          Pill(
+          RoundAction(
+            size: _filterRowHeight,
             label: t.clearFilters,
-            bg: Colors.transparent,
-            fg: gc.accent,
             onTap: _clearAll,
-            hPad: 10,
-            vPad: 7,
-            fontSize: 12.5,
+            child: SvgPathIcon(Ic.close, size: 20, color: gc.textSecondary),
           ),
         ],
       ]),
