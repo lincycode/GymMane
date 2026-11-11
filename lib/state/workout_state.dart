@@ -858,11 +858,10 @@ mixin WorkoutState on FitCore, SettingsState, LibraryState, PlacesState, StatsSt
       final total = e.sets.where((st) => st.counts).length.toDouble();
       final ticked = e.sets.where((st) => st.counts && st.done).length.toDouble();
       if (total <= 0) continue;
-      final secondary = exerciseById(e.id)?.secondary ?? const <String>[];
       void add(Map<String, double> m, String id, double n) => m[id] = (m[id] ?? 0) + n;
       add(planned, e.primary, total);
       if (ticked > 0) add(done, e.primary, ticked);
-      for (final m in secondary) {
+      for (final m in _secondaryMusclesForSnapshot(e.id, e.primary)) {
         add(planned, m, total / 2);
         if (ticked > 0) add(done, m, ticked / 2);
       }

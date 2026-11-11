@@ -1658,6 +1658,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get muscleQuads => '股四头肌';
 
   @override
+  String get muscleAdductors => '大腿内收肌';
+
+  @override
   String get muscleHamstrings => '腘绳肌';
 
   @override
@@ -9032,6 +9035,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get muscleQuads => '股四頭肌';
+
+  @override
+  String get muscleAdductors => '大腿內收肌';
 
   @override
   String get muscleHamstrings => '腿後肌';

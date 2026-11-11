@@ -124,7 +124,7 @@ bool _fits(Set<String> qCore, Set<String> q, Set<String> c) {
   return cMeaning.length >= 2 && cMeaning.difference(_modifiers).isNotEmpty && q.containsAll(cMeaning);
 }
 
-const _legs = {'quads', 'glutes', 'hamstrings', 'calves'};
+const _legs = {'quads', 'adductors', 'glutes', 'hamstrings', 'calves'};
 
 bool _sameMuscle(String? hint, Exercise e) =>
     hint == null ||
@@ -143,6 +143,7 @@ const _muscleHints = <List<String>, String>{
   ['hyperextension', 'back extension', 'superman', 'lower back', 'erector', 'deadlift']: 'lowerback',
   ['calf', 'calves', 'soleus']: 'calves',
   ['hamstring', 'leg curl', 'good morning', 'nordic']: 'hamstrings',
+  ['adductor', 'hip adduction', 'copenhagen']: 'adductors',
   ['glute', 'hip thrust', 'bridge', 'kickback']: 'glutes',
   ['quad', 'squat', 'leg press', 'leg extension', 'lunge', 'step up', 'hack']: 'quads',
   ['oblique', 'twist', 'side bend', 'wood chop', 'russian']: 'obliques',

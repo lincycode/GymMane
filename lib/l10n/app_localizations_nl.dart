@@ -1727,6 +1727,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get muscleQuads => 'Quadriceps';
 
   @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
   String get muscleHamstrings => 'Hamstrings';
 
   @override

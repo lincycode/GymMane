@@ -1730,6 +1730,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get muscleQuads => 'Quadrizeps';
 
   @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
   String get muscleHamstrings => 'Beinbeuger';
 
   @override

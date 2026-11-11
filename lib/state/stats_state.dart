@@ -982,7 +982,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
         final n = e.workingSets.length.toDouble();
         if (n <= 0 || !countsForMuscles(e.id)) continue;
         out[e.primary] = (out[e.primary] ?? 0) + n;
-        for (final m in exerciseById(e.id)?.secondary ?? const <String>[]) {
+        for (final m in _secondaryMusclesForSnapshot(e.id, e.primary)) {
           out[m] = (out[m] ?? 0) + n / 2;
         }
       }
@@ -1041,7 +1041,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
         final n = e.workingSets.length.toDouble();
         if (n <= 0 || !countsForMuscles(e.id)) continue;
         out[e.primary] = (out[e.primary] ?? 0) + n;
-        for (final m in exerciseById(e.id)?.secondary ?? const <String>[]) {
+        for (final m in _secondaryMusclesForSnapshot(e.id, e.primary)) {
           out[m] = (out[m] ?? 0) + n / 2;
         }
       }
@@ -1069,6 +1069,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
     'back': 60,
     'lowerback': 72,
     'quads': 72,
+    'adductors': 72,
     'hamstrings': 72,
     'glutes': 72,
     'shoulders': 48,
@@ -1103,7 +1104,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
         void add(String m, double share) =>
             out[m] = (out[m] ?? 0) + effort * share * math.exp(-hours / _tau(m));
         add(e.primary, 1);
-        for (final m in exerciseById(e.id)?.secondary ?? const <String>[]) {
+        for (final m in _secondaryMusclesForSnapshot(e.id, e.primary)) {
           add(m, 0.5);
         }
       }

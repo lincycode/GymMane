@@ -31,6 +31,9 @@ monochrome display and vector-traced with potrace into a single path per pose,
 the same treatment Workout Guide gives its Everkinetic frames. Those files hold
 two lines instead of three.
 
+`assets/art/hand-gripper.txt` is an original EnoGym illustration of a spring
+gripper in its open and closed positions, under CC BY-SA 4.0.
+
 ## Fonts
 
 Nunito, by the Nunito Project Authors, under the SIL Open Font License

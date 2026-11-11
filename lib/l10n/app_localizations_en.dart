@@ -1723,6 +1723,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get muscleQuads => 'Quads';
 
   @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
   String get muscleHamstrings => 'Hamstrings';
 
   @override

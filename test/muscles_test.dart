@@ -58,6 +58,21 @@ void main() {
 
     String bench() => fit.matchExerciseByName('Bench Press')!.id;
 
+    test('keeps a historical primary muscle without counting it twice after catalog corrections', () {
+      final day = DateTime.now();
+      final squat = fit.exerciseById('qXTaZnJ')!;
+      expect(squat.primary, 'quads');
+      fit.sessions.add(LoggedSession(day, 600, [
+        LoggedExercise(squat.id, squat.name, 'glutes', [LoggedSet(8, 60)]),
+        LoggedExercise('hip-adduction-machine', 'Hip Adduction Machine', 'adductors', [LoggedSet(8, 20)]),
+      ]));
+
+      expect(fit.muscleSetsOver(7)['glutes'], 1);
+      expect(fit.muscleSetsBetween(day, day)['adductors'], 1);
+      expect(fit.muscleFatigue(now: day)['glutes'], 1);
+      expect(fit.sessions.single.exercises.first.primary, 'glutes');
+    });
+
     test('cuenta los días desde la última serie del músculo principal', () {
       final now = DateTime.now();
       fit.sessions.add(LoggedSession(DateTime(now.year, now.month, now.day - 9, 12), 600, [

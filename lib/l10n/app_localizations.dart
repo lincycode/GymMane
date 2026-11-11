@@ -3168,6 +3168,12 @@ abstract class AppLocalizations {
   /// **'Quads'**
   String get muscleQuads;
 
+  /// No description provided for @muscleAdductors.
+  ///
+  /// In en, this message translates to:
+  /// **'Adductors'**
+  String get muscleAdductors;
+
   /// No description provided for @muscleHamstrings.
   ///
   /// In en, this message translates to:

@@ -206,6 +206,7 @@ extension GymL10n on AppLocalizations {
         'abdomen' => muscleAbdomen,
         'obliques' => muscleObliques,
         'quads' => muscleQuads,
+        'adductors' => muscleAdductors,
         'hamstrings' => muscleHamstrings,
         'glutes' => muscleGlutes,
         'calves' => muscleCalves,

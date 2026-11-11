@@ -1372,6 +1372,7 @@ class _ZoneCard extends StatelessWidget {
       selected: selected,
       label: label,
       excludeSemantics: true,
+      onTap: onTap,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onTap,
@@ -1392,10 +1393,11 @@ class _ZoneCard extends StatelessWidget {
                 child: FittedBox(child: BodyZoneArt(muscles: muscles, height: 92)),
               ),
               const SizedBox(height: 10),
-              Text(label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(label, style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
+              ),
               const SizedBox(height: 1),
               Text(t.exerciseCount(fit.musclesCount(muscles)),
                   maxLines: 1,

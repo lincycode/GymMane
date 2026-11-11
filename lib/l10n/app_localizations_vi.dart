@@ -1678,6 +1678,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get muscleQuads => 'Đùi trước';
 
   @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
   String get muscleHamstrings => 'Đùi sau';
 
   @override

@@ -23,6 +23,7 @@ const _axes = [
   'forearm',
   'abdomen',
   'quads',
+  'adductors',
   'calves',
   'hamstrings',
   'glutes',
@@ -225,7 +226,7 @@ class MuscleFigurePainter extends CustomPainter {
   static Rect crop(String id) {
     final cx = _backView.contains(id) ? 411.0 : 115.0;
     if (id == 'calves') return Rect.fromCenter(center: Offset(cx, 362), width: 200, height: 200);
-    final top = id == 'quads' || id == 'hamstrings' || id == 'glutes' ? 160.0 : -4.0;
+    final top = const {'quads', 'adductors', 'hamstrings', 'glutes'}.contains(id) ? 160.0 : -4.0;
     return Rect.fromLTWH(cx - 135, top, 270, 270);
   }
 

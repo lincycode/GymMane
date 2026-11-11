@@ -1715,6 +1715,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get muscleQuads => 'العضلة الرباعية';
 
   @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
   String get muscleHamstrings => 'أوتار الركبة';
 
   @override

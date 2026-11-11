@@ -446,6 +446,7 @@ const Map<String, String> kExerciseNameIt = {
   'bench-leg-raise': 'Sollevamento gambe su panca',
   'hack-squat-machine': 'Hack squat alla macchina',
   'straight-arm-pulldown': 'Pulldown a braccia tese',
+  'hand-gripper': 'Chiusura della pinza per la presa',
 };
 
 const Map<String, List<String>> kExerciseStepsIt = {
@@ -665,8 +666,8 @@ const Map<String, List<String>> kExerciseStepsIt = {
     'Stai in piedi con i piedi alla larghezza delle spalle, un manubrio per mano.',
     'Fai un passo avanti con il piede destro e scendi in affondo.',
     'Tieni la schiena dritta e il petto alto mentre scendi.',
-    'Spingi sul tallone destro per tornare alla posizione iniziale.',
-    'Ripeti con la gamba sinistra.',
+    'Spingi sul piede anteriore per risalire. Negli affondi in camminata porta avanti il piede posteriore. Sul posto riporta indietro quello anteriore.',
+    'Alterna le gambe a ogni ripetizione.',
   ],
   'qx4fgX7': [
     'Stai in piedi con i piedi alla larghezza delle spalle, un manubrio per mano.',
@@ -878,11 +879,10 @@ const Map<String, List<String>> kExerciseStepsIt = {
     'Fai una pausa in alto, poi abbassa lentamente il corpo fino alla posizione iniziale.',
   ],
   'aaXr7ld': [
-    "Regola l'altezza del sedile e la posizione della pedana per un allineamento corretto.",
-    'Siediti sulla macchina con il petto contro il cuscinetto e i piedi ben appoggiati sulla pedana.',
-    'Afferra le maniglie con presa prona leggermente più larga delle spalle.',
-    'Tieni la schiena dritta e attiva il core.',
-    'Tira le maniglie verso il busto stringendo le scapole.',
+    'Sali sulla pedana con i piedi alla larghezza delle anche.',
+    'Piega leggermente le ginocchia, inclina il busto dalle anche e afferra la maniglia con entrambe le mani.',
+    'Mantieni il busto stabile e tira la maniglia verso le costole inferiori.',
+    'Abbassa la maniglia con controllo fino a distendere le braccia.',
   ],
   'face-pull': [
     "Metti la corda al cavo poco sopra l'altezza della testa.",
@@ -1315,7 +1315,7 @@ const Map<String, List<String>> kExerciseStepsIt = {
     "Siediti alla macchina per alzate laterali con i cuscinetti contro l'esterno delle braccia.",
     'Regola il sedile così che il perno sia in linea con le spalle.',
     "Spingi le braccia fuori e su finché arrivano all'altezza delle spalle.",
-    'Tieni il collo rilassato e i trapezi fuori dal movimento.',
+    'Tieni il collo rilassato ed evita di sollevare le spalle.',
     'Abbassa lentamente i cuscinetti ai lati.',
   ],
   'landmine-press': [
@@ -1995,11 +1995,10 @@ const Map<String, List<String>> kExerciseStepsIt = {
     'Tieni la contrazione per una breve pausa mentre stringi i bicipiti.',
   ],
   'xNrS20v': [
-    'Stai dritto con i piedi alla larghezza delle spalle e tieni un bilanciere con presa prona, palmi rivolti in basso.',
-    "Tieni ferme le braccia ed espira mentre pieghi il bilanciere verso l'alto, contraendo i bicipiti.",
-    'Continua a sollevare il bilanciere finché i bicipiti sono completamente contratti e il bilanciere è alle spalle.',
-    'Tieni la contrazione per una breve pausa mentre stringi i bicipiti.',
-    'Inspira mentre abbassi lentamente il bilanciere fino alla posizione iniziale, tenendo ferme le braccia.',
+    'Tieni il bilanciere davanti alle cosce con i palmi rivolti verso il basso.',
+    'Tieni le braccia ai lati del corpo e i polsi in posizione neutra.',
+    'Fletti i gomiti e solleva il bilanciere usando brachioradiale, brachiale e bicipite.',
+    'Abbassa lentamente il bilanciere senza oscillare con il busto.',
   ],
   'J74XlNf': [
     'Siediti su una palla fitness con i piedi piatti a terra e la schiena dritta.',
@@ -2099,11 +2098,10 @@ const Map<String, List<String>> kExerciseStepsIt = {
     'Ripeti per il numero di ripetizioni voluto.',
   ],
   'bZq4bwK': [
-    'Siediti sul bordo di una panca o di una sedia con le mani aggrappate al bordo vicino ai fianchi.',
-    'Fai scivolare i glutei oltre il bordo anteriore della panca con le gambe tese davanti a te.',
-    'Tieni la schiena vicina alla panca e i gomiti leggermente piegati.',
-    'Abbassa il corpo piegando i gomiti finché la parte alta delle braccia è parallela al pavimento.',
-    "Spingiti di nuovo verso l'alto raddrizzando le braccia.",
+    'Fissa il carico alla cintura e afferra le parallele.',
+    'Sostieniti a braccia distese con il busto piuttosto verticale.',
+    'Piega i gomiti e scendi fino a una profondità comoda senza far oscillare il carico.',
+    'Spingi sulle parallele per distendere i gomiti e risalire.',
   ],
   'OTgkHwR': [
     "Sdraiati su una panca declinata con la testa più in basso dei piedi e tieni un manubrio in ogni mano, palmi uno di fronte all'altro.",
@@ -2971,5 +2969,10 @@ const Map<String, List<String>> kExerciseStepsIt = {
     'Porta le spalle in avanti oltre le mani e mantieni questa inclinazione.',
     'Abbassa il petto a terra senza lasciare cadere il bacino.',
     'Spingi per risalire mantenendo la stessa inclinazione in avanti.',
+  ],
+  'hand-gripper': [
+    'Tieni una pinza per la presa con un manico contro il palmo e l’altro sotto le dita.',
+    'Mantieni il polso neutro e stringi i manici con le dita.',
+    'Riapri la pinza lentamente, ripeti e cambia mano.',
   ],
 };

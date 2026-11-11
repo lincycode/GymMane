@@ -465,6 +465,7 @@ const Map<String, String> kExerciseNameEs = {
   'bench-leg-raise': 'Elevación de piernas en banco',
   'hack-squat-machine': 'Sentadilla hack en máquina',
   'straight-arm-pulldown': 'Jalón con brazos rectos',
+  'hand-gripper': 'Apretar una pinza de mano',
 };
 
 const Map<String, List<String>> kExerciseStepsEs = {
@@ -740,11 +741,10 @@ const Map<String, List<String>> kExerciseStepsEs = {
     'Aguanta un momento arriba y baja la barra despacio a la posición inicial.',
   ],
   'xNrS20v': [
-    'Ponte de pie con los pies a la anchura de los hombros y sujeta la barra en pronación, con las palmas hacia abajo.',
-    'Mantén los brazos quietos y suelta el aire mientras subes la barra contrayendo el bíceps.',
-    'Sigue subiendo la barra hasta contraer el bíceps del todo, con la barra a la altura de los hombros.',
-    'Aguanta un instante en la contracción apretando el bíceps.',
-    'Coge aire mientras bajas la barra despacio a la posición inicial, con los brazos quietos.',
+    'Sujeta la barra delante de los muslos con las palmas hacia abajo.',
+    'Mantén los brazos junto al cuerpo y las muñecas neutras.',
+    'Flexiona los codos para subir la barra con el braquiorradial, el braquial y el bíceps.',
+    'Baja la barra despacio sin balancear el tronco.',
   ],
   'LsZkfU6': [
     'Siéntate en un banco con los pies apoyados en el suelo y sujeta la barra en pronación, con las palmas hacia abajo.',
@@ -1318,8 +1318,8 @@ const Map<String, List<String>> kExerciseStepsEs = {
     'Ponte de pie con los pies a la anchura de los hombros y una mancuerna en cada mano.',
     'Da un paso adelante con el pie derecho y baja a la zancada.',
     'Mantén la espalda recta y el pecho alto mientras bajas.',
-    'Empuja con el talón derecho para volver a la posición inicial.',
-    'Repite con la pierna izquierda.',
+    'Empuja con el pie delantero para levantarte. Si avanzas, acerca el pie trasero. Si haces la zancada en el sitio, vuelve atrás con el pie delantero.',
+    'Alterna las piernas en cada repetición.',
   ],
   'FkBIE6a': [
     'Túmbate boca abajo en un banco plano con las rodillas justo fuera del borde.',
@@ -1439,11 +1439,10 @@ const Map<String, List<String>> kExerciseStepsEs = {
     'Repite las repeticiones que quieras.',
   ],
   'aaXr7ld': [
-    'Ajusta la altura del asiento y la plataforma para quedar bien alineado.',
-    'Siéntate en la máquina con el pecho contra la almohadilla y los pies apoyados en la plataforma.',
-    'Agarra las agarraderas en pronación, algo más abierto que la anchura de los hombros.',
-    'Mantén la espalda recta y aprieta el core.',
-    'Tira de las asas hacia el tronco juntando las escápulas.',
+    'Colócate de pie en la plataforma con los pies al ancho de las caderas.',
+    'Flexiona ligeramente las rodillas, inclínate desde las caderas y sujeta el asa con ambas manos.',
+    'Mantén el tronco firme y lleva el asa hacia las costillas inferiores.',
+    'Baja el asa de forma controlada hasta extender los brazos.',
   ],
   'Ser9eQp': [
     'Ajusta el asiento para que los codos queden alineados con el eje de la máquina.',
@@ -1766,11 +1765,10 @@ const Map<String, List<String>> kExerciseStepsEs = {
     'Aguanta un momento abajo y empuja con los talones para volver a la posición inicial.',
   ],
   'bZq4bwK': [
-    'Siéntate en el borde de un banco o una silla agarrando el borde junto a la cadera.',
-    'Desliza el culo por delante del banco, con las piernas estiradas hacia delante.',
-    'Mantén la espalda pegada al banco y los codos algo flexionados.',
-    'Baja el cuerpo flexionando los codos hasta que los brazos queden paralelos al suelo.',
-    'Empuja para volver a la posición inicial estirando los brazos.',
+    'Sujeta la carga al cinturón de lastre y agarra las barras paralelas.',
+    'Sostén el cuerpo con los brazos extendidos y el tronco bastante erguido.',
+    'Flexiona los codos para bajar hasta una profundidad cómoda, sin balancear la carga.',
+    'Empuja las barras para extender los codos y volver arriba.',
   ],
   'pec-deck': [
     'Siéntate en la contractora con la espalda pegada al respaldo y los pies apoyados.',
@@ -1832,7 +1830,7 @@ const Map<String, List<String>> kExerciseStepsEs = {
     'Siéntate en la máquina de laterales con las almohadillas en la parte externa de los brazos.',
     'Ajusta el asiento para que el eje quede a la altura de los hombros.',
     'Empuja los brazos hacia fuera y arriba hasta la altura de los hombros.',
-    'Mantén el cuello relajado y los trapecios fuera del movimiento.',
+    'Relaja el cuello y evita encoger los hombros.',
     'Baja las almohadillas despacio hasta los costados.',
   ],
   'landmine-press': [
@@ -3677,5 +3675,10 @@ const Map<String, List<String>> kExerciseStepsEs = {
     'Inclínate un poco hacia delante desde la cadera y aprieta el abdomen.',
     'Baja la barra en arco hasta los muslos sin doblar los brazos.',
     'Deja subir la barra despacio hasta la altura de los ojos.',
+  ],
+  'hand-gripper': [
+    'Sujeta una pinza de mano con un mango contra la palma y el otro sobre los dedos.',
+    'Mantén la muñeca neutra y junta los mangos con los dedos.',
+    'Abre la pinza despacio, repite y cambia de mano.',
   ],
 };

@@ -7,6 +7,7 @@ import 'package:gymmane/models/workout.dart';
 import 'package:gymmane/services/exercise_match.dart';
 import 'package:gymmane/services/local_store.dart';
 import 'package:gymmane/state/fit_state.dart';
+import 'package:gymmane/widgets/body_map.dart';
 import 'package:gymmane/widgets/ui_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +31,49 @@ void main() {
             fit.exercisesFiltered.every((e) => e.primary == m || e.secondary.contains(m)), isTrue);
         fit.setMuscleFilter(m);
       }
+    });
+
+    testWidgets('machine seated row shows trapezius and appears in its muscle filter', (tester) async {
+      tester.view.physicalSize = const Size(320, 720);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      addTearDown(() => setAppLanguage('en'));
+      const id = '7I6LNUG';
+      expect(fit.exerciseById(id)!.primary, 'back');
+      fit.setMuscleFilter('trapezius');
+      expect(fit.exercisesFiltered.map((ex) => ex.id), contains(id));
+      fit.setMuscleFilter('trapezius');
+
+      fit.setLanguage('zh');
+      fit.persistNow();
+      fit.openExercise(id);
+      await tester.pumpWidget(const GymManeApp());
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('坐姿器械划船'), findsOneWidget);
+      expect(find.text('肱二头肌, '), findsOneWidget);
+      expect(find.text('前臂, '), findsOneWidget);
+      expect(find.text('斜方肌'), findsOneWidget);
+      expect(tester.getSize(find.text('斜方肌')).height, lessThan(24));
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    test('adductors select the inner thigh in both body maps and filter the adduction machine', () {
+      expect(kBodyZones['Legs'], contains('adductors'));
+      final previousSex = fit.profile.sex;
+      addTearDown(() {
+        fit.profile.sex = previousSex;
+        fit.setMuscleFilter('adductors');
+      });
+      for (final sex in ['male', 'female']) {
+        fit.profile.sex = sex;
+        expect(muscleAt(const Offset(101, 240)), 'adductors', reason: sex);
+        expect(muscleAt(const Offset(129, 240)), 'adductors', reason: sex);
+        expect(muscleAt(const Offset(82, 245)), 'quads', reason: sex);
+      }
+      fit.setMuscleFilter('adductors');
+      final adduction = fit.exercisesFiltered.singleWhere((e) => e.id == 'hip-adduction-machine');
+      expect(adduction.primary, 'adductors');
     });
   });
 

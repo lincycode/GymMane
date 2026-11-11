@@ -52,8 +52,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     final gc = context.gc;
     final ex = fit.activeExercise;
     final fav = fit.favorites[ex.id] ?? false;
-    final secondary =
-        ex.secondary.map(muscleLabel).join(', ').isEmpty ? t.none : ex.secondary.map(muscleLabel).join(', ');
+    final secondary = ex.secondary.map(muscleLabel).toList();
     final steps = fit.activeExerciseSteps(ex);
     final pr = fit.exerciseRecord(ex.id);
     final oneRm = fit.oneRmSeries(ex.id);
@@ -182,11 +181,11 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _meta(gc, t.primaryLabel, muscleLabel(ex.primary)),
+                      _meta(gc, t.primaryLabel, [muscleLabel(ex.primary)]),
                       const SizedBox(width: 20),
                       _meta(gc, t.secondaryLabel, secondary, onTap: () => _editSecondary(context, ex.id)),
                       const SizedBox(width: 20),
-                      _meta(gc, t.equipmentLabel, t.equipment(ex.equipment)),
+                      _meta(gc, t.equipmentLabel, [t.equipment(ex.equipment)]),
                     ],
                   ),
                   const SizedBox(height: 18),
@@ -680,7 +679,8 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     );
   }
 
-  Widget _meta(GymColors gc, String label, String value, {VoidCallback? onTap}) {
+  Widget _meta(GymColors gc, String label, List<String> values, {VoidCallback? onTap}) {
+    final style = AppTheme.f(14.5, weight: FontWeight.w600, color: gc.text);
     final column = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -692,10 +692,21 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
           ],
         ]),
         const SizedBox(height: 5),
-        Text(value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTheme.f(14.5, weight: FontWeight.w600, color: gc.text)),
+        if (values.length <= 1)
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(values.isEmpty ? t.none : values.single, style: style),
+          )
+        else
+          Semantics(
+            label: values.join(', '),
+            excludeSemantics: true,
+            child: Wrap(children: [
+              for (final (index, value) in values.indexed)
+                Text(index == values.length - 1 ? value : '$value, ', style: style),
+            ]),
+          ),
       ],
     );
     return Flexible(

@@ -23,6 +23,10 @@ mixin LibraryState on FitCore {
 
   bool hasSecondaryOverride(String id) => secondaryOverride.containsKey(id);
 
+  // A saved session may retain a primary muscle that the catalogue now lists as secondary.
+  Iterable<String> _secondaryMusclesForSnapshot(String id, String primary) =>
+      (exerciseById(id)?.secondary ?? const <String>[]).where((muscle) => muscle != primary);
+
   void setSecondary(String id, List<String> muscles) {
     final ex = exerciseById(id);
     if (ex == null) return;
