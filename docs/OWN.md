@@ -59,7 +59,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 更新源固定为公开仓库 `lincycode/GymMane` 的 latest Release。每个 Release 使用 `enogym-v<versionName>` 标签，指向经过验证的 `own` 提交，并包含 arm64 APK、同名 `.sha256` 和 `enogym-update.json`。个人版标签中的 `own` 不代表 GitHub prerelease；正式更新发布为非草稿、非 prerelease。更新清单使用 Android 实际版本码（如 own.7 的 arm64 为 72），不只比较上游版本字符串。
 
-`2.1.0-own.10` 是过渡版，更新器和发布脚本同时支持 `2.1.0-own.N` 与 `1.0.0` 形式。之后 EnoGym 独立编号，上游版本与提交继续记在 `own.properties`。从旧版通过应用内更新切到独立编号，需要先装过渡版。也可以手动覆盖安装独立编号的 APK。Android 版本码沿用同一递增序列。
+`2.1.0-own.10` 是过渡版，更新器和发布脚本同时支持 `2.1.0-own.N` 与 `1.0.0` 形式。EnoGym 从 `1.0.0` 开始独立编号。上游版本与提交记录在 `own.properties`。从旧版通过应用内更新切到独立编号，需要先装过渡版。也可以手动覆盖安装独立编号的 APK。Android 版本码沿用同一递增序列。
 
 应用检查发布身份、ABI、最低系统版本和大小，流式下载到专用缓存目录，校验 SHA-256、包名、版本和当前签名。安装通过系统安装器确认，首次可能需要允许 EnoGym 安装未知应用，返回后再次点击安装。正在训练时不安装；退出弹窗会取消未完成的下载。已下载且校验通过的包可复用，更新后再次检查会清理旧更新缓存，不接触训练数据。
 
