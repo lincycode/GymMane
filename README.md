@@ -6,11 +6,12 @@ Enoch 维护的 Android 训练记录工具。可以安排每周训练，按组�
 
 [下载 EnoGym](https://github.com/lincycode/GymMane/releases/latest) · [维护说明](docs/OWN.md)
 
-## 训练与记录
+## EnoGym 的改动
 
-- **训练计划**：从首页管理每周安排、轮换顺序和训练方案。添加模板前可以预览动作、组数和排程。
-- **组间休息**：应用内倒计时和休息结束通知，支持仅通知或响铃。支持 Android 实时通知的设备可在通知栏或状态栏查看倒计时。
-- **离线使用**：训练、统计和备份可在离线时使用。手动检查更新时连接 GitHub。
+- **训练计划**从首页进入。每周安排、轮换顺序和训练方案各有入口。导入模板前可预览动作、组数和排程，确认后才写入。
+- **组间休息**移除了应用触发的震动，保留无声通知和可选铃声。支持 Android 实时通知的设备可在通知栏或状态栏查看倒计时。
+- **简体中文**补齐了界面文案、动作说明、训练模板和预置菜品。
+- **个人版更新**可在应用内检查、下载并验证安装包。训练、统计和备份可离线使用。
 
 ## 安装与更新
 
@@ -18,6 +19,6 @@ Enoch 维护的 Android 训练记录工具。可以安排每周训练，按组�
 
 ## 来源与许可
 
-**Based on GymMane by InlitX.** 原项目见 [InlitX/GymMane](https://github.com/InlitX/GymMane)。
+**Based on GymMane by InlitX.** EnoGym 基于 [GymMane](https://github.com/InlitX/GymMane) 开发，由本仓库独立维护与发布。感谢原作者 InlitX 和所有贡献者。
 
-源码按 [GPL-3.0](LICENSE) 发布，适用[署名条款](ADDITIONAL_TERMS.md)。插图、字体及其他素材的来源见 [CREDITS.md](CREDITS.md)。
+代码遵循 [GPL-3.0 许可证](LICENSE)，保留原有版权声明、贡献记录和各项依赖的许可。署名要求和素材许可见 [附加条款](ADDITIONAL_TERMS.md) 与 [贡献与素材来源](CREDITS.md)。

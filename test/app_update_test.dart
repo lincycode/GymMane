@@ -12,34 +12,35 @@ import 'package:gymmane/state/fit_state.dart';
 import 'package:gymmane/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const _apk = 'EnoGym-2.1.0-own.7-Ace6T-arm64-v8a-release.apk';
+const _legacyVersion = '2.1.0-own.7';
+String _apkName(String version) => 'EnoGym-$version-Ace6T-arm64-v8a-release.apk';
 final _hash = List.filled(64, 'a').join();
-Map<String, dynamic> _manifest() => {
+Map<String, dynamic> _manifest({String version = _legacyVersion, int code = 72}) => {
   'schemaVersion': 1,
   'applicationId': updateAppId,
-  'versionName': '2.1.0-own.7',
-  'versionCode': 72,
+  'versionName': version,
+  'versionCode': code,
   'minSdk': 24,
   'abi': 'arm64-v8a',
-  'apkName': _apk,
+  'apkName': _apkName(version),
   'size': 4,
   'sha256': _hash,
 };
-Map<String, dynamic> _release() => {
-  'tag_name': 'enogym-v2.1.0-own.7',
+Map<String, dynamic> _release({String version = _legacyVersion}) => {
+  'tag_name': 'enogym-v$version',
   'draft': false,
   'prerelease': false,
   'body': 'Test release notes',
   'assets': [
-    for (final name in [_apk, updateManifestName])
+    for (final name in [_apkName(version), updateManifestName])
       {
         'name': name,
         'state': 'uploaded',
         'size': 4,
-        'id': name == _apk ? 1 : 2,
-        'url': 'https://api.github.com/repos/$updateRepository/releases/assets/${name == _apk ? 1 : 2}',
+        'id': name == _apkName(version) ? 1 : 2,
+        'url': 'https://api.github.com/repos/$updateRepository/releases/assets/${name == _apkName(version) ? 1 : 2}',
         'browser_download_url':
-            'https://github.com/$updateRepository/releases/download/enogym-v2.1.0-own.7/$name',
+            'https://github.com/$updateRepository/releases/download/enogym-v$version/$name',
       },
   ],
 };
@@ -150,14 +151,16 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late Directory directory;
   final methods = <String>[];
+  late int installedCode;
   setUp(() async {
     directory = await Directory.systemTemp.createTemp('enogym-update-test-');
     methods.clear();
+    installedCode = 62;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
       AppUpdateService.channel,
       (call) async {
         methods.add(call.method);
-        if (call.method == 'info') return _installed(directory.path);
+        if (call.method == 'info') return _installed(directory.path, code: installedCode);
         if (call.method == 'verify') {
           expect(call.arguments['fileName'], '$_hash.apk');
           expect(call.arguments['versionCode'], 72);
@@ -194,6 +197,21 @@ void main() {
     expect(update.apkUrl.host, 'api.github.com');
   });
 
+  test('the transition release finds 1.0.0 by its higher Android version code', () async {
+    const version = '1.0.0';
+    installedCode = 102;
+    final client = _Client([
+      _Response(utf8.encode(jsonEncode(_release(version: version)))),
+      _Response(utf8.encode(jsonEncode(_manifest(version: version, code: 112)))),
+    ]);
+    await HttpOverrides.runZoned(() async {
+      final update = (await AppUpdateService().check())!;
+      expect(update.versionName, version);
+      expect(update.versionCode, 112);
+      expect(update.apkUrl.path, '/repos/$updateRepository/releases/assets/1');
+    }, createHttpClient: (_) => client);
+  });
+
   test('rejects wrong identity, unsupported ABI, hashes, size and inconsistent tags', () {
     for (final entry in {
       'schemaVersion': 2,
@@ -202,7 +220,6 @@ void main() {
       'sha256': 'bad',
       'size': 0,
       'versionCode': '72',
-      'versionName': '2.1.0',
       'apkName': '../other.apk',
     }.entries) {
       expect(
@@ -211,6 +228,11 @@ void main() {
         reason: entry.key,
       );
     }
+    const unsupportedVersion = '1.0.0-beta.1';
+    expect(
+      () => parse(_manifest(version: unsupportedVersion), _release(version: unsupportedVersion)),
+      throwsA(isA<UpdateFailure>()),
+    );
     expect(() => parse({..._manifest(), 'minSdk': 99}), throwsA(isA<UpdateFailure>()));
     expect(() => parse(null, {..._release(), 'prerelease': true}), throwsA(isA<UpdateFailure>()));
     expect(() => parse(null, {..._release(), 'draft': true}), throwsA(isA<UpdateFailure>()));

@@ -23,7 +23,7 @@ def main():
     properties = dict(line.split('=', 1) for line in Path('own.properties').read_text().splitlines() if '=' in line)
     version = properties['versionName']
     code = int(properties['versionCode']) * 10 + 2
-    if not re.fullmatch(r'\d+\.\d+\.\d+-own\.\d+', version):
+    if not re.fullmatch(r'\d+\.\d+\.\d+(?:-own\.\d+)?', version):
         raise SystemExit('Invalid personal version name.')
     if properties['applicationId'] != 'com.echolin.gymmane':
         raise SystemExit('Unexpected application identity.')

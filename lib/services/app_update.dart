@@ -83,7 +83,7 @@ class AppUpdate {
         manifest['applicationId'] != updateAppId ||
         installed.packageName != updateAppId ||
         version is! String ||
-        !RegExp(r'^\d+\.\d+\.\d+-own\.\d+$').hasMatch(version) ||
+        !RegExp(r'^\d+\.\d+\.\d+(?:-own\.\d+)?$').hasMatch(version) ||
         release['tag_name'] != 'enogym-v$version' ||
         code is! int ||
         code <= 0 ||

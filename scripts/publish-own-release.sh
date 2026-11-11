@@ -39,7 +39,7 @@ stable = [r for r in releases if not r['draft'] and not r['prerelease']]
 if stable:
     latest = max(stable, key=lambda r: r['published_at'])
     previous = None
-    version = re.fullmatch(r'enogym-v(\d+\.\d+\.\d+-own\.\d+)', latest['tag_name'])
+    version = re.fullmatch(r'enogym-v(\d+\.\d+\.\d+(?:-own\.\d+)?)', latest['tag_name'])
     if version:
         cached = directory.parent / version[1] / 'enogym-update.json'
         asset = next((a for a in latest['assets'] if a['name'] == cached.name), None)
