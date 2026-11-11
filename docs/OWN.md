@@ -65,7 +65,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 首次使用需手动覆盖安装包含更新功能的 APK。不能卸载清数据，也不能使用原作者包或 Debug 包来覆盖。真实厂商系统的安装授权与后台行为仍需实机验收。
 
-每次交付通过验证的 EnoGym 个人版更新，都执行以下流程，让手机可以在应用里检查更新。
+平时完成验证后，将本次改动提交并推送到 `origin/own`。收到用户明确的发布要求后，再按以下流程创建 GitHub Release，让手机可以在应用里检查更新。
 
 1. 在 `own` 修改，递增 `own.properties` 的 versionName 和 versionCode，保留包名与固定签名。更新 `docs/releases/<版本>.md`。
 2. 运行相关测试、完整分析，使用 `bash scripts/build-own.sh release --no-pub` 构建。仅在依赖已正确准备后使用 `--no-pub`。验证同签名升级和数据保留，审查并提交相关源码。
@@ -113,7 +113,7 @@ git merge --no-ff 上游稳定标签
 
 观察 Releases 及与计划、记录、备份相关的 Issues/PR。只有已落地的提交可合入；紧急 cherry-pick 要记录原始提交和依赖。不要对长期 own 反复 rebase。
 
-代码回退不等于数据回退。升级前导出备份；若上游升级数据格式，不能直接降级 APK，优先修复后继续向前升级。合入个人版的功能更新通过验收后，按上述个人版发布流程交付。
+升级前导出备份。若上游升级数据格式，优先修复后继续向前升级，直接降级 APK 可能无法读取新版数据。合入个人版的功能更新通过验收后推送 `own`，发布时遵循用户当次要求。
 
 ## 验收与证据
 
