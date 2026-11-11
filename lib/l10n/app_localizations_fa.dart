@@ -641,6 +641,23 @@ class AppLocalizationsFa extends AppLocalizations {
   String get favouritesOnly => 'علاقه‌مندی‌ها';
 
   @override
+  String get frequentExercises => 'Frequent';
+
+  @override
+  String frequentExerciseCounts(int recent, int total) {
+    return '$recent sessions in 90 days · $total total';
+  }
+
+  @override
+  String get noFrequentExercises => 'No matching frequent exercises';
+
+  @override
+  String get frequentExercisesHint => 'Exercises you trained at least twice in the last 90 days appear here.';
+
+  @override
+  String get exitFrequentExercises => 'Exit Frequent';
+
+  @override
   String get noFavouritesYet => 'هنوز علاقه‌مندی نداری';
 
   @override

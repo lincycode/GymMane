@@ -819,7 +819,7 @@ class _NavBar extends StatefulWidget {
 
 class _NavBarState extends State<_NavBar> {
   static const height = 68.0;
-  static const _iw = 58.0;
+  static const _preferredItemWidth = 58.0;
   static const _fabW = 48.0;
   static const _routes = ['home', 'progress', 'exercises', 'settings'];
 
@@ -828,6 +828,7 @@ class _NavBarState extends State<_NavBar> {
   int? _pressed;
   double _slotW = 0;
   double _gap = 0;
+  double _itemWidth = _preferredItemWidth;
 
   int get _selectedIndex {
     if (_hover != null) return _hover!;
@@ -837,9 +838,9 @@ class _NavBarState extends State<_NavBar> {
 
   double _slotX(int i) => switch (i) {
         0 => 0,
-        1 => _iw + _gap,
-        2 => 2 * _iw + 3 * _gap + _fabW,
-        _ => 3 * _iw + 4 * _gap + _fabW,
+        1 => _itemWidth + _gap,
+        2 => 2 * _itemWidth + 3 * _gap + _fabW,
+        _ => 3 * _itemWidth + 4 * _gap + _fabW,
       };
 
   void _go(int i) => [fit.goHome, fit.goProgress, fit.goExercises, fit.goSettings][i]();
@@ -847,7 +848,7 @@ class _NavBarState extends State<_NavBar> {
   int _nearest(double x) {
     var best = 0;
     for (var i = 1; i < 4; i++) {
-      if ((_slotX(i) + _iw / 2 - x).abs() < (_slotX(best) + _iw / 2 - x).abs()) best = i;
+      if ((_slotX(i) + _itemWidth / 2 - x).abs() < (_slotX(best) + _itemWidth / 2 - x).abs()) best = i;
     }
     return best;
   }
@@ -856,7 +857,7 @@ class _NavBarState extends State<_NavBar> {
     final near = _nearest(x);
     if (near != _hover) HapticFeedback.selectionClick();
     setState(() {
-      _dragX = x.clamp(_iw / 2, _slotW - _iw / 2);
+      _dragX = x.clamp(_itemWidth / 2, _slotW - _itemWidth / 2);
       _hover = near;
     });
   }
@@ -881,7 +882,8 @@ class _NavBarState extends State<_NavBar> {
     return LayoutBuilder(
         builder: (context, c) {
           _slotW = c.maxWidth - 28;
-          _gap = ((_slotW - 4 * _iw - _fabW) / 4).clamp(0.0, 40.0);
+          _itemWidth = ((_slotW - _fabW) / 4).clamp(0.0, _preferredItemWidth);
+          _gap = ((_slotW - 4 * _itemWidth - _fabW) / 4).clamp(0.0, 40.0);
           final drag = _dragX;
 
           return Stack(
@@ -910,8 +912,8 @@ class _NavBarState extends State<_NavBar> {
                 bottom: 0,
                 child: _LiquidPill(
                   left: _slotX(_selectedIndex) - _gap * 0.2,
-                  dragLeft: drag == null ? null : drag - _iw / 2 - _gap * 0.2,
-                  width: _iw + _gap * 0.4,
+                  dragLeft: drag == null ? null : drag - _itemWidth / 2 - _gap * 0.2,
+                  width: _itemWidth + _gap * 0.4,
                   color: gc.text.withValues(alpha: fit.dark ? 0.13 : 0.08),
                 ),
               ),
@@ -923,7 +925,7 @@ class _NavBarState extends State<_NavBar> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onHorizontalDragStart: (d) {
-                    final fab = 2 * _iw + 2 * _gap + _fabW / 2;
+                    final fab = 2 * _itemWidth + 2 * _gap + _fabW / 2;
                     if ((d.localPosition.dx - fab).abs() < _fabW / 2 + 4) return;
                     HapticFeedback.selectionClick();
                     _dragTo(d.localPosition.dx);
@@ -988,7 +990,7 @@ class _NavBarState extends State<_NavBar> {
           duration: Duration(milliseconds: pressed ? 110 : 340),
           curve: pressed ? Curves.easeOut : Curves.easeOutBack,
           child: SizedBox(
-            width: _iw,
+            width: _itemWidth,
             height: height,
             child: TweenAnimationBuilder<double>(
               tween: Tween(begin: selected ? 1 : 0, end: selected ? 1 : 0),

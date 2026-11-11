@@ -59,6 +59,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   Widget build(BuildContext context) {
     final gc = context.gc;
     final list = fit.exercisesFiltered;
+    final usage = fit.exFrequentOnly ? fit.exerciseTrainingUsage() : null;
 
     final pad = MediaQuery.paddingOf(context).top;
     final searchTop = pad + 12 + 50 + 14;
@@ -75,12 +76,12 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
               itemBuilder: (context, i) {
                 if (list.isEmpty) return _empty(gc);
                 final ex = list[i];
-                final first = i == 0 || list[i - 1].primary != ex.primary;
-                final last = i == list.length - 1 || list[i + 1].primary != ex.primary;
+                final first = i == 0 || (usage == null && list[i - 1].primary != ex.primary);
+                final last = i == list.length - 1 || (usage == null && list[i + 1].primary != ex.primary);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (first) ...[
+                    if (first && usage == null) ...[
                       SizedBox(height: i == 0 ? 2 : 22),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(4, 0, 0, 8),
@@ -99,7 +100,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         ]),
                       ),
                     ],
-                    _row(gc, ex, first: first, last: last),
+                    _row(gc, ex, first: first, last: last, usage: usage?[ex.id]),
                   ],
                 );
               },
@@ -155,6 +156,11 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   void _clearAll() {
     _c.clear();
     fit.clearExFilters();
+  }
+
+  void _toggleFrequent() {
+    if (_scroll.hasClients) _scroll.jumpTo(0);
+    fit.toggleFrequentExercisesFilter();
   }
 
   Widget _header(BuildContext context, GymColors gc, int count, double pad, double searchTop, double chipsTop) {
@@ -311,15 +317,20 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   Widget _quickChips(BuildContext context, GymColors gc) {
     final sheetOn = _sheetFilters;
     final zoneOn = fit.exZoneFilter != null || fit.exMuscleFilter != null;
-    final anyOn = sheetOn > 0 || zoneOn || fit.exFavouritesOnly;
-    Widget pill(String label, bool on, VoidCallback onTap) => Pill(
-          label: label,
-          bg: on ? gc.ember : gc.bgRaised2,
-          fg: on ? gc.onEmber : gc.textSecondary,
-          onTap: onTap,
-          hPad: 14,
-          vPad: 7,
-          fontSize: 12.5,
+    final showClear = sheetOn > 0 || zoneOn || fit.exFavouritesOnly;
+    final compact = MediaQuery.sizeOf(context).width < 360;
+    final gap = SizedBox(width: compact ? 6 : 8);
+    Widget pill(String label, bool on, VoidCallback onTap) => ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 44),
+          child: Pill(
+            label: label,
+            bg: on ? gc.ember : gc.bgRaised2,
+            fg: on ? gc.onEmber : gc.textSecondary,
+            onTap: onTap,
+            hPad: compact ? 8 : 14,
+            vPad: 7,
+            fontSize: 12.5,
+          ),
         );
     final active = <(String, VoidCallback)>[
       if (fit.exKindFilter != null) (t.exerciseKind(fit.exKindFilter!), () => fit.setKindFilter(fit.exKindFilter!)),
@@ -346,18 +357,24 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           zoneOn,
           () => showBodyZones(context),
         ),
-        const SizedBox(width: 8),
+        gap,
         pill(sheetOn > 0 ? '${t.filters} · $sheetOn' : t.filters, false,
             () => showExerciseFilters(context, onClear: _c.clear)),
-        for (final (label, off) in active) ...[
-          const SizedBox(width: 8),
-          _ActiveFilter(label: label, onTap: off),
-        ],
-        const SizedBox(width: 8),
+        gap,
+        Semantics(
+          button: true,
+          selected: fit.exFrequentOnly,
+          child: pill(t.frequentExercises, fit.exFrequentOnly, _toggleFrequent),
+        ),
+        gap,
         pill(fit.favouriteCount > 0 ? '${t.favouritesOnly} · ${fit.favouriteCount}' : t.favouritesOnly,
             fit.exFavouritesOnly, fit.toggleFavouritesFilter),
-        if (anyOn) ...[
-          const SizedBox(width: 8),
+        for (final (label, off) in active) ...[
+          gap,
+          _ActiveFilter(label: label, onTap: off),
+        ],
+        if (showClear) ...[
+          gap,
           Pill(
             label: t.clearFilters,
             bg: Colors.transparent,
@@ -373,7 +390,15 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   }
 
   Widget _empty(GymColors gc) {
-    final noFavs = fit.exFavouritesOnly && fit.favouriteCount == 0;
+    final frequent = fit.exFrequentOnly;
+    final noFavs = !frequent && fit.exFavouritesOnly && fit.favouriteCount == 0;
+    final (title, hint) = frequent
+        ? (t.noFrequentExercises, t.frequentExercisesHint)
+        : noFavs
+            ? (t.noFavouritesYet, t.noFavouritesHint)
+            : (t.noExercisesFound, t.noExercisesHint);
+    final action = frequent ? _toggleFrequent : _clearAll;
+    final actionLabel = frequent ? t.exitFrequentExercises : t.clearFilters;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
       child: Column(
@@ -383,20 +408,27 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           else
             SvgPathIcon(const [IconPath('M11 11m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0', strokeWidth: 1.5), IconPath('M21 21l-4.35-4.35', strokeWidth: 1.5)], size: 40, color: gc.textTertiary),
           const SizedBox(height: 10),
-          Text(noFavs ? t.noFavouritesYet : t.noExercisesFound,
+          Text(title, textAlign: TextAlign.center,
               style: AppTheme.f(15.5, weight: FontWeight.w700, color: gc.text)),
           const SizedBox(height: 4),
-          Text(noFavs ? t.noFavouritesHint : t.noExercisesHint,
+          Text(hint,
               textAlign: TextAlign.center,
               style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
           const SizedBox(height: 16),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _clearAll,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Text(t.clearFilters,
-                  style: AppTheme.f(13, weight: FontWeight.w600, color: gc.accent)),
+          Semantics(
+            container: true,
+            button: true,
+            label: actionLabel,
+            onTap: action,
+            excludeSemantics: true,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: action,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Text(actionLabel,
+                    style: AppTheme.f(13, weight: FontWeight.w600, color: gc.accent)),
+              ),
             ),
           ),
         ],
@@ -412,7 +444,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     return n;
   }
 
-  Widget _row(GymColors gc, Exercise ex, {required bool first, required bool last}) {
+  Widget _row(GymColors gc, Exercise ex,
+      {required bool first, required bool last, ExerciseTrainingUsage? usage}) {
     final fav = fit.favorites[ex.id] ?? false;
     return Container(
       decoration: BoxDecoration(
@@ -450,6 +483,11 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                             overflow: TextOverflow.ellipsis,
                             style: AppTheme.f(12,
                                 weight: FontWeight.w500, color: gc.textSecondary)),
+                        if (usage != null) ...[
+                          const SizedBox(height: 4),
+                          Text(t.frequentExerciseCounts(usage.recent, usage.total),
+                              style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textSecondary)),
+                        ],
                       ],
                     ),
                   ),

@@ -1,5 +1,7 @@
 part of 'fit_state.dart';
 
+typedef ExerciseTrainingUsage = ({int recent, int total, DateTime lastTrained});
+
 mixin LibraryState on FitCore {
   String exSearch = '';
   String? exMuscleFilter;
@@ -119,6 +121,7 @@ mixin LibraryState on FitCore {
     exEquipmentFilter = null;
     exKindFilter = null;
     exFavouritesOnly = false;
+    exFrequentOnly = false;
     exArchivedOnly = false;
     notifyListeners();
   }
@@ -171,13 +174,52 @@ mixin LibraryState on FitCore {
 
   int get favouriteCount => favorites.values.where((v) => v).length;
 
+  bool exFrequentOnly = false;
+
+  void toggleFrequentExercisesFilter() {
+    exFrequentOnly = !exFrequentOnly;
+    notifyListeners();
+  }
+
+  Map<String, ExerciseTrainingUsage> exerciseTrainingUsage({DateTime? now}) {
+    final today = _dayKey(now ?? DateTime.now());
+    return _remember('exerciseTrainingUsage', () {
+      final firstDay = shiftDays(today, -89);
+      final usage = <String, ExerciseTrainingUsage>{};
+      for (final session in sessions) {
+        final day = _dayKey(session.day);
+        if (day.isAfter(today)) continue;
+        final recent = day.isBefore(firstDay) ? 0 : 1;
+        final trained = {
+          for (final exercise in session.exercises)
+            if (exercise.sets.any((set) => set.counts &&
+                (set.reps > 0 || (set.left ?? 0) > 0 || (set.right ?? 0) > 0 ||
+                    (set.sec ?? 0) > 0 || (set.km ?? 0) > 0)))
+              exercise.id,
+        };
+        for (final id in trained) {
+          final previous = usage[id];
+          final last = previous?.lastTrained;
+          usage[id] = (
+            recent: (previous?.recent ?? 0) + recent,
+            total: (previous?.total ?? 0) + 1,
+            lastTrained: last != null && last.isAfter(session.date) ? last : session.date,
+          );
+        }
+      }
+      return Map<String, ExerciseTrainingUsage>.unmodifiable(usage);
+    }, today);
+  }
+
   List<Exercise> get exercisesFiltered => exercisesMatching(exSearch);
 
   List<Exercise> exercisesMatching(String query) {
     final matchesSearch = exerciseSearch(query);
+    final usage = exFrequentOnly ? exerciseTrainingUsage() : null;
     final list = allExercises.where((ex) {
       if (isArchived(ex.id) != exArchivedOnly) return false;
       if (exFavouritesOnly && favorites[ex.id] != true) return false;
+      if (usage != null && (usage[ex.id]?.recent ?? 0) < 2) return false;
       if (!matchesSearch(ex)) return false;
       if (exMuscleFilter != null &&
           ex.primary != exMuscleFilter &&
@@ -191,6 +233,17 @@ mixin LibraryState on FitCore {
       if (exKindFilter != null && kindOf(ex) != exKindFilter) return false;
       return true;
     }).toList();
+    if (usage != null) {
+      final ranked = list.indexed.toList()..sort((a, b) {
+        final left = usage[a.$2.id]!;
+        final right = usage[b.$2.id]!;
+        final countOrder = right.recent.compareTo(left.recent);
+        if (countOrder != 0) return countOrder;
+        final dateOrder = right.lastTrained.compareTo(left.lastTrained);
+        return dateOrder == 0 ? a.$1.compareTo(b.$1) : dateOrder;
+      });
+      return [for (final (_, exercise) in ranked) exercise];
+    }
     final zone = kBodyZones[exZoneFilter];
     if (zone != null) {
       final inside = _groupedByMuscle(list.where((ex) => zone.contains(ex.primary)).toList());

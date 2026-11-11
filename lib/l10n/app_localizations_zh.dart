@@ -626,6 +626,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get favouritesOnly => '我的收藏';
 
   @override
+  String get frequentExercises => '常练';
+
+  @override
+  String frequentExerciseCounts(int recent, int total) {
+    return '近 90 天 $recent 次 · 累计 $total 次';
+  }
+
+  @override
+  String get noFrequentExercises => '没有符合条件的常练动作';
+
+  @override
+  String get frequentExercisesHint => '近 90 天练过至少 2 次的动作会显示在这里。';
+
+  @override
+  String get exitFrequentExercises => '退出常练';
+
+  @override
   String get noFavouritesYet => '暂无收藏';
 
   @override

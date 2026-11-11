@@ -1260,6 +1260,36 @@ abstract class AppLocalizations {
   /// **'Favourites'**
   String get favouritesOnly;
 
+  /// No description provided for @frequentExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequent'**
+  String get frequentExercises;
+
+  /// No description provided for @frequentExerciseCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'{recent} sessions in 90 days · {total} total'**
+  String frequentExerciseCounts(int recent, int total);
+
+  /// No description provided for @noFrequentExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching frequent exercises'**
+  String get noFrequentExercises;
+
+  /// No description provided for @frequentExercisesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises you trained at least twice in the last 90 days appear here.'**
+  String get frequentExercisesHint;
+
+  /// No description provided for @exitFrequentExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit Frequent'**
+  String get exitFrequentExercises;
+
   /// No description provided for @noFavouritesYet.
   ///
   /// In en, this message translates to:
