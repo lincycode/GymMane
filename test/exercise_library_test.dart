@@ -329,9 +329,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('${t.filters} · 1'), findsOneWidget);
 
-      await tester.ensureVisible(find.text(titleCase(t.difficulty('Beginner'))));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(titleCase(t.difficulty('Beginner'))));
+      final beginnerChip = find.text(titleCase(t.difficulty('Beginner'))).hitTestable();
+      expect(beginnerChip, findsOneWidget);
+      await tester.tap(beginnerChip);
       await tester.pumpAndSettle();
       expect(fit.exDifficultyFilter, isNull);
       expect(find.text(t.filters), findsOneWidget);

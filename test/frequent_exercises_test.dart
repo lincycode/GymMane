@@ -7,6 +7,7 @@ import 'package:gymmane/models/exercise.dart';
 import 'package:gymmane/models/workout.dart';
 import 'package:gymmane/services/local_store.dart';
 import 'package:gymmane/state/fit_state.dart';
+import 'package:gymmane/widgets/ui_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Exercise _exercise(String name) => kExercises.firstWhere((e) => e.name == name);
@@ -166,7 +167,7 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('keeps the clear button visible while narrow filter chips scroll', (tester) async {
+  testWidgets('wraps narrow filter chips and keeps the whole toolbar tappable', (tester) async {
     tester.view.physicalSize = const Size(320, 720);
     tester.view.devicePixelRatio = 1;
     tester.platformDispatcher.textScaleFactorTestValue = 2;
@@ -192,18 +193,37 @@ void main() {
     await tester.pumpAndSettle();
 
     final reset = find.bySemanticsLabel('清除筛选');
-    final strip = find.ancestor(of: find.text('常练'), matching: find.byType(SingleChildScrollView));
     expect(reset, findsOneWidget);
     expect(find.text('清除筛选'), findsNothing);
     final resetRect = tester.getRect(reset);
     expect(resetRect.right, 300);
     expect(resetRect.size, const Size(44, 44));
-    final chipX = tester.getTopLeft(find.text('常练')).dx;
 
-    await tester.drag(strip, const Offset(-170, 0));
-    await tester.pumpAndSettle();
-    expect(tester.getTopLeft(find.text('常练')).dx, lessThan(chipX));
-    expect(tester.getRect(reset), resetRect);
+    final chips = [
+      find.widgetWithText(Pill, t.muscleGroupName('Chest')),
+      find.widgetWithText(Pill, '${t.filters} · 2'),
+      find.widgetWithText(Pill, t.frequentExercises),
+      find.widgetWithText(Pill, '${t.favouritesOnly} · 1'),
+    ];
+    final firstResult = tester.getTopLeft(find.text('杠铃平板卧推')).dy;
+    for (final chip in chips) {
+      expect(chip.hitTestable(), findsOneWidget);
+      final rect = tester.getRect(chip);
+      expect(rect.left, greaterThanOrEqualTo(20));
+      expect(rect.right, lessThanOrEqualTo(resetRect.left));
+      expect(rect.bottom, lessThan(firstResult));
+    }
+    expect(tester.getCenter(chips.last).dy, greaterThan(tester.getCenter(chips.first).dy));
+    expect(tester.getCenter(chips.last).dy, closeTo(tester.getCenter(chips[2]).dy, 1));
+    expect(tester.getCenter(chips.first).dy, closeTo(resetRect.center.dy, 1));
+    for (final label in [t.equipment('Barbell'), t.difficulty('Intermediate')]) {
+      final chip = find.text(label);
+      expect(chip.hitTestable(), findsOneWidget);
+      expect(tester.getBottomRight(chip).dx, lessThanOrEqualTo(300));
+      expect(tester.getBottomRight(chip).dy, lessThan(firstResult));
+    }
+    expect(tester.takeException(), isNull);
+
     await tester.tap(reset);
     await tester.pumpAndSettle();
 

@@ -34,7 +34,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
 
   static const _span = 110.0;
   static const _btn = 40.0;
-  static const _filterRowHeight = 44.0;
+  static const _clearTargetSize = 44.0;
 
   @override
   void initState() {
@@ -65,17 +65,33 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     final pad = MediaQuery.paddingOf(context).top;
     final searchTop = pad + 12 + 50 + 14;
     final chipsTop = searchTop + 48 + 10;
-    final contentTop = chipsTop + _filterRowHeight + 8;
 
     return Stack(children: [
               Positioned.fill(
                 child: ListView.builder(
               key: const PageStorageKey('exercises'),
               controller: _scroll,
-              padding: EdgeInsets.fromLTRB(20, contentTop, 20, 110),
-              itemCount: list.isEmpty ? 1 : list.length,
-              itemBuilder: (context, i) {
+              padding: EdgeInsets.fromLTRB(20, chipsTop, 20, 110),
+              itemCount: 1 + (list.isEmpty ? 1 : list.length),
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: AnimatedBuilder(
+                      animation: _scroll,
+                      child: _quickChips(context, gc),
+                      builder: (context, child) => IgnorePointer(
+                        ignoring: _fold > 0.3,
+                        child: Opacity(
+                          opacity: (1 - _fold * 1.6).clamp(0.0, 1.0),
+                          child: child,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 if (list.isEmpty) return _empty(gc);
+                final i = index - 1;
                 final ex = list[i];
                 final first = i == 0 || (usage == null && list[i - 1].primary != ex.primary);
                 final last = i == list.length - 1 || (usage == null && list[i + 1].primary != ex.primary);
@@ -107,7 +123,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
               },
                 ),
               ),
-              Positioned.fill(child: _header(context, gc, list.length, pad, searchTop, chipsTop)),
+              Positioned.fill(child: _header(context, gc, list.length, pad, searchTop)),
               Positioned(
                 right: 20,
                 bottom: 112,
@@ -164,7 +180,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     fit.toggleFrequentExercisesFilter();
   }
 
-  Widget _header(BuildContext context, GymColors gc, int count, double pad, double searchTop, double chipsTop) {
+  Widget _header(BuildContext context, GymColors gc, int count, double pad, double searchTop) {
     final blur = EdgeBlur(height: pad + 70, sigma: 14);
     return LayoutBuilder(builder: (context, box) {
       final w = box.maxWidth;
@@ -172,7 +188,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         animation: _scroll,
         builder: (context, _) {
           final p = _fold;
-          final y = _scroll.hasClients ? _scroll.offset : 0.0;
           final plusX = w - 20 - _btn;
           final searchX = 20 + (plusX - 8 - _btn - 20) * p;
           final searchY = searchTop + (pad + 12 - searchTop) * p;
@@ -184,21 +199,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             clipBehavior: Clip.none,
             children: [
               if (p > 0.001) IgnorePointer(child: Opacity(opacity: p, child: blur)),
-              Positioned(
-                left: 0,
-                right: 0,
-                top: chipsTop - y.clamp(0.0, chipsTop),
-                child: IgnorePointer(
-                  ignoring: p > 0.3,
-                  child: Opacity(
-                    opacity: (1 - p * 1.6).clamp(0.0, 1.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: _quickChips(context, gc),
-                    ),
-                  ),
-                ),
-              ),
               Positioned(
                 left: 20,
                 right: 20 + _btn + 12 + (_btn + 8) * 2 * p,
@@ -319,8 +319,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     final sheetOn = _sheetFilters;
     final zoneOn = fit.exZoneFilter != null || fit.exMuscleFilter != null;
     final showClear = sheetOn > 0 || zoneOn || fit.exFavouritesOnly;
-    final compact = MediaQuery.sizeOf(context).width < 360;
-    final gap = SizedBox(width: compact ? 6 : 8);
+    const gap = 6.0;
     Widget pill(String label, bool on, VoidCallback onTap) => ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 44),
           child: Pill(
@@ -328,9 +327,23 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             bg: on ? gc.ember : gc.bgRaised2,
             fg: on ? gc.onEmber : gc.textSecondary,
             onTap: onTap,
-            hPad: compact ? 8 : 14,
+            hPad: 10,
             vPad: 7,
             fontSize: 12.5,
+          ),
+        );
+    Widget chipGroup(List<Widget> children) => ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: _clearTargetSize),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            widthFactor: 1,
+            heightFactor: 1,
+            child: Wrap(
+              spacing: gap,
+              runSpacing: gap,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: children,
+            ),
           ),
         );
     final active = <(String, VoidCallback)>[
@@ -345,52 +358,66 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       for (final place in fit.places)
         if (place.id == fit.activePlaceId) (place.name, () => fit.setActivePlace('')),
     ];
-    final chips = SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      clipBehavior: showClear ? Clip.hardEdge : Clip.none,
-      child: Row(children: [
-        pill(
-          fit.exZoneFilter != null
-              ? t.muscleGroupName(fit.exZoneFilter!)
-              : fit.exMuscleFilter != null
-                  ? muscleLabel(fit.exMuscleFilter!)
-                  : t.byZone,
-          zoneOn,
-          () => showBodyZones(context),
-        ),
-        gap,
-        pill(sheetOn > 0 ? '${t.filters} · $sheetOn' : t.filters, false,
-            () => showExerciseFilters(context, onClear: _c.clear)),
-        gap,
-        Semantics(
-          button: true,
-          selected: fit.exFrequentOnly,
-          child: pill(t.frequentExercises, fit.exFrequentOnly, _toggleFrequent),
-        ),
-        gap,
-        pill(fit.favouriteCount > 0 ? '${t.favouritesOnly} · ${fit.favouriteCount}' : t.favouritesOnly,
-            fit.exFavouritesOnly, fit.toggleFavouritesFilter),
-        for (final (label, off) in active) ...[
-          gap,
-          _ActiveFilter(label: label, onTap: off),
-        ],
-      ]),
-    );
-    return SizedBox(
-      height: _filterRowHeight,
-      child: Row(children: [
-        Expanded(child: chips),
-        if (showClear) ...[
-          gap,
-          RoundAction(
-            size: _filterRowHeight,
-            label: t.clearFilters,
-            onTap: _clearAll,
-            child: SvgPathIcon(Ic.close, size: 20, color: gc.textSecondary),
+    final chips = Wrap(
+      spacing: gap,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        chipGroup([
+          pill(
+            fit.exZoneFilter != null
+                ? t.muscleGroupName(fit.exZoneFilter!)
+                : fit.exMuscleFilter != null
+                    ? muscleLabel(fit.exMuscleFilter!)
+                    : t.byZone,
+            zoneOn,
+            () => showBodyZones(context),
           ),
-        ],
-      ]),
+          pill(sheetOn > 0 ? '${t.filters} · $sheetOn' : t.filters, false,
+              () => showExerciseFilters(context, onClear: _c.clear)),
+        ]),
+        chipGroup([
+          Semantics(
+            button: true,
+            selected: fit.exFrequentOnly,
+            child: pill(t.frequentExercises, fit.exFrequentOnly, _toggleFrequent),
+          ),
+          pill(fit.favouriteCount > 0 ? '${t.favouritesOnly} · ${fit.favouriteCount}' : t.favouritesOnly,
+              fit.exFavouritesOnly, fit.toggleFavouritesFilter),
+        ]),
+      ],
     );
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Expanded(child: chips),
+        if (showClear)
+          Semantics(
+            button: true,
+            label: t.clearFilters,
+            child: Pressable(
+              onTap: _clearAll,
+              child: SizedBox.square(
+                dimension: _clearTargetSize,
+                child: Center(
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(color: gc.bgRaised2, shape: BoxShape.circle),
+                    child: Center(child: SvgPathIcon(Ic.close, size: 10, color: gc.textSecondary)),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ]),
+      if (active.isNotEmpty) ...[
+        const SizedBox(height: gap),
+        Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: [for (final (label, off) in active) _ActiveFilter(label: label, onTap: off)],
+        ),
+      ],
+    ]);
   }
 
   Widget _empty(GymColors gc) {
@@ -551,7 +578,9 @@ class _ActiveFilter extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(14, 7, 10, 7),
         decoration: BoxDecoration(color: gc.ember, borderRadius: BorderRadius.circular(100)),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Text(titleCase(label), style: AppTheme.f(12.5, weight: FontWeight.w600, color: gc.onEmber)),
+          Flexible(
+            child: Text(titleCase(label), style: AppTheme.f(12.5, weight: FontWeight.w600, color: gc.onEmber)),
+          ),
           const SizedBox(width: 6),
           Icon(PhosphorIconsBold.x, size: 11, color: gc.onEmber.withValues(alpha: 0.8)),
         ]),
