@@ -14,4 +14,8 @@
 - 只暂存本次明确文件，检查暂存 diff，运行 `git diff --cached --check` 与 `python3 scripts/check-staged-files.py`，按功能提交。
 - EnoGym 个人版改动通过验证后，默认提交并推送 `own` 至 `origin/own`。用户当次要求仅本地交付时优先遵循。
 - 收到用户当次明确的发布要求后，按 [维护说明](docs/OWN.md#应用内更新与发布) 创建带签名 APK、校验文件和更新清单的 GitHub Release，并验证应用内更新源。推送其他分支、发 PR、部署、强推或重写历史仍需明确授权。
+- 更新日志由负责发版或同步上游的智能体维护。
+  - 每次发布 EnoGym 时，一并更新 `docs/releases/<版本>.md`，用首个项目符号列表简写本版要点，供应用内更新日志和 GitHub Release 复用。
+  - 发版或同步上游时核对 GymMane 的正式发布记录。发现尚未收录的新版本时，在 `docs/upstream-releases.json` 补上版本、北京时间发布日期及中英文摘要。
+  - 合并上游时，同步更新 `own.properties` 的 `upstreamVersion` 和 `upstreamCommit`，以实际合入的版本基线和提交为准。
 - 真机操作先协调设备使用，优先在隔离模拟器验证。不得触碰用户已有应用的数据；测试结束恢复临时调整的设备设置。
