@@ -648,23 +648,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get favouritesOnly => 'Favoritos';
 
   @override
-  String get frequentExercises => 'Frequent';
-
-  @override
-  String frequentExerciseCounts(int recent, int total) {
-    return '$recent sessions in 90 days · $total total';
-  }
-
-  @override
-  String get noFrequentExercises => 'No matching frequent exercises';
-
-  @override
-  String get frequentExercisesHint => 'Exercises you trained at least twice in the last 90 days appear here.';
-
-  @override
-  String get exitFrequentExercises => 'Exit Frequent';
-
-  @override
   String get noFavouritesYet => 'Aún no tienes favoritos';
 
   @override
@@ -1723,9 +1706,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get muscleQuads => 'Cuádriceps';
 
   @override
-  String get muscleAdductors => 'Aductores';
-
-  @override
   String get muscleHamstrings => 'Isquiotibiales';
 
   @override
@@ -2015,11 +1995,6 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String liveSet(int n, int total) {
     return 'Serie $n de $total';
-  }
-
-  @override
-  String liveAddSeconds(int n) {
-    return '+$n s';
   }
 
   @override
@@ -2712,13 +2687,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get alarmStyleQuiet => 'Respetar silencio';
-
-  @override
-  String get alarmStyleNotificationOnly => 'Notification only';
-
-  @override
-  String get alarmStyleSoundHint =>
-      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Sugeridos para ti';
@@ -7567,6 +7535,266 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mealAiNothingChosen => 'Activa al menos un alimento';
 
   @override
+  String get cholesterolLabel => 'Colesterol';
+
+  @override
+  String get mealAiFlagMatched => 'Igual que un alimento tuyo';
+
+  @override
+  String get mealAiNotSame => 'No es el mismo';
+
+  @override
+  String get homeOrderRow => 'Orden de las secciones';
+
+  @override
+  String get homeOrderHint => 'Mantén y arrastra para cambiar el orden de Inicio.';
+
+  @override
+  String get homeOrderFolders => 'Accesos';
+
+  @override
+  String get equipNew => 'Nuevo';
+
+  @override
+  String get equipNewTitle => 'Material nuevo';
+
+  @override
+  String get equipNewHint => 'p. ej. Cinturón de lastre';
+
+  @override
+  String get homeOrderWeekdays => 'Checks semanales';
+
+  @override
+  String get repsMaxTitle => 'Repeticiones hasta';
+
+  @override
+  String get repsRangeHint => 'Mantén pulsadas las repeticiones para poner un rango como 8-12.';
+
+  @override
+  String get repsRangeClear => 'Quitar rango';
+
+  @override
+  String get noteLinksLabel => 'ENLACES';
+
+  @override
+  String get noteLinkAdd => 'Añadir enlace';
+
+  @override
+  String get noteLinkEdit => 'Editar enlace';
+
+  @override
+  String get noteLinkNameHint => 'Nombre';
+
+  @override
+  String get noteLinkUrlHint => 'Dirección web';
+
+  @override
+  String get noteLinkInvalid => 'Esa dirección no parece válida';
+
+  @override
+  String get changeRest => 'Descanso entre ejercicios';
+
+  @override
+  String get changeRestHint => 'Tras la última serie, antes del siguiente ejercicio';
+
+  @override
+  String get notifSuppTake => 'Tomado';
+
+  @override
+  String get sideRest => 'Descanso entre lados';
+
+  @override
+  String get sideRestHint => 'Ejercicios por lados: el primer ✓ cierra un lado';
+
+  @override
+  String get gfxCompat => 'Gráficos compatibles';
+
+  @override
+  String get gfxCompatHint =>
+      'Para móviles donde las letras se ven rotas. El desenfoque se queda, algún efecto se simplifica';
+
+  @override
+  String get gfxRestartTitle => '¿Reiniciar GymMane?';
+
+  @override
+  String get gfxRestartBody =>
+      'Se cierra y se vuelve a abrir para cambiar cómo dibuja la pantalla. No se pierde nada de lo guardado.';
+
+  @override
+  String get gfxRestart => 'Reiniciar';
+
+  @override
+  String get webSynced => 'Actualizado con cambios de otro dispositivo';
+
+  @override
+  String get webSyncedPhone => 'Ya tienes los cambios de tu móvil';
+
+  @override
+  String get webWelcomeBlurb => 'Todo se queda en tu propio servidor. Sin cuenta, sin nube, sin pagar nada.';
+
+  @override
+  String get webOwnServer => 'Tu servidor, tus reglas';
+
+  @override
+  String get webOwnServerWhy => 'Sin cuentas ni nubes de terceros. Tus datos viven donde tú lo montas.';
+
+  @override
+  String get webServerSaved => 'Guardado en tu servidor';
+
+  @override
+  String get webServerOffline => 'Sin conexión con tu servidor';
+
+  @override
+  String get webServerLocal => 'Guardado en este navegador';
+
+  @override
+  String get webServerTitle => 'Tu servidor';
+
+  @override
+  String webPhoneLast(String date) {
+    return 'Última copia del móvil: $date';
+  }
+
+  @override
+  String get webPhoneNone => 'Aún no ha llegado ninguna copia del móvil';
+
+  @override
+  String get webPhoneScan => 'Traer del móvil';
+
+  @override
+  String get webPhoneExport => 'Mandar al móvil';
+
+  @override
+  String get webPhoneExportDone => 'Lista en la carpeta compartida. Tu móvil la trae al sincronizar';
+
+  @override
+  String get webPhoneImported => 'Ya tienes los cambios de tu móvil';
+
+  @override
+  String get webPhoneNothing => 'No hay nada nuevo del móvil';
+
+  @override
+  String get webPhoneHow =>
+      'Activa en el móvil la copia automática en una carpeta que sincronices con Syncthing. El servidor y el móvil se traen solos los cambios del otro, y al juntar nunca se borra nada.';
+
+  @override
+  String get webPhoneGuide => 'Cómo montarlo';
+
+  @override
+  String get webPhoneOff => 'La sincronización con el móvil está apagada en este servidor';
+
+  @override
+  String get toolGroupBody => 'Cuerpo';
+
+  @override
+  String get toolNameProtein => 'Proteína';
+
+  @override
+  String get toolTitleProtein => 'Proteína diaria';
+
+  @override
+  String get toolDescProtein => 'Cuánta proteína al día';
+
+  @override
+  String get toolHintProtein => 'Gramos al día, repartidos en tus comidas';
+
+  @override
+  String get proteinGoalLabel => 'Objetivo';
+
+  @override
+  String get proteinExplain =>
+      'Sale del rango en el que coinciden casi todos los estudios para gente que entrena: más cuando bajas de peso, para no perder músculo. Pasarte no es malo, solo aporta poco.';
+
+  @override
+  String get toolNameWater => 'Agua';
+
+  @override
+  String get toolTitleWater => 'Agua diaria';
+
+  @override
+  String get toolDescWater => 'Cuánta agua beber al día';
+
+  @override
+  String get toolHintWater => 'Litros al día, contando la comida';
+
+  @override
+  String get waterTrainingLabel => 'Entreno al día';
+
+  @override
+  String get waterExplain =>
+      'Unos 35 ml por kilo de peso, más un extra por cada minuto que entrenas. Bebe más los días de calor.';
+
+  @override
+  String get autoBackupSync => 'Sincronizar ahora';
+
+  @override
+  String get autoBackupMerged => 'Ya tienes los cambios de tus otros dispositivos';
+
+  @override
+  String get autoBackupSyncHint =>
+      'Comparte esta carpeta con Syncthing y cada dispositivo trae lo que dejan los otros. Al juntar nunca se borra nada.';
+
+  @override
+  String get webPhoneFolder => 'Carpeta compartida';
+
+  @override
+  String get webPhoneFolderHow =>
+      'Se elige al instalar el servidor. Para cambiarla, pon GYMMANE_SYNC en el archivo .env del servidor y reinícialo.';
+
+  @override
+  String get webPhoneOffHow =>
+      'Para encenderla, quita GYMMANE_SYNC=off del archivo .env del servidor y reinícialo.';
+
+  @override
+  String webPhoneDevices(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n móviles sincronizados',
+      one: '1 móvil sincronizado',
+      zero: 'Ningún móvil ha sincronizado aún',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String webPhoneError(String error) {
+    return 'No se pudo leer la carpeta: $error';
+  }
+
+  @override
+  String get frequentExercises => 'Frequent';
+
+  @override
+  String frequentExerciseCounts(int recent, int total) {
+    return '$recent sessions in 90 days · $total total';
+  }
+
+  @override
+  String get noFrequentExercises => 'No matching frequent exercises';
+
+  @override
+  String get frequentExercisesHint => 'Exercises you trained at least twice in the last 90 days appear here.';
+
+  @override
+  String get exitFrequentExercises => 'Exit Frequent';
+
+  @override
+  String get muscleAdductors => 'Aductores';
+
+  @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
+  String get alarmStyleNotificationOnly => 'Notification only';
+
+  @override
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
+
+  @override
   String get ownManagePlan => 'Manage training plan';
 
   @override
@@ -7640,61 +7868,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ownSupportOriginal => 'Support the original author';
 
   @override
-  String get cholesterolLabel => 'Colesterol';
+  String get ownBackupFolderSync => 'Shared-folder sync';
 
   @override
-  String get mealAiFlagMatched => 'Igual que un alimento tuyo';
-
-  @override
-  String get mealAiNotSame => 'No es el mismo';
-
-  @override
-  String get homeOrderRow => 'Orden de las secciones';
-
-  @override
-  String get homeOrderHint => 'Mantén y arrastra para cambiar el orden de Inicio.';
-
-  @override
-  String get homeOrderFolders => 'Accesos';
-
-  @override
-  String get equipNew => 'Nuevo';
-
-  @override
-  String get equipNewTitle => 'Material nuevo';
-
-  @override
-  String get equipNewHint => 'p. ej. Cinturón de lastre';
-
-  @override
-  String get homeOrderWeekdays => 'Checks semanales';
-
-  @override
-  String get repsMaxTitle => 'Repeticiones hasta';
-
-  @override
-  String get repsRangeHint => 'Mantén pulsadas las repeticiones para poner un rango como 8-12.';
-
-  @override
-  String get repsRangeClear => 'Quitar rango';
-
-  @override
-  String get noteLinksLabel => 'ENLACES';
-
-  @override
-  String get noteLinkAdd => 'Añadir enlace';
-
-  @override
-  String get noteLinkEdit => 'Editar enlace';
-
-  @override
-  String get noteLinkNameHint => 'Nombre';
-
-  @override
-  String get noteLinkUrlHint => 'Dirección web';
-
-  @override
-  String get noteLinkInvalid => 'Esa dirección no parece válida';
+  String get ownBackupFolderSyncHint =>
+      'Merge training data from backups in this folder. Set up Syncthing separately.';
 
   @override
   String get ownDisplayEffects => 'Display effects';

@@ -646,23 +646,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favouritesOnly => 'Favourites';
 
   @override
-  String get frequentExercises => 'Frequent';
-
-  @override
-  String frequentExerciseCounts(int recent, int total) {
-    return '$recent sessions in 90 days · $total total';
-  }
-
-  @override
-  String get noFrequentExercises => 'No matching frequent exercises';
-
-  @override
-  String get frequentExercisesHint => 'Exercises you trained at least twice in the last 90 days appear here.';
-
-  @override
-  String get exitFrequentExercises => 'Exit Frequent';
-
-  @override
   String get noFavouritesYet => 'No favourites yet';
 
   @override
@@ -1723,9 +1706,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get muscleQuads => 'Quads';
 
   @override
-  String get muscleAdductors => 'Adductors';
-
-  @override
   String get muscleHamstrings => 'Hamstrings';
 
   @override
@@ -2015,11 +1995,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String liveSet(int n, int total) {
     return 'Set $n of $total';
-  }
-
-  @override
-  String liveAddSeconds(int n) {
-    return '+$n s';
   }
 
   @override
@@ -2712,13 +2687,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alarmStyleQuiet => 'Follow silent mode';
-
-  @override
-  String get alarmStyleNotificationOnly => 'Notification only';
-
-  @override
-  String get alarmStyleSoundHint =>
-      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
 
   @override
   String get suggestedPicks => 'Suggested for you';
@@ -7520,6 +7488,265 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealAiNothingChosen => 'Turn on at least one food';
 
   @override
+  String get cholesterolLabel => 'Cholesterol';
+
+  @override
+  String get mealAiFlagMatched => 'Same as a food you saved';
+
+  @override
+  String get mealAiNotSame => 'Not the same';
+
+  @override
+  String get homeOrderRow => 'Order of sections';
+
+  @override
+  String get homeOrderHint => 'Hold and drag to change the order of Home.';
+
+  @override
+  String get homeOrderFolders => 'Shortcuts';
+
+  @override
+  String get equipNew => 'New';
+
+  @override
+  String get equipNewTitle => 'New equipment';
+
+  @override
+  String get equipNewHint => 'e.g. Weight belt';
+
+  @override
+  String get homeOrderWeekdays => 'Week checks';
+
+  @override
+  String get repsMaxTitle => 'Reps up to';
+
+  @override
+  String get repsRangeHint => 'Long press the reps to set a range like 8-12.';
+
+  @override
+  String get repsRangeClear => 'Remove range';
+
+  @override
+  String get noteLinksLabel => 'LINKS';
+
+  @override
+  String get noteLinkAdd => 'Add link';
+
+  @override
+  String get noteLinkEdit => 'Edit link';
+
+  @override
+  String get noteLinkNameHint => 'Name';
+
+  @override
+  String get noteLinkUrlHint => 'Web address';
+
+  @override
+  String get noteLinkInvalid => 'That address doesn\'t look right';
+
+  @override
+  String get changeRest => 'Rest between exercises';
+
+  @override
+  String get changeRestHint => 'After the last set, before the next exercise';
+
+  @override
+  String get notifSuppTake => 'Taken';
+
+  @override
+  String get sideRest => 'Rest between sides';
+
+  @override
+  String get sideRestHint => 'Per-side exercises: the first ✓ ends one side';
+
+  @override
+  String get gfxCompat => 'Compatible graphics';
+
+  @override
+  String get gfxCompatHint => 'For phones where letters look broken. Blur stays, a few effects get simpler';
+
+  @override
+  String get gfxRestartTitle => 'Restart GymMane?';
+
+  @override
+  String get gfxRestartBody =>
+      'It closes and opens again to change how it draws the screen. Nothing you saved is lost.';
+
+  @override
+  String get gfxRestart => 'Restart';
+
+  @override
+  String get webSynced => 'Updated with changes from another device';
+
+  @override
+  String get webSyncedPhone => 'Your phone\'s changes are in';
+
+  @override
+  String get webWelcomeBlurb => 'Everything stays on your own server. No account, no cloud, nothing to pay.';
+
+  @override
+  String get webOwnServer => 'Your server, your rules';
+
+  @override
+  String get webOwnServerWhy => 'No accounts and no third-party cloud. Your data lives where you run it.';
+
+  @override
+  String get webServerSaved => 'Saved on your server';
+
+  @override
+  String get webServerOffline => 'Can\'t reach your server';
+
+  @override
+  String get webServerLocal => 'Saved in this browser';
+
+  @override
+  String get webServerTitle => 'Your server';
+
+  @override
+  String webPhoneLast(String date) {
+    return 'Last copy from your phone: $date';
+  }
+
+  @override
+  String get webPhoneNone => 'No copy from your phone yet';
+
+  @override
+  String get webPhoneScan => 'Get from phone';
+
+  @override
+  String get webPhoneExport => 'Send to phone';
+
+  @override
+  String get webPhoneExportDone => 'Left in the shared folder. Your phone brings it in when it syncs';
+
+  @override
+  String get webPhoneImported => 'Your phone\'s changes are in';
+
+  @override
+  String get webPhoneNothing => 'Nothing new from your phone';
+
+  @override
+  String get webPhoneHow =>
+      'Turn on automatic backups on your phone into a folder you sync with Syncthing. The server and the phone bring in each other\'s changes on their own, and merging never deletes anything.';
+
+  @override
+  String get webPhoneGuide => 'How to set it up';
+
+  @override
+  String get webPhoneOff => 'Phone sync is off on this server';
+
+  @override
+  String get toolGroupBody => 'Body';
+
+  @override
+  String get toolNameProtein => 'Protein';
+
+  @override
+  String get toolTitleProtein => 'Daily protein';
+
+  @override
+  String get toolDescProtein => 'How much protein a day';
+
+  @override
+  String get toolHintProtein => 'Grams a day, spread over your meals';
+
+  @override
+  String get proteinGoalLabel => 'Goal';
+
+  @override
+  String get proteinExplain =>
+      'Based on the range most studies agree on for people who train: more when you are losing weight, to keep your muscle. Going over it is safe, it just adds little.';
+
+  @override
+  String get toolNameWater => 'Water';
+
+  @override
+  String get toolTitleWater => 'Daily water';
+
+  @override
+  String get toolDescWater => 'How much to drink a day';
+
+  @override
+  String get toolHintWater => 'Litres a day, food included';
+
+  @override
+  String get waterTrainingLabel => 'Training a day';
+
+  @override
+  String get waterExplain =>
+      'About 35 ml per kilo of body weight, plus some extra for each minute you train. Drink more on hot days.';
+
+  @override
+  String get autoBackupSync => 'Sync now';
+
+  @override
+  String get autoBackupMerged => 'Changes from your other devices are in';
+
+  @override
+  String get autoBackupSyncHint =>
+      'Share this folder with Syncthing and each device brings in what the others leave here. Merging never deletes anything.';
+
+  @override
+  String get webPhoneFolder => 'Shared folder';
+
+  @override
+  String get webPhoneFolderHow =>
+      'Chosen when you install the server. To change it, set GYMMANE_SYNC in the server\'s .env file and restart it.';
+
+  @override
+  String get webPhoneOffHow =>
+      'To turn it on, remove GYMMANE_SYNC=off from the server\'s .env file and restart it.';
+
+  @override
+  String webPhoneDevices(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n phones synced',
+      one: '1 phone synced',
+      zero: 'No phone has synced yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String webPhoneError(String error) {
+    return 'Couldn\'t read the folder: $error';
+  }
+
+  @override
+  String get frequentExercises => 'Frequent';
+
+  @override
+  String frequentExerciseCounts(int recent, int total) {
+    return '$recent sessions in 90 days · $total total';
+  }
+
+  @override
+  String get noFrequentExercises => 'No matching frequent exercises';
+
+  @override
+  String get frequentExercisesHint => 'Exercises you trained at least twice in the last 90 days appear here.';
+
+  @override
+  String get exitFrequentExercises => 'Exit Frequent';
+
+  @override
+  String get muscleAdductors => 'Adductors';
+
+  @override
+  String liveAddSeconds(int n) {
+    return '+$n s';
+  }
+
+  @override
+  String get alarmStyleNotificationOnly => 'Notification only';
+
+  @override
+  String get alarmStyleSoundHint =>
+      'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.';
+
+  @override
   String get ownManagePlan => 'Manage training plan';
 
   @override
@@ -7593,61 +7820,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ownSupportOriginal => 'Support the original author';
 
   @override
-  String get cholesterolLabel => 'Cholesterol';
+  String get ownBackupFolderSync => 'Shared-folder sync';
 
   @override
-  String get mealAiFlagMatched => 'Same as a food you saved';
-
-  @override
-  String get mealAiNotSame => 'Not the same';
-
-  @override
-  String get homeOrderRow => 'Order of sections';
-
-  @override
-  String get homeOrderHint => 'Hold and drag to change the order of Home.';
-
-  @override
-  String get homeOrderFolders => 'Shortcuts';
-
-  @override
-  String get equipNew => 'New';
-
-  @override
-  String get equipNewTitle => 'New equipment';
-
-  @override
-  String get equipNewHint => 'e.g. Weight belt';
-
-  @override
-  String get homeOrderWeekdays => 'Week checks';
-
-  @override
-  String get repsMaxTitle => 'Reps up to';
-
-  @override
-  String get repsRangeHint => 'Long press the reps to set a range like 8-12.';
-
-  @override
-  String get repsRangeClear => 'Remove range';
-
-  @override
-  String get noteLinksLabel => 'LINKS';
-
-  @override
-  String get noteLinkAdd => 'Add link';
-
-  @override
-  String get noteLinkEdit => 'Edit link';
-
-  @override
-  String get noteLinkNameHint => 'Name';
-
-  @override
-  String get noteLinkUrlHint => 'Web address';
-
-  @override
-  String get noteLinkInvalid => 'That address doesn\'t look right';
+  String get ownBackupFolderSyncHint =>
+      'Merge training data from backups in this folder. Set up Syncthing separately.';
 
   @override
   String get ownDisplayEffects => 'Display effects';

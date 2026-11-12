@@ -6,11 +6,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ar.dart';
+import 'app_localizations_bn.dart';
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fa.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
+import 'app_localizations_id.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_ja.dart';
 import 'app_localizations_ko.dart';
@@ -20,6 +23,7 @@ import 'app_localizations_pt.dart';
 import 'app_localizations_ru.dart';
 import 'app_localizations_tr.dart';
 import 'app_localizations_uk.dart';
+import 'app_localizations_ur.dart';
 import 'app_localizations_vi.dart';
 import 'app_localizations_zh.dart';
 
@@ -107,11 +111,14 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('ar'),
+    Locale('bn'),
     Locale('de'),
     Locale('en'),
     Locale('es'),
     Locale('fa'),
     Locale('fr'),
+    Locale('hi'),
+    Locale('id'),
     Locale('it'),
     Locale('ja'),
     Locale('ko'),
@@ -121,6 +128,7 @@ abstract class AppLocalizations {
     Locale('ru'),
     Locale('tr'),
     Locale('uk'),
+    Locale('ur'),
     Locale('vi'),
     Locale('zh'),
     Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
@@ -1259,36 +1267,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Favourites'**
   String get favouritesOnly;
-
-  /// No description provided for @frequentExercises.
-  ///
-  /// In en, this message translates to:
-  /// **'Frequent'**
-  String get frequentExercises;
-
-  /// No description provided for @frequentExerciseCounts.
-  ///
-  /// In en, this message translates to:
-  /// **'{recent} sessions in 90 days · {total} total'**
-  String frequentExerciseCounts(int recent, int total);
-
-  /// No description provided for @noFrequentExercises.
-  ///
-  /// In en, this message translates to:
-  /// **'No matching frequent exercises'**
-  String get noFrequentExercises;
-
-  /// No description provided for @frequentExercisesHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Exercises you trained at least twice in the last 90 days appear here.'**
-  String get frequentExercisesHint;
-
-  /// No description provided for @exitFrequentExercises.
-  ///
-  /// In en, this message translates to:
-  /// **'Exit Frequent'**
-  String get exitFrequentExercises;
 
   /// No description provided for @noFavouritesYet.
   ///
@@ -3168,12 +3146,6 @@ abstract class AppLocalizations {
   /// **'Quads'**
   String get muscleQuads;
 
-  /// No description provided for @muscleAdductors.
-  ///
-  /// In en, this message translates to:
-  /// **'Adductors'**
-  String get muscleAdductors;
-
   /// No description provided for @muscleHamstrings.
   ///
   /// In en, this message translates to:
@@ -3707,12 +3679,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set {n} of {total}'**
   String liveSet(int n, int total);
-
-  /// No description provided for @liveAddSeconds.
-  ///
-  /// In en, this message translates to:
-  /// **'+{n} s'**
-  String liveAddSeconds(int n);
 
   /// No description provided for @liveResting.
   ///
@@ -4937,18 +4903,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Follow silent mode'**
   String get alarmStyleQuiet;
-
-  /// No description provided for @alarmStyleNotificationOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification only'**
-  String get alarmStyleNotificationOnly;
-
-  /// No description provided for @alarmStyleSoundHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.'**
-  String get alarmStyleSoundHint;
 
   /// No description provided for @suggestedPicks.
   ///
@@ -13158,6 +13112,474 @@ abstract class AppLocalizations {
   /// **'Turn on at least one food'**
   String get mealAiNothingChosen;
 
+  /// No description provided for @cholesterolLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cholesterol'**
+  String get cholesterolLabel;
+
+  /// No description provided for @mealAiFlagMatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Same as a food you saved'**
+  String get mealAiFlagMatched;
+
+  /// No description provided for @mealAiNotSame.
+  ///
+  /// In en, this message translates to:
+  /// **'Not the same'**
+  String get mealAiNotSame;
+
+  /// No description provided for @homeOrderRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Order of sections'**
+  String get homeOrderRow;
+
+  /// No description provided for @homeOrderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold and drag to change the order of Home.'**
+  String get homeOrderHint;
+
+  /// No description provided for @homeOrderFolders.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcuts'**
+  String get homeOrderFolders;
+
+  /// No description provided for @equipNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get equipNew;
+
+  /// No description provided for @equipNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New equipment'**
+  String get equipNewTitle;
+
+  /// No description provided for @equipNewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Weight belt'**
+  String get equipNewHint;
+
+  /// No description provided for @homeOrderWeekdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Week checks'**
+  String get homeOrderWeekdays;
+
+  /// No description provided for @repsMaxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reps up to'**
+  String get repsMaxTitle;
+
+  /// No description provided for @repsRangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press the reps to set a range like 8-12.'**
+  String get repsRangeHint;
+
+  /// No description provided for @repsRangeClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove range'**
+  String get repsRangeClear;
+
+  /// No description provided for @noteLinksLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'LINKS'**
+  String get noteLinksLabel;
+
+  /// No description provided for @noteLinkAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add link'**
+  String get noteLinkAdd;
+
+  /// No description provided for @noteLinkEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit link'**
+  String get noteLinkEdit;
+
+  /// No description provided for @noteLinkNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get noteLinkNameHint;
+
+  /// No description provided for @noteLinkUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Web address'**
+  String get noteLinkUrlHint;
+
+  /// No description provided for @noteLinkInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That address doesn\'t look right'**
+  String get noteLinkInvalid;
+
+  /// No description provided for @changeRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest between exercises'**
+  String get changeRest;
+
+  /// No description provided for @changeRestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'After the last set, before the next exercise'**
+  String get changeRestHint;
+
+  /// No description provided for @notifSuppTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken'**
+  String get notifSuppTake;
+
+  /// No description provided for @sideRest.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest between sides'**
+  String get sideRest;
+
+  /// No description provided for @sideRestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Per-side exercises: the first ✓ ends one side'**
+  String get sideRestHint;
+
+  /// No description provided for @gfxCompat.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatible graphics'**
+  String get gfxCompat;
+
+  /// No description provided for @gfxCompatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For phones where letters look broken. Blur stays, a few effects get simpler'**
+  String get gfxCompatHint;
+
+  /// No description provided for @gfxRestartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart GymMane?'**
+  String get gfxRestartTitle;
+
+  /// No description provided for @gfxRestartBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It closes and opens again to change how it draws the screen. Nothing you saved is lost.'**
+  String get gfxRestartBody;
+
+  /// No description provided for @gfxRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get gfxRestart;
+
+  /// No description provided for @webSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated with changes from another device'**
+  String get webSynced;
+
+  /// No description provided for @webSyncedPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone\'s changes are in'**
+  String get webSyncedPhone;
+
+  /// No description provided for @webWelcomeBlurb.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything stays on your own server. No account, no cloud, nothing to pay.'**
+  String get webWelcomeBlurb;
+
+  /// No description provided for @webOwnServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Your server, your rules'**
+  String get webOwnServer;
+
+  /// No description provided for @webOwnServerWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'No accounts and no third-party cloud. Your data lives where you run it.'**
+  String get webOwnServerWhy;
+
+  /// No description provided for @webServerSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved on your server'**
+  String get webServerSaved;
+
+  /// No description provided for @webServerOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t reach your server'**
+  String get webServerOffline;
+
+  /// No description provided for @webServerLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved in this browser'**
+  String get webServerLocal;
+
+  /// No description provided for @webServerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your server'**
+  String get webServerTitle;
+
+  /// No description provided for @webPhoneLast.
+  ///
+  /// In en, this message translates to:
+  /// **'Last copy from your phone: {date}'**
+  String webPhoneLast(String date);
+
+  /// No description provided for @webPhoneNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No copy from your phone yet'**
+  String get webPhoneNone;
+
+  /// No description provided for @webPhoneScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Get from phone'**
+  String get webPhoneScan;
+
+  /// No description provided for @webPhoneExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to phone'**
+  String get webPhoneExport;
+
+  /// No description provided for @webPhoneExportDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Left in the shared folder. Your phone brings it in when it syncs'**
+  String get webPhoneExportDone;
+
+  /// No description provided for @webPhoneImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone\'s changes are in'**
+  String get webPhoneImported;
+
+  /// No description provided for @webPhoneNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new from your phone'**
+  String get webPhoneNothing;
+
+  /// No description provided for @webPhoneHow.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on automatic backups on your phone into a folder you sync with Syncthing. The server and the phone bring in each other\'s changes on their own, and merging never deletes anything.'**
+  String get webPhoneHow;
+
+  /// No description provided for @webPhoneGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'How to set it up'**
+  String get webPhoneGuide;
+
+  /// No description provided for @webPhoneOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone sync is off on this server'**
+  String get webPhoneOff;
+
+  /// No description provided for @toolGroupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Body'**
+  String get toolGroupBody;
+
+  /// No description provided for @toolNameProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get toolNameProtein;
+
+  /// No description provided for @toolTitleProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily protein'**
+  String get toolTitleProtein;
+
+  /// No description provided for @toolDescProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'How much protein a day'**
+  String get toolDescProtein;
+
+  /// No description provided for @toolHintProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'Grams a day, spread over your meals'**
+  String get toolHintProtein;
+
+  /// No description provided for @proteinGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get proteinGoalLabel;
+
+  /// No description provided for @proteinExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on the range most studies agree on for people who train: more when you are losing weight, to keep your muscle. Going over it is safe, it just adds little.'**
+  String get proteinExplain;
+
+  /// No description provided for @toolNameWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get toolNameWater;
+
+  /// No description provided for @toolTitleWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily water'**
+  String get toolTitleWater;
+
+  /// No description provided for @toolDescWater.
+  ///
+  /// In en, this message translates to:
+  /// **'How much to drink a day'**
+  String get toolDescWater;
+
+  /// No description provided for @toolHintWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Litres a day, food included'**
+  String get toolHintWater;
+
+  /// No description provided for @waterTrainingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Training a day'**
+  String get waterTrainingLabel;
+
+  /// No description provided for @waterExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'About 35 ml per kilo of body weight, plus some extra for each minute you train. Drink more on hot days.'**
+  String get waterExplain;
+
+  /// No description provided for @autoBackupSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get autoBackupSync;
+
+  /// No description provided for @autoBackupMerged.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes from your other devices are in'**
+  String get autoBackupMerged;
+
+  /// No description provided for @autoBackupSyncHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this folder with Syncthing and each device brings in what the others leave here. Merging never deletes anything.'**
+  String get autoBackupSyncHint;
+
+  /// No description provided for @webPhoneFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared folder'**
+  String get webPhoneFolder;
+
+  /// No description provided for @webPhoneFolderHow.
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen when you install the server. To change it, set GYMMANE_SYNC in the server\'s .env file and restart it.'**
+  String get webPhoneFolderHow;
+
+  /// No description provided for @webPhoneOffHow.
+  ///
+  /// In en, this message translates to:
+  /// **'To turn it on, remove GYMMANE_SYNC=off from the server\'s .env file and restart it.'**
+  String get webPhoneOffHow;
+
+  /// No description provided for @webPhoneDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =0{No phone has synced yet} =1{1 phone synced} other{{n} phones synced}}'**
+  String webPhoneDevices(int n);
+
+  /// No description provided for @webPhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read the folder: {error}'**
+  String webPhoneError(String error);
+
+  /// No description provided for @frequentExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequent'**
+  String get frequentExercises;
+
+  /// No description provided for @frequentExerciseCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'{recent} sessions in 90 days · {total} total'**
+  String frequentExerciseCounts(int recent, int total);
+
+  /// No description provided for @noFrequentExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching frequent exercises'**
+  String get noFrequentExercises;
+
+  /// No description provided for @frequentExercisesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises you trained at least twice in the last 90 days appear here.'**
+  String get frequentExercisesHint;
+
+  /// No description provided for @exitFrequentExercises.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit Frequent'**
+  String get exitFrequentExercises;
+
+  /// No description provided for @muscleAdductors.
+  ///
+  /// In en, this message translates to:
+  /// **'Adductors'**
+  String get muscleAdductors;
+
+  /// No description provided for @liveAddSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'+{n} s'**
+  String liveAddSeconds(int n);
+
+  /// No description provided for @alarmStyleNotificationOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification only'**
+  String get alarmStyleNotificationOnly;
+
+  /// No description provided for @alarmStyleSoundHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the alarm volume, follow your phone’s silent mode, or show a notification without sound.'**
+  String get alarmStyleSoundHint;
+
   /// No description provided for @ownManagePlan.
   ///
   /// In en, this message translates to:
@@ -13284,119 +13706,17 @@ abstract class AppLocalizations {
   /// **'Support the original author'**
   String get ownSupportOriginal;
 
-  /// No description provided for @cholesterolLabel.
+  /// No description provided for @ownBackupFolderSync.
   ///
   /// In en, this message translates to:
-  /// **'Cholesterol'**
-  String get cholesterolLabel;
+  /// **'Shared-folder sync'**
+  String get ownBackupFolderSync;
 
-  /// No description provided for @mealAiFlagMatched.
+  /// No description provided for @ownBackupFolderSyncHint.
   ///
   /// In en, this message translates to:
-  /// **'Same as a food you saved'**
-  String get mealAiFlagMatched;
-
-  /// No description provided for @mealAiNotSame.
-  ///
-  /// In en, this message translates to:
-  /// **'Not the same'**
-  String get mealAiNotSame;
-
-  /// No description provided for @homeOrderRow.
-  ///
-  /// In en, this message translates to:
-  /// **'Order of sections'**
-  String get homeOrderRow;
-
-  /// No description provided for @homeOrderHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold and drag to change the order of Home.'**
-  String get homeOrderHint;
-
-  /// No description provided for @homeOrderFolders.
-  ///
-  /// In en, this message translates to:
-  /// **'Shortcuts'**
-  String get homeOrderFolders;
-
-  /// No description provided for @equipNew.
-  ///
-  /// In en, this message translates to:
-  /// **'New'**
-  String get equipNew;
-
-  /// No description provided for @equipNewTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'New equipment'**
-  String get equipNewTitle;
-
-  /// No description provided for @equipNewHint.
-  ///
-  /// In en, this message translates to:
-  /// **'e.g. Weight belt'**
-  String get equipNewHint;
-
-  /// No description provided for @homeOrderWeekdays.
-  ///
-  /// In en, this message translates to:
-  /// **'Week checks'**
-  String get homeOrderWeekdays;
-
-  /// No description provided for @repsMaxTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Reps up to'**
-  String get repsMaxTitle;
-
-  /// No description provided for @repsRangeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Long press the reps to set a range like 8-12.'**
-  String get repsRangeHint;
-
-  /// No description provided for @repsRangeClear.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove range'**
-  String get repsRangeClear;
-
-  /// No description provided for @noteLinksLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'LINKS'**
-  String get noteLinksLabel;
-
-  /// No description provided for @noteLinkAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'Add link'**
-  String get noteLinkAdd;
-
-  /// No description provided for @noteLinkEdit.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit link'**
-  String get noteLinkEdit;
-
-  /// No description provided for @noteLinkNameHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Name'**
-  String get noteLinkNameHint;
-
-  /// No description provided for @noteLinkUrlHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Web address'**
-  String get noteLinkUrlHint;
-
-  /// No description provided for @noteLinkInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'That address doesn\'t look right'**
-  String get noteLinkInvalid;
+  /// **'Merge training data from backups in this folder. Set up Syncthing separately.'**
+  String get ownBackupFolderSyncHint;
 
   /// No description provided for @ownDisplayEffects.
   ///
@@ -13566,11 +13886,14 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   @override
   bool isSupported(Locale locale) => <String>[
     'ar',
+    'bn',
     'de',
     'en',
     'es',
     'fa',
     'fr',
+    'hi',
+    'id',
     'it',
     'ja',
     'ko',
@@ -13580,6 +13903,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
     'ru',
     'tr',
     'uk',
+    'ur',
     'vi',
     'zh',
   ].contains(locale.languageCode);
@@ -13605,6 +13929,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar':
       return AppLocalizationsAr();
+    case 'bn':
+      return AppLocalizationsBn();
     case 'de':
       return AppLocalizationsDe();
     case 'en':
@@ -13615,6 +13941,10 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsFa();
     case 'fr':
       return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'id':
+      return AppLocalizationsId();
     case 'it':
       return AppLocalizationsIt();
     case 'ja':
@@ -13633,6 +13963,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsTr();
     case 'uk':
       return AppLocalizationsUk();
+    case 'ur':
+      return AppLocalizationsUr();
     case 'vi':
       return AppLocalizationsVi();
     case 'zh':

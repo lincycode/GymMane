@@ -1,6 +1,6 @@
 # EnoGym 维护说明
 
-个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 73b2786acda9a7ffeb08b60fa8578bef9b836555（2026-11-10 核实），保留上游 Flutter 结构与离线数据格式。个人版的下载和更新使用本仓库的 GitHub Releases。原版介绍、商店资料和下载渠道见 [InlitX/GymMane](https://github.com/InlitX/GymMane)。
+个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 f7fd2baf984375a45dad8b0651f02bf11eb145a4（2026-11-12 核实），保留上游 Flutter 结构与离线数据格式。个人版的下载和更新使用本仓库的 GitHub Releases。原版介绍、商店资料和下载渠道见 [InlitX/GymMane](https://github.com/InlitX/GymMane)。
 
 ## 使用与范围
 
@@ -89,6 +89,10 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 5. 确认 latest API 返回本版，并通过应用使用的资源 API 下载更新清单和 APK，核对 SHA-256。涉及更新器或安装兼容性时，用旧版模拟器走完整的检查、下载和覆盖安装流程，并核对数据。
 
 当前沿用本机专用密钥签名，密钥不上传 GitHub。上游 `.github/workflows/build-apk.yml` 的签名路径和版本来源不是个人版发布流程，请勿直接用于发布 EnoGym；个人版目前使用上述脚本。`own` 是 GitHub 默认分支，承载个人版源码、首页和发布。`main` 用于对照上游。手机更新读取同一仓库的 latest Release。
+
+## 共享文件夹同步
+
+原作者的自托管 Web 版和服务器源码随上游合并。Android 客户端仍用本地存储，只有在「数据与备份 → 自动备份」主动开启「共享文件夹同步」后，才会扫描共享文件夹中的其他设备备份。Syncthing 由用户另行配置。关闭时沿用原有 `gymmane-auto-` ZIP 命名、目录和保留数量。进行中或暂停的训练会阻止同步合并。APK 更新仍使用 EnoGym 的 GitHub Release。
 
 ## 上游同步
 

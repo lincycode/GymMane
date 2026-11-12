@@ -22,11 +22,16 @@ void showAutoBackupSheet(BuildContext context) {
 
   Future<void> now(BuildContext sheet) async {
     if (!b.hasFolder && !await b.pickFolder()) return;
+    final n = b.syncEnabled ? await b.pull() : 0;
     final ok = await b.run(force: true);
     if (!sheet.mounted) return;
-    showNotchToast(sheet, ok ? t.autoBackupSaved : t.autoBackupLost,
-        icon: ok ? PhosphorIconsFill.checkCircle : PhosphorIconsFill.warningCircle,
-        accent: ok ? sheet.gc.sage : sheet.gc.danger);
+    final merged = n > 0;
+    showNotchToast(
+      sheet,
+      ok ? (merged ? t.autoBackupMerged : t.autoBackupSaved) : t.autoBackupLost,
+      icon: ok ? PhosphorIconsFill.checkCircle : PhosphorIconsFill.warningCircle,
+      accent: ok ? sheet.gc.sage : sheet.gc.danger,
+    );
   }
 
   String status() {
@@ -51,71 +56,73 @@ void showAutoBackupSheet(BuildContext context) {
       listenable: b,
       builder: (sheet, _) {
         final i = AutoBackup.keepOptions.indexOf(b.keep);
-        return Container(
-          padding: sheetPad(sheet),
-          decoration: sheetDecoration(gc),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SheetHandle(),
-              const SizedBox(height: 20),
-              SheetTitle(t.autoBackup, subtitle: t.autoBackupHint),
-              const SizedBox(height: 18),
-              OptionGroup([
-                for (final (m, label, detail) in modes)
-                  OptionItem(label, detail: detail, selected: b.mode == m, onTap: () => choose(m)),
-              ]),
-              const SizedBox(height: 12),
-              OptionGroup([
-                OptionItem(
-                  b.hasFolder && b.folderName.isNotEmpty ? b.folderName : t.autoBackupFolder,
-                  icon: PhosphorIconsRegular.folderSimple,
-                  detail: b.hasFolder ? status() : t.autoBackupNoFolder,
-                  danger: b.failed,
-                  trailing: Icon(PhosphorIconsRegular.caretRight, size: 15, color: gc.textTertiary),
-                  onTap: b.pickFolder,
+        return AppSheet(
+          children: [
+            SheetTitle(t.autoBackup, subtitle: t.autoBackupHint),
+            const SizedBox(height: 18),
+            OptionGroup([
+              for (final (m, label, detail) in modes)
+                OptionItem(label, detail: detail, selected: b.mode == m, onTap: () => choose(m)),
+            ]),
+            const SizedBox(height: 12),
+            OptionGroup([
+              OptionItem(
+                b.hasFolder && b.folderName.isNotEmpty ? b.folderName : t.autoBackupFolder,
+                icon: PhosphorIconsRegular.folderSimple,
+                detail: b.hasFolder ? status() : t.autoBackupNoFolder,
+                danger: b.failed,
+                trailing: Icon(PhosphorIconsRegular.caretRight, size: 15, color: gc.textTertiary),
+                onTap: b.pickFolder,
+              ),
+            ]),
+            const SizedBox(height: 10),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: b.syncEnabled,
+              onChanged: b.running || b.pulling ? null : b.setSyncEnabled,
+              title: Text(t.ownBackupFolderSync),
+              subtitle: Text(t.ownBackupFolderSyncHint),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    t.autoBackupKeep,
+                    style: AppTheme.f(14, weight: FontWeight.w600, color: gc.text),
+                  ),
                 ),
-              ]),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(t.autoBackupKeep,
-                        style: AppTheme.f(14, weight: FontWeight.w600, color: gc.text)),
-                  ),
-                  StepperControl(
-                    value: '${b.keep}',
-                    onDec: () {
-                      if (i > 0) b.setKeep(AutoBackup.keepOptions[i - 1]);
-                    },
-                    onInc: () {
-                      if (i < AutoBackup.keepOptions.length - 1) b.setKeep(AutoBackup.keepOptions[i + 1]);
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Center(
-                child: b.running
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(strokeWidth: 2.4, color: gc.ember),
-                        ),
-                      )
-                    : GhostButton(
-                        label: t.autoBackupNow,
-                        icon: PhosphorIconsRegular.fileZip,
-                        onTap: () => now(sheet),
+                StepperControl(
+                  value: '${b.keep}',
+                  onDec: () {
+                    if (i > 0) b.setKeep(AutoBackup.keepOptions[i - 1]);
+                  },
+                  onInc: () {
+                    if (i < AutoBackup.keepOptions.length - 1) b.setKeep(AutoBackup.keepOptions[i + 1]);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Center(
+              child: b.running || b.pulling
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2.4, color: gc.ember),
                       ),
-              ),
-              const SizedBox(height: 14),
-              PrimaryButton(label: t.done, onTap: () => Navigator.of(sheet).pop()),
-            ],
-          ),
+                    )
+                  : GhostButton(
+                      label: b.syncEnabled ? t.autoBackupSync : t.autoBackupNow,
+                      icon: PhosphorIconsRegular.arrowsClockwise,
+                      onTap: () => now(sheet),
+                    ),
+            ),
+            const SizedBox(height: 14),
+            PrimaryButton(label: t.done, onTap: () => Navigator.of(sheet).pop()),
+          ],
         );
       },
     ),

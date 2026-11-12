@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:archive/archive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:sync/sync.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../state/fit_state.dart';
@@ -19,7 +21,7 @@ class AutoBackup extends ChangeNotifier {
 
   static const _channel = MethodChannel('gymmane/backup');
   static const _key = 'autoBackup';
-  static const prefix = 'gymmane-auto-';
+  static const _localPrefix = 'gymmane-auto-';
   static const keepOptions = [1, 3, 5, 10, 20];
 
   bool get supported => !kIsWeb && Platform.isAndroid;
@@ -33,6 +35,13 @@ class AutoBackup extends ChangeNotifier {
   bool failed = false;
   bool running = false;
   int _seenSessions = -1;
+  bool _syncEnabled = false;
+  bool get syncEnabled => _syncEnabled;
+  String device = '';
+  final Map<String, int> _pulled = {};
+  DateTime? pulledAt;
+  int pulledCount = 0;
+  bool pulling = false;
   Timer? _afterWorkout;
 
   bool get hasFolder => folderUri.isNotEmpty;
@@ -42,7 +51,9 @@ class AutoBackup extends ChangeNotifier {
     if (!supported) return;
     _seenSessions = fit.sessions.length;
     fit.addListener(_onFit);
-    unawaited(_checkFolder());
+    unawaited(_checkFolder().then((_) async {
+      if (syncEnabled) await pull();
+    }));
     Timer(const Duration(seconds: 8), onLeave);
   }
 
@@ -60,7 +71,34 @@ class AutoBackup extends ChangeNotifier {
       lastAt = at == null ? null : DateTime.fromMillisecondsSinceEpoch(at);
       _lastCrc = (j['crc'] as num?)?.toInt() ?? 0;
       failed = j['failed'] as bool? ?? false;
+      _syncEnabled = j['syncEnabled'] as bool? ?? false;
+      device = j['device'] as String? ?? '';
+      ((j['pulled'] as Map?) ?? const {}).forEach((k, v) {
+        if (k is String && v is num) _pulled[k] = v.toInt();
+      });
+      final pa = (j['pulledAt'] as num?)?.toInt();
+      pulledAt = pa == null ? null : DateTime.fromMillisecondsSinceEpoch(pa);
+      pulledCount = (j['pulledCount'] as num?)?.toInt() ?? 0;
     } catch (_) {}
+    if (syncEnabled && device.isEmpty) {
+      _ensureDevice();
+      _save();
+    }
+  }
+
+  void _ensureDevice() {
+    if (device.isNotEmpty) return;
+    final r = math.Random.secure();
+    device = String.fromCharCodes([for (var i = 0; i < 6; i++) 97 + r.nextInt(26)]);
+    if (device == 'server') device = 'serves';
+  }
+
+  void setSyncEnabled(bool enabled) {
+    if (running || pulling || enabled == syncEnabled) return;
+    if (enabled) _ensureDevice();
+    _syncEnabled = enabled;
+    _lastCrc = 0;
+    _save();
   }
 
   void _save() {
@@ -74,6 +112,11 @@ class AutoBackup extends ChangeNotifier {
           if (lastAt != null) 'at': lastAt!.millisecondsSinceEpoch,
           'crc': _lastCrc,
           if (failed) 'failed': true,
+          if (syncEnabled) 'syncEnabled': true,
+          if (device.isNotEmpty) 'device': device,
+          'pulled': _pulled,
+          if (pulledAt != null) 'pulledAt': pulledAt!.millisecondsSinceEpoch,
+          'pulledCount': pulledCount,
         }));
     notifyListeners();
   }
@@ -140,7 +183,7 @@ class AutoBackup extends ChangeNotifier {
   }
 
   Future<bool> run({bool force = false}) async {
-    if (!supported || !hasFolder || running) return false;
+    if (!supported || !hasFolder || running || pulling) return false;
     running = true;
     notifyListeners();
     var ok = false;
@@ -165,7 +208,8 @@ class AutoBackup extends ChangeNotifier {
     final zip = await buildBackupZip();
     if (!isValidBackupZip(zip)) return false;
     final now = DateTime.now();
-    final name = '$prefix${_stamp(now)}.zip';
+    final prefix = syncEnabled ? '$syncPrefix$device-' : _localPrefix;
+    final name = syncEnabled ? syncName(device, now) : '$_localPrefix${_stamp(now)}.zip';
     final tmp = File('${(await getTemporaryDirectory()).path}/$name');
     await tmp.writeAsBytes(zip, flush: true);
     try {
@@ -186,6 +230,45 @@ class AutoBackup extends ChangeNotifier {
     lastAt = now;
     _lastCrc = crc;
     return true;
+  }
+
+  Future<int> pull() async {
+    if (!supported || !hasFolder || !syncEnabled || running || pulling || fit.session?.complete == false) return 0;
+    pulling = true;
+    notifyListeners();
+    var merged = 0;
+    try {
+      final names = await _channel.invokeListMethod<String>('list', {'uri': folderUri, 'prefix': syncPrefix}) ?? const [];
+      final newest = newestByDevice(names, self: device);
+      for (final f in newest.values) {
+        if (fit.session?.complete == false) break;
+        final seen = _pulled[f.device] ?? 0;
+        if (f.at.millisecondsSinceEpoch <= seen) continue;
+        final tmp = File('${(await getTemporaryDirectory()).path}/pull-${f.name}');
+        try {
+          final ok = await _channel.invokeMethod<bool>('read', {'uri': folderUri, 'name': f.name, 'path': tmp.path}) ?? false;
+          if (!ok) continue;
+          final last = lastAt;
+          final result = await mergeBackupZip(await tmp.readAsBytes(), incomingNewer: last == null || f.at.isAfter(last));
+          if (result == null) continue;
+          _pulled[f.device] = f.at.millisecondsSinceEpoch;
+          if (result) merged++;
+        } finally {
+          try {
+            await tmp.delete();
+          } catch (_) {}
+        }
+      }
+    } catch (e) {
+      debugPrint('AutoBackup pull failed: $e');
+    }
+    pulling = false;
+    if (merged > 0 || pulledAt == null) {
+      pulledAt = DateTime.now();
+      pulledCount = merged;
+    }
+    _save();
+    return merged;
   }
 
   static String _two(int n) => n.toString().padLeft(2, '0');

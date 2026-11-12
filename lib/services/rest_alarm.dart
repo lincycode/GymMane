@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
@@ -10,6 +9,8 @@ import 'package:timezone/timezone.dart' as tz;
 import '../l10n/l10n.dart';
 import 'headphones.dart';
 import 'local_store.dart';
+import 'supplement_reminder.dart';
+import 'host.dart';
 
 class RestAlarm {
   RestAlarm._();
@@ -97,6 +98,8 @@ class RestAlarm {
             requestBadgePermission: false,
           ),
         ),
+        onDidReceiveNotificationResponse: (r) => SupplementReminder.instance.tapped(r.payload),
+        onDidReceiveBackgroundNotificationResponse: supplementActionInBackground,
       );
       _ready = true;
     } catch (e) {
@@ -115,7 +118,7 @@ class RestAlarm {
 
   Future<void> retireVibratingChannels() async {
     const marker = 'non_vibrating_notifications';
-    if (!_ready || !Platform.isAndroid || Store.instance.note(marker) == '1') return;
+    if (!_ready || !onAndroid || Store.instance.note(marker) == '1') return;
     try {
       final android = _androidPlugin;
       if (android == null) return;
@@ -179,7 +182,7 @@ class RestAlarm {
   Future<bool> notificationsAllowed() async {
     if (!_ready) return true;
     try {
-      if (Platform.isIOS) {
+      if (onIOS) {
         final options = await _iosPlugin?.checkPermissions();
         return options?.isEnabled ?? true;
       }
@@ -192,7 +195,7 @@ class RestAlarm {
   Future<bool> requestPermission() async {
     if (!_ready) return true;
     try {
-      if (Platform.isIOS) {
+      if (onIOS) {
         return await _iosPlugin?.requestPermissions(alert: true, sound: true) ?? true;
       }
       final granted = await _androidPlugin?.requestNotificationsPermission() ?? true;
@@ -213,7 +216,7 @@ class RestAlarm {
   Future<void> fireNow() async {
     final visible = WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
     final custom = customSoundPath?.isNotEmpty ?? false;
-    if (_ready && !visible && (!custom || !_sound) && Platform.isAndroid) {
+    if (_ready && !visible && (!custom || !_sound) && onAndroid) {
       _generation++;
       return;
     }

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -6,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../app/own_build.dart';
 import '../catalog/awards.dart';
@@ -30,6 +27,7 @@ import '../widgets/name_ticker.dart';
 import '../widgets/nutrition_art.dart';
 import '../widgets/profile_avatar.dart';
 import '../widgets/ui_kit.dart';
+import '../services/file_share.dart';
 
 const double kRecapAvatar = 150;
 
@@ -310,11 +308,9 @@ class _RecapScreenState extends State<RecapScreen> {
       final data = await image.toByteData(format: ui.ImageByteFormat.png);
       image.dispose();
       if (data == null) return;
-      final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/gymmane-${_recap.month.year}-${_recap.month.month}-$_variant.png');
-      await file.writeAsBytes(data.buffer.asUint8List(), flush: true);
       if (!mounted) return;
-      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], subject: ownAppName));
+      await shareFile('gymmane-${_recap.month.year}-${_recap.month.month}-$_variant.png', data.buffer.asUint8List(),
+          mime: 'image/png', subject: ownAppName);
     } catch (_) {
       if (mounted) {
         showNotchToast(context, t.shareFailed, icon: PhosphorIconsFill.warningCircle, accent: context.gc.warn);

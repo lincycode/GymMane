@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gymmane/catalog/exercise_catalog.dart';
 import 'package:gymmane/models/exercise.dart';
 import 'package:gymmane/models/note.dart';
+import 'package:gymmane/services/auto_backup.dart';
 import 'package:gymmane/services/backup_zip.dart';
 import 'package:gymmane/services/local_store.dart';
 import 'package:gymmane/services/media_store.dart';
@@ -100,6 +101,39 @@ void main() {
     expect(fit.profile.name, 'Alex');
     expect(fit.exerciseMedia, isEmpty);
     expect(await restoreBackupZip(Uint8List.fromList([1, 2, 3, 4, 5])), false);
+  });
+
+  test('a legacy automatic backup folder does not enable folder sync', () async {
+    Store.instance.setNote('autoBackup', jsonEncode({
+      'mode': 'daily',
+      'uri': 'content://test/legacy',
+      'name': 'Legacy backups',
+      'keep': 3,
+    }));
+    final backup = AutoBackup.instance;
+    backup.init();
+    expect(backup.syncEnabled, isFalse);
+    expect(backup.folderName, 'Legacy backups');
+    expect(backup.mode, AutoBackupMode.daily);
+    expect(backup.keep, 3);
+  });
+
+  test('folder sync leaves a paused workout intact', () async {
+    fit.updateProfile(name: 'Remote');
+    final zip = await buildBackupZip();
+    fit.updateProfile(name: 'Local');
+    final id = fit.createRoutine();
+    fit.toggleRoutineExercise(id, bench.id);
+    fit.startRoutine(fit.routines.firstWhere((routine) => routine.id == id));
+    fit.endCountdown();
+    fit.toggleSessionPause();
+    final session = fit.session;
+    expect(session, isNotNull);
+    expect(fit.sessionPaused, isTrue);
+
+    expect(await mergeBackupZip(zip, incomingNewer: true), isNull);
+    expect(fit.session, same(session));
+    expect(fit.profile.name, 'Local');
   });
 
   test('a json backup from 1.0 still imports, media included', () async {

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ import '../widgets/file_thumb.dart';
 import '../widgets/glass.dart';
 import '../widgets/photo_source_sheet.dart';
 import '../widgets/ui_kit.dart';
+import '../widgets/local_image.dart';
 
 class MomentsScreen extends StatefulWidget {
   const MomentsScreen({super.key});
@@ -318,7 +318,7 @@ HeroFlightShuttleBuilder _photoFlight(String path) => (_, animation, _, _, _) =>
       builder: (_, _) => ClipRRect(
         borderRadius: BorderRadius.circular(ui.lerpDouble(18, 22, animation.value)!),
         child: SizedBox.expand(
-          child: Image.file(File(path), fit: BoxFit.cover, gaplessPlayback: true),
+          child: Image(image: localImage(path), fit: BoxFit.cover, gaplessPlayback: true),
         ),
       ),
     );
@@ -327,7 +327,7 @@ Future<void> openMoment(BuildContext context, Moment moment) async {
   final path = MediaStore.pathFor(moment.file) ?? '';
   if (path.isEmpty) return;
   try {
-    await precacheImage(FileImage(File(path)), context);
+    await precacheImage(localImage(path), context);
   } catch (_) {}
   if (!context.mounted) return;
   await Navigator.of(context).push(PageRouteBuilder<void>(
@@ -375,7 +375,7 @@ class _PhotoView extends StatelessWidget {
                       flightShuttleBuilder: _photoFlight(path),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(22),
-                        child: Image.file(File(path), fit: BoxFit.contain),
+                        child: Image(image: localImage(path), fit: BoxFit.contain),
                       ),
                     ),
                   ),

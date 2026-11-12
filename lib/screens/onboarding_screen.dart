@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../app/desktop.dart';
 import '../app/own_build.dart';
 import '../catalog/body_art.dart';
 import '../catalog/exercise_catalog.dart';
@@ -43,6 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _probing = false;
   bool _blur = false;
   bool _motion = false;
+  bool _wide = false;
 
   @override
   void initState() {
@@ -178,6 +180,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
+    _wide = DesktopScope.wideFor(MediaQuery.sizeOf(context).width);
+    final content = Column(
+      children: [
+        ValueListenableBuilder<int>(valueListenable: _at, builder: (_, _, _) => _topBar(gc)),
+        Expanded(
+          child: RepaintBoundary(
+            child: PageView(
+              controller: _page,
+              onPageChanged: _onPage,
+              children: [
+                for (final page in [
+                  _welcome(gc),
+                  _nameStep(gc),
+                  _photoStep(gc),
+                  _unitsStep(gc),
+                  _bodyStep(gc),
+                  _goalStep(gc),
+                  _placeStep(gc),
+                  if (_slow) _speedStep(gc),
+                ])
+                  RepaintBoundary(child: page),
+              ],
+            ),
+          ),
+        ),
+        ValueListenableBuilder<int>(valueListenable: _at, builder: (_, _, _) => _bottomBar(gc)),
+      ],
+    );
     return Scaffold(
       backgroundColor: gc.bg,
       resizeToAvoidBottomInset: false,
@@ -186,33 +216,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Positioned.fill(child: RepaintBoundary(child: _Glow(gc))),
           const Positioned.fill(child: RepaintBoundary(child: AppBackground(pattern: 'dots'))),
           SafeArea(
-            child: Column(
-              children: [
-                ValueListenableBuilder<int>(valueListenable: _at, builder: (_, _, _) => _topBar(gc)),
-                Expanded(
-                  child: RepaintBoundary(
-                    child: PageView(
-                    controller: _page,
-                    onPageChanged: _onPage,
-                    children: [
-                      for (final page in [
-                        _welcome(gc),
-                        _nameStep(gc),
-                        _photoStep(gc),
-                        _unitsStep(gc),
-                        _bodyStep(gc),
-                        _goalStep(gc),
-                        _placeStep(gc),
-                        if (_slow) _speedStep(gc),
-                      ])
-                        RepaintBoundary(child: page),
-                    ],
-                  ),
-                  ),
-                ),
-                ValueListenableBuilder<int>(valueListenable: _at, builder: (_, _, _) => _bottomBar(gc)),
-              ],
-            ),
+            child: _wide
+                ? LayoutBuilder(
+                    builder: (context, box) => Center(
+                      child: Container(
+                        width: math.min(1080, box.maxWidth - 64),
+                        height: math.min(660, box.maxHeight - 48),
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          color: gc.bg.withValues(alpha: 0.72),
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        child: content,
+                      ),
+                    ),
+                  )
+                : content,
           ),
         ],
       ),
@@ -221,7 +240,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _topBar(GymColors gc) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 16, 16, 0),
+      padding: _wide ? const EdgeInsets.fromLTRB(44, 30, 36, 0) : const EdgeInsets.fromLTRB(24, 16, 16, 0),
       child: Row(
         children: [
           Expanded(
@@ -259,8 +278,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _bottomBar(GymColors gc) {
+    final next = PrimaryButton(
+      label: _index == _last
+          ? t.welcomeStart
+          : _index == 2 && fit.profile.photo.isEmpty
+              ? t.onbPhotoLater
+              : t.next,
+      onTap: () => _index == _last ? _finish() : _go(_index + 1),
+    );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 22),
+      padding: _wide ? const EdgeInsets.fromLTRB(44, 8, 44, 32) : const EdgeInsets.fromLTRB(24, 8, 24, 22),
       child: Row(
         children: [
           if (_index > 0)
@@ -275,16 +302,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Icon(PhosphorIconsBold.arrowLeft, size: 18, color: gc.textSecondary),
               ),
             ),
-          Expanded(
-            child: PrimaryButton(
-              label: _index == _last
-                  ? t.welcomeStart
-                  : _index == 2 && fit.profile.photo.isEmpty
-                      ? t.onbPhotoLater
-                      : t.next,
-              onTap: () => _index == _last ? _finish() : _go(_index + 1),
-            ),
-          ),
+          if (_wide) ...[const Spacer(), SizedBox(width: 240, child: next)] else Expanded(child: next),
         ],
       ),
     );
@@ -298,6 +316,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     required Widget child,
     Widget Function(double height)? hero,
   }) {
+    if (_wide) return _split(gc, step: step, title: title, why: why, child: child, hero: hero);
     return LayoutBuilder(
       builder: (context, box) => SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -342,6 +361,74 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  Widget _split(
+    GymColors gc, {
+    required int step,
+    required String title,
+    required String why,
+    required Widget child,
+    Widget Function(double height)? hero,
+  }) {
+    return LayoutBuilder(
+      builder: (context, box) {
+        final h = (box.maxHeight * 0.34).clamp(150.0, 210.0);
+        final heroBox = hero == null ? null : SizedBox(height: h, child: Center(child: hero(h)));
+        return Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 28, 4),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(44, 0, 36, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _in(0, _label(gc, t.onbStep(step, _last))),
+                      const SizedBox(height: 14),
+                      _in(1, Text(title, style: AppTheme.f(40, weight: FontWeight.w800, color: gc.text, height: 1.08))),
+                      const SizedBox(height: 16),
+                      _in(2, Text(why, style: AppTheme.f(15.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.55))),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: gc.bgRaised.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(28),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: box.maxHeight - 40 - 56),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 440),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (heroBox != null) ...[_in(0, heroBox), const SizedBox(height: 26)],
+                              _in(3, child),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _label(GymColors gc, String text) => Text(text.toUpperCase(),
       style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4));
 
@@ -350,6 +437,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(20)),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           for (var i = 0; i < rows.length; i++) ...[
             if (i > 0)
@@ -579,9 +667,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: RollingText('$goal',
                       style: AppTheme.d(h * 0.3, weight: FontWeight.w800, color: gc.text, height: 1.4)),
                 ),
-                Text(t.perWeek(goal).replaceFirst('$goal', '').trim().toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: AppTheme.f(10, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.2)),
+                SizedBox(
+                  width: h * 0.58,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(t.perWeek(goal).replaceFirst('$goal', '').trim().toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: AppTheme.f(10, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.2)),
+                  ),
+                ),
               ]),
             ),
           ),
