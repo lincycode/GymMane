@@ -37,7 +37,16 @@ class PhoneSync {
   String? lastError;
   Timer? _poll;
   Timer? _exportSoon;
-  bool _busy = false;
+  Future<void> _operations = Future.value();
+
+  Future<T> _serial<T>(Future<T> Function() action) {
+    final next = _operations.then((_) => action());
+    _operations = next.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return next;
+  }
 
   Future<void> start({Duration every = const Duration(seconds: 15)}) async {
     await Directory(syncDir).create(recursive: true);
@@ -106,26 +115,34 @@ class PhoneSync {
       }
     }
     if (old != null) out.add(('legacy', oldAt!, old));
+    out.sort((a, b) => a.$2.compareTo(b.$2));
     return out;
   }
 
-  Future<bool> scan() async {
-    if (_busy) return false;
-    _busy = true;
+  Future<bool> scan() => _serial(_scan);
+
+  Future<bool> _scan() async {
     var merged = false;
     try {
+      var baseline = store.current.savedAt;
+      var revision = store.current.rev;
       for (final (dev, at, f) in await _candidates()) {
         if (at.millisecondsSinceEpoch <= (_pulled[dev] ?? 0)) continue;
         final size = await f.length();
         await Future<void>.delayed(const Duration(milliseconds: 600));
         if (await f.length() != size) continue;
-        final last = lastExport;
-        final result = await mergeZip(await f.readAsBytes(), incomingNewer: last == null || at.isAfter(last));
-        _pulled[dev] = at.millisecondsSinceEpoch;
+        final bytes = await f.readAsBytes();
+        if (store.current.rev != revision) baseline = store.current.savedAt;
+        final result = await _mergeZip(
+          bytes,
+          incomingNewer: baseline == null || at.isAfter(baseline),
+        );
         if (result == null) {
           lastError = 'Could not read ${f.uri.pathSegments.last}';
           continue;
         }
+        revision = store.current.rev;
+        _pulled[dev] = at.millisecondsSinceEpoch;
         lastError = null;
         lastImport = DateTime.now().toUtc();
         lastImportFile = f.uri.pathSegments.last;
@@ -136,12 +153,16 @@ class PhoneSync {
     } catch (e) {
       lastError = '$e';
       return false;
-    } finally {
-      _busy = false;
     }
   }
 
-  Future<bool?> mergeZip(Uint8List bytes, {required bool incomingNewer}) async {
+  Future<bool?> mergeZip(Uint8List bytes, {required bool incomingNewer}) =>
+      _serial(() => _mergeZip(bytes, incomingNewer: incomingNewer));
+
+  Future<bool?> _mergeZip(
+    Uint8List bytes, {
+    required bool incomingNewer,
+  }) async {
     final Archive archive;
     try {
       archive = ZipDecoder().decodeBytes(bytes);
@@ -163,48 +184,94 @@ class PhoneSync {
     }
 
     Map<String, dynamic> local = const {};
-    final text = store.current.text;
+    final snapshot = store.current;
+    final text = snapshot.text;
     if (text != null) {
       try {
         local = jsonDecode(text) as Map<String, dynamic>;
       } catch (_) {}
     }
 
-    final localEx = (local['media'] as Map?) ?? const {};
-    final exercise = <String, String>{};
-    final exMap = incoming['media'];
-    if (exMap is Map) {
-      for (final e in exMap.entries) {
-        final id = e.key;
-        final path = e.value;
-        if (id is! String || path is! String || localEx.containsKey(id)) continue;
-        final data = archive.findFile(path)?.readBytes();
-        if (data == null) continue;
-        final ext = path.contains('.') ? path.substring(path.lastIndexOf('.') + 1).toLowerCase() : 'dat';
-        final clean = id.replaceAll(RegExp(r'[^A-Za-z0-9_-]'), '_');
-        final name = 'ex-$clean-${data.length}.$ext';
-        if (await media.write(name, data)) exercise[id] = name;
-      }
-    }
-    incoming['media'] = exercise;
-
-    var added = exercise.isNotEmpty;
-    for (final group in _groups.keys) {
-      final map = incoming[group];
-      if (map is! Map) continue;
-      for (final e in map.entries) {
-        final name = e.key;
-        final path = e.value;
-        if (name is! String || path is! String || !MediaFiles.validName(name) || await media.exists(name)) continue;
-        final data = archive.findFile(path)?.readBytes();
-        if (data != null && await media.write(name, data)) added = true;
-      }
+    final added = <String>{};
+    Future<String?> save(String path) async {
+      final data = archive.findFile(path)?.readBytes();
+      if (data == null) return null;
+      final ext = path.contains('.')
+          ? path.substring(path.lastIndexOf('.') + 1).toLowerCase()
+          : 'dat';
+      return saveSyncMedia(
+        bytes: data,
+        fingerprint: getCrc32(data),
+        extension: ext,
+        read: media.read,
+        write: (name, bytes) async {
+          added.add(name);
+          return media.write(name, bytes);
+        },
+      );
     }
 
-    final merged = mergeStates(local, incoming, incomingNewer: incomingNewer);
-    if (sameState(local, merged) && !added) return false;
-    await store.write(jsonEncode(merged), source: 'phone');
-    return true;
+    try {
+      final localEx = (local['media'] as Map?) ?? const {};
+      final exercise = <String, String>{};
+      final exMap = incoming['media'];
+      if (exMap is Map) {
+        for (final e in exMap.entries) {
+          if (e.key is! String ||
+              e.value is! String ||
+              localEx.containsKey(e.key)) {
+            continue;
+          }
+          final name = await save(e.value as String);
+          if (name == null) return null;
+          exercise[e.key as String] = name;
+        }
+      }
+      incoming['media'] = exercise;
+
+      final used = stringsIn(
+        mergeStates(local, incoming, incomingNewer: incomingNewer),
+      );
+      final renames = <String, String>{};
+      for (final group in _groups.keys) {
+        final map = incoming[group];
+        if (map is! Map) continue;
+        for (final e in map.entries) {
+          if (e.key is! String || e.value is! String || !used.contains(e.key)) {
+            continue;
+          }
+          final name = await save(e.value as String);
+          if (name == null) return null;
+          renames[e.key as String] = name;
+        }
+      }
+      final renamed = renameStrings(incoming, renames) as Map<String, dynamic>;
+      final merged = mergeStates(local, renamed, incomingNewer: incomingNewer);
+      if (store.current.rev != snapshot.rev) return null;
+      if (sameState(local, merged)) {
+        return false;
+      }
+      final result = await store.write(
+        jsonEncode(merged),
+        baseRev: snapshot.rev,
+        source: 'phone',
+      );
+      if (result.conflict) return null;
+      return true;
+    } catch (_) {
+      return null;
+    } finally {
+      // A simultaneous browser save may already reference one of these files.
+      final current = store.current.text;
+      final retained = current == null
+          ? const <String>{}
+          : stringsIn(jsonDecode(current));
+      for (final name in added.difference(retained)) {
+        try {
+          await media.delete(name);
+        } catch (_) {}
+      }
+    }
   }
 
   void changed() {
@@ -212,7 +279,9 @@ class PhoneSync {
     _exportSoon = Timer(const Duration(seconds: 30), () => exportZip());
   }
 
-  Future<bool> exportZip() async {
+  Future<bool> exportZip() => _serial(_exportZip);
+
+  Future<bool> _exportZip() async {
     final text = store.current.text;
     if (text == null) return false;
     try {

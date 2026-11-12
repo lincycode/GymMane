@@ -16,15 +16,20 @@ import 'local_store.dart';
 enum AutoBackupMode { off, workout, daily, weekly }
 
 class AutoBackup extends ChangeNotifier {
-  AutoBackup._();
+  AutoBackup._({bool? supported}) : _supportedOverride = supported;
   static final AutoBackup instance = AutoBackup._();
+
+  @visibleForTesting
+  factory AutoBackup.forTesting() => AutoBackup._(supported: true);
+
+  final bool? _supportedOverride;
 
   static const _channel = MethodChannel('gymmane/backup');
   static const _key = 'autoBackup';
   static const _localPrefix = 'gymmane-auto-';
   static const keepOptions = [1, 3, 5, 10, 20];
 
-  bool get supported => !kIsWeb && Platform.isAndroid;
+  bool get supported => _supportedOverride ?? (!kIsWeb && Platform.isAndroid);
 
   AutoBackupMode mode = AutoBackupMode.off;
   String folderUri = '';
@@ -42,6 +47,7 @@ class AutoBackup extends ChangeNotifier {
   DateTime? pulledAt;
   int pulledCount = 0;
   bool pulling = false;
+  bool _picking = false;
   Timer? _afterWorkout;
 
   bool get hasFolder => folderUri.isNotEmpty;
@@ -133,6 +139,8 @@ class AutoBackup extends ChangeNotifier {
   }
 
   Future<bool> pickFolder() async {
+    if (running || pulling || _picking) return false;
+    _picking = true;
     try {
       final picked = await _channel.invokeMapMethod<String, dynamic>('pick');
       if (picked == null) return false;
@@ -140,10 +148,16 @@ class AutoBackup extends ChangeNotifier {
       folderName = picked['name'] as String? ?? '';
       failed = false;
       _lastCrc = 0;
+      lastAt = null;
+      _pulled.clear();
+      pulledAt = null;
+      pulledCount = 0;
       _save();
       return hasFolder;
     } catch (_) {
       return false;
+    } finally {
+      _picking = false;
     }
   }
 
@@ -183,7 +197,7 @@ class AutoBackup extends ChangeNotifier {
   }
 
   Future<bool> run({bool force = false}) async {
-    if (!supported || !hasFolder || running || pulling) return false;
+    if (!supported || !hasFolder || running || pulling || _picking) return false;
     running = true;
     notifyListeners();
     var ok = false;
@@ -200,9 +214,8 @@ class AutoBackup extends ChangeNotifier {
 
   Future<bool> _write(bool force) async {
     fit.persistNow();
-    final crc = getCrc32(utf8.encode(jsonEncode(Store.finite(fit.toJson()))));
+    final crc = _fingerprint();
     if (!force && crc == _lastCrc && lastAt != null) {
-      lastAt = DateTime.now();
       return true;
     }
     final zip = await buildBackupZip();
@@ -233,24 +246,52 @@ class AutoBackup extends ChangeNotifier {
   }
 
   Future<int> pull() async {
-    if (!supported || !hasFolder || !syncEnabled || running || pulling || fit.session?.complete == false) return 0;
+    if (!supported ||
+        !hasFolder ||
+        !syncEnabled ||
+        running ||
+        pulling ||
+        _picking ||
+        fit.session?.complete == false) {
+      return 0;
+    }
     pulling = true;
     notifyListeners();
     var merged = 0;
     try {
-      final names = await _channel.invokeListMethod<String>('list', {'uri': folderUri, 'prefix': syncPrefix}) ?? const [];
-      final newest = newestByDevice(names, self: device);
-      for (final f in newest.values) {
+      fit.persistNow();
+      var expected = _fingerprint();
+      var backedUp = lastAt != null && expected == _lastCrc;
+      final baseline = lastAt;
+      final names =
+          await _channel.invokeListMethod<String>('list', {'uri': folderUri, 'prefix': syncPrefix}) ??
+          const [];
+      final newest = newestByDevice(names, self: device).values.toList()
+        ..sort((a, b) => a.at.compareTo(b.at));
+      for (final f in newest) {
         if (fit.session?.complete == false) break;
         final seen = _pulled[f.device] ?? 0;
         if (f.at.millisecondsSinceEpoch <= seen) continue;
         final tmp = File('${(await getTemporaryDirectory()).path}/pull-${f.name}');
         try {
-          final ok = await _channel.invokeMethod<bool>('read', {'uri': folderUri, 'name': f.name, 'path': tmp.path}) ?? false;
+          final ok =
+              await _channel.invokeMethod<bool>('read', {
+                'uri': folderUri,
+                'name': f.name,
+                'path': tmp.path,
+              }) ??
+              false;
           if (!ok) continue;
-          final last = lastAt;
-          final result = await mergeBackupZip(await tmp.readAsBytes(), incomingNewer: last == null || f.at.isAfter(last));
+          final bytes = await tmp.readAsBytes();
+          if (_fingerprint() != expected) backedUp = false;
+          // A backup timestamp is not a local edit timestamp. Until current
+          // edits have been backed up, keep local conflicts and merge new IDs.
+          final result = await mergeBackupZip(
+            bytes,
+            incomingNewer: backedUp && baseline != null && f.at.isAfter(baseline),
+          );
           if (result == null) continue;
+          expected = _fingerprint();
           _pulled[f.device] = f.at.millisecondsSinceEpoch;
           if (result) merged++;
         } finally {
@@ -270,6 +311,8 @@ class AutoBackup extends ChangeNotifier {
     _save();
     return merged;
   }
+
+  static int _fingerprint() => getCrc32(utf8.encode(jsonEncode(Store.finite(fit.toJson()))));
 
   static String _two(int n) => n.toString().padLeft(2, '0');
 

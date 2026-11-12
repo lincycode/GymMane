@@ -199,7 +199,7 @@ object BackupBridge {
                 while (it.moveToNext()) {
                     val id = it.getString(0) ?: continue
                     val name = it.getString(1) ?: continue
-                    if (name.startsWith(prefix) && name.endsWith(".zip")) found.add(id to name)
+                    if (BackupNames.belongsTo(name, prefix)) found.add(id to name)
                 }
             }
         } catch (e: Exception) {

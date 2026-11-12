@@ -2,11 +2,59 @@ import 'dart:convert';
 
 const String syncPrefix = 'gymmane-auto-';
 
-const Set<String> _localOnly = {'live', 'liveStart', 'liveElapsed', 'livePaused', 'alarmSound', 'alarmSoundName'};
+const Set<String> _localOnly = {
+  'live',
+  'liveStart',
+  'liveElapsed',
+  'livePaused',
+  'alarmSound',
+  'alarmSoundName',
+};
 
 const Set<String> _unionLists = {'checkins', 'awardsSeen', 'trkKnown'};
 
-const Set<String> mediaGroups = {'noteMedia', 'shotMedia', 'momentMedia', 'foodMedia', 'passMedia'};
+const Set<String> mediaGroups = {
+  'noteMedia',
+  'shotMedia',
+  'momentMedia',
+  'foodMedia',
+  'passMedia',
+};
+
+// These preferences are omitted by the serializer at their default value.
+// Absence in the preferred snapshot means reset, unlike an absent record.
+const Set<String> _optionalPreferences = {
+  'autoProgress',
+  'hideShots',
+  'blur',
+  'textSize',
+  'calm',
+  'miniBody',
+  'checkIn',
+  'mTune',
+  'voice',
+  'deload',
+  'deloadFrom',
+  'lowEndAsked',
+  'trainAgain',
+  'plateBar',
+  'lastPass',
+  'rotation',
+  'rotationNext',
+  'rotationRest',
+  'planId',
+};
+const Set<String> _nutritionPreferences = {
+  'rest',
+  'burned',
+  'betaOff',
+  'kj',
+  'still',
+  'wGoal',
+  'wAim',
+  'suppAt',
+  'shake',
+};
 
 class SyncFile {
   const SyncFile(this.name, this.device, this.at);
@@ -55,11 +103,22 @@ Map<String, SyncFile> newestByDevice(Iterable<String> names, {required String se
   return out;
 }
 
-Map<String, dynamic> mergeStates(Map<String, dynamic> local, Map<String, dynamic> incoming,
-    {required bool incomingNewer}) {
+Map<String, dynamic> mergeStates(
+  Map<String, dynamic> local,
+  Map<String, dynamic> incoming, {
+  required bool incomingNewer,
+}) {
   final newer = incomingNewer ? incoming : local;
   final older = incomingNewer ? local : incoming;
   final out = _mergeMap(newer, older);
+  _copyPreferences(out, newer, _optionalPreferences);
+  if (newer['nutrition'] case final Map nutrition) {
+    _copyPreferences(
+      out['nutrition'] as Map<String, dynamic>,
+      nutrition,
+      _nutritionPreferences,
+    );
+  }
   for (final k in _localOnly) {
     if (local.containsKey(k)) {
       out[k] = local[k];
@@ -74,7 +133,22 @@ Map<String, dynamic> mergeStates(Map<String, dynamic> local, Map<String, dynamic
   return out;
 }
 
-bool sameState(Map<String, dynamic> a, Map<String, dynamic> b) => jsonEncode(a) == jsonEncode(b);
+void _copyPreferences(
+  Map<String, dynamic> out,
+  Map preferred,
+  Set<String> keys,
+) {
+  for (final key in keys) {
+    if (preferred.containsKey(key)) {
+      out[key] = preferred[key];
+    } else {
+      out.remove(key);
+    }
+  }
+}
+
+bool sameState(Map<String, dynamic> a, Map<String, dynamic> b) =>
+    jsonEncode(a) == jsonEncode(b);
 
 Map<String, dynamic> _mergeMap(Map a, Map b) {
   final out = <String, dynamic>{};
@@ -92,7 +166,7 @@ Map<String, dynamic> _mergeMap(Map a, Map b) {
 Object? _merge(String key, Object? a, Object? b) {
   if (a is Map && b is Map) return _mergeMap(a, b);
   if (a is List && b is List) return _mergeList(key, a, b);
-  return a ?? b;
+  return a;
 }
 
 String? _keyOf(Object? x) {
@@ -158,4 +232,34 @@ Object? renameStrings(Object? node, Map<String, String> renames) {
   if (node is List) return [for (final x in node) renameStrings(x, renames)];
   if (node is Map) return {for (final e in node.entries) '${e.key}': renameStrings(e.value, renames)};
   return node;
+}
+
+/// Reuse identical media across snapshots; never overwrite a different file,
+/// even if its fingerprint collides. Callers roll back only their new writes.
+Future<String?> saveSyncMedia({
+  required List<int> bytes,
+  required int fingerprint,
+  required String extension,
+  required Future<List<int>?> Function(String) read,
+  required Future<bool> Function(String, List<int>) write,
+}) async {
+  final ext = RegExp(r'^[a-z0-9]{1,10}$').hasMatch(extension)
+      ? extension
+      : 'dat';
+  final stem = 'sync-${fingerprint.toRadixString(16)}-${bytes.length}';
+  for (var i = 0; ; i++) {
+    final name = '$stem${i == 0 ? '' : '-$i'}.$ext';
+    final existing = await read(name);
+    if (existing == null) return await write(name, bytes) ? name : null;
+    if (existing.length == bytes.length) {
+      var same = true;
+      for (var j = 0; j < bytes.length; j++) {
+        if (bytes[j] != existing[j]) {
+          same = false;
+          break;
+        }
+      }
+      if (same) return name;
+    }
+  }
 }

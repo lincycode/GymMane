@@ -53,6 +53,7 @@ Future<void> main() async {
   }
 
   fit.onWidgetsShouldUpdate = HomeWidgetBridge.update;
+  HomeWidgetBridge.listen();
   NutritionWidgets.watch(HomeWidgetBridge.update);
   AutoBackup.instance.init();
   runApp(const GymManeApp());

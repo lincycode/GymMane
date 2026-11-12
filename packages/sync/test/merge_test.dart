@@ -72,11 +72,81 @@ void main() {
   });
 
   test('renames media references', () {
-    final out = renameStrings({
-      'notes': [
-        {'m': ['old.jpg']},
-      ],
-    }, {'old.jpg': 'new.jpg'});
+    final out = renameStrings(
+      {
+        'notes': [
+          {
+            'm': ['old.jpg'],
+          },
+        ],
+      },
+      {'old.jpg': 'new.jpg'},
+    );
     expect(stringsIn(out), contains('new.jpg'));
   });
+  test(
+    'preferred defaults clear omitted preferences without dropping any records',
+    () {
+      final local = {
+        'blur': false,
+        'calm': true,
+        'trainAt': 600,
+        'nutrition': {
+          'betaOff': true,
+          'rest': {'kcal': 1000},
+          'water': [
+            {'id': 'local'},
+          ],
+        },
+        'sessions': [
+          {'id': 'local'},
+        ],
+      };
+      final remote = {
+        'trainAt': null,
+        'nutrition': {
+          'water': [
+            {'id': 'remote'},
+          ],
+        },
+        'sessions': [
+          {'id': 'remote'},
+        ],
+      };
+      final merged = mergeStates(local, remote, incomingNewer: true);
+      expect(merged.containsKey('blur'), isFalse);
+      expect(merged.containsKey('calm'), isFalse);
+      expect(merged['trainAt'], isNull);
+      expect((merged['nutrition'] as Map).containsKey('betaOff'), isFalse);
+      expect((merged['nutrition'] as Map).containsKey('rest'), isFalse);
+      expect((merged['nutrition'] as Map)['water'], hasLength(2));
+      expect(merged['sessions'], hasLength(2));
+      final reversed = mergeStates(remote, local, incomingNewer: false);
+      expect(sameState(merged, reversed), isTrue);
+    },
+  );
+
+  test(
+    'media fingerprints are idempotent and byte collisions do not overwrite',
+    () async {
+      final files = <String, List<int>>{};
+      Future<String?> save(List<int> bytes) => saveSyncMedia(
+        bytes: bytes,
+        fingerprint: 123,
+        extension: 'png',
+        read: (name) async => files[name],
+        write: (name, data) async {
+          files[name] = data;
+          return true;
+        },
+      );
+      final first = await save([1, 2]);
+      expect(await save([1, 2]), first);
+      final second = await save([3, 4]);
+      expect(second, isNot(first));
+      expect(files[first], [1, 2]);
+      expect(files[second], [3, 4]);
+      expect(files, hasLength(2));
+    },
+  );
 }

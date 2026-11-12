@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
 
 import '../state/fit_state.dart';
@@ -29,9 +30,34 @@ class HomeWidgetBridge {
   static bool get _ios => !kIsWeb && Platform.isIOS;
   static bool get _supported => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
   static bool _groupReady = false;
+  static bool _primed = false;
+  static const _channel = MethodChannel('gymmane/widgets');
   static Timer? _debounce;
   static Future<void>? _job;
   static final Set<String> _forced = {};
+  static const _trainingProviders = [
+    ('HeatmapWidgetProvider', 'HeatmapWidget'),
+    ('BodyWidgetProvider', 'BodyWidget'),
+    ('TodayWidgetProvider', 'TodayWidget'),
+    ('StatsWidgetProvider', 'StatsWidget'),
+    ('WeekWidgetProvider', 'WeekWidget'),
+  ];
+
+  static void prepareForLauncher() {
+    if (!_supported) return;
+    _forced.addAll(_trainingProviders.map((p) => p.$1));
+    _forced.addAll(NutritionWidgets.providers);
+    unawaited(updateNow());
+  }
+
+  static void listen() {
+    if (!_supported || _ios) return;
+    _channel.setMethodCallHandler((call) async {
+      if (call.method == 'added' && call.arguments is String) {
+        await updateNow(provider: call.arguments as String);
+      }
+    });
+  }
 
   static void update() {
     if (!_supported) return;
@@ -61,7 +87,9 @@ class HomeWidgetBridge {
   static Future<void> _paint() async {
     try {
       final widgets = _ios ? null : await HomeWidget.getInstalledWidgets();
-      final installed = widgets == null
+      // The launcher can add a widget while Flutter is stopped. Seed every
+      // preview once per process, then limit ordinary updates to installed ones.
+      final installed = !_primed || widgets == null
           ? null
           : {
               ..._forced,
@@ -208,13 +236,7 @@ class HomeWidgetBridge {
         await HomeWidget.saveWidgetData<String>(themeKey, pref);
       }
 
-      for (final (android, ios) in const [
-        ('HeatmapWidgetProvider', 'HeatmapWidget'),
-        ('BodyWidgetProvider', 'BodyWidget'),
-        ('TodayWidgetProvider', 'TodayWidget'),
-        ('StatsWidgetProvider', 'StatsWidget'),
-        ('WeekWidgetProvider', 'WeekWidget'),
-      ]) {
+      for (final (android, ios) in _trainingProviders) {
         if (wants(android)) await _reload(android, ios);
       }
       if (!_ios) {
@@ -222,6 +244,7 @@ class HomeWidgetBridge {
           if (wants(android)) await _reload(android, android);
         }
       }
+      _primed = true;
     } catch (e) {
       debugPrint('HomeWidgetBridge.update falló: $e');
     }

@@ -156,8 +156,10 @@ void main() {
     expect([for (final n in state['notes'] as List) (n as Map)['id']], containsAll(['w1', 'n1']));
     final exName = (state['media'] as Map)['EIeI8Vf'] as String;
     expect(File('${tmp.path}/data/media/$exName').readAsBytesSync(), [9, 9, 9]);
-    expect(File('${tmp.path}/data/media/note-1-0.jpg').readAsBytesSync(), [7, 7]);
-    expect(File('${tmp.path}/data/media/food-9-1.png').readAsBytesSync(), [5]);
+    final noteName = ((state['notes'] as List).firstWhere((n) => n['id'] == 'n1')['m'] as List).single as String;
+    final foodName = ((state['nutrition'] as Map)['foods'] as List).single['ph'] as String;
+    expect(File('${tmp.path}/data/media/$noteName').readAsBytesSync(), [7, 7]);
+    expect(File('${tmp.path}/data/media/$foodName').readAsBytesSync(), [5]);
 
     final (again, body2, _) = await call('POST', '/api/sync/scan');
     expect(again, 200);
@@ -173,8 +175,8 @@ void main() {
     expect(mine, hasLength(1));
     final out = ZipDecoder().decodeBytes(mine.single.readAsBytesSync());
     final back = jsonDecode(utf8.decode(out.findFile('gymmane.json')!.readBytes()!)) as Map<String, dynamic>;
-    expect((back['noteMedia'] as Map).keys, ['note-1-0.jpg']);
-    expect((back['foodMedia'] as Map).keys, ['food-9-1.png']);
+    expect((back['noteMedia'] as Map).keys, [noteName]);
+    expect((back['foodMedia'] as Map).keys, [foodName]);
     expect(out.findFile((back['media'] as Map)['EIeI8Vf'] as String)!.readBytes(), [9, 9, 9]);
   });
 

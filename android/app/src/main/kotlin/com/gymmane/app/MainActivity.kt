@@ -40,6 +40,7 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val messenger = flutterEngine.dartExecutor.binaryMessenger
+        RefreshingWidgetProvider.channel = MethodChannel(messenger, "gymmane/widgets")
 
         MethodChannel(messenger, "gymmane/graphics").setMethodCallHandler { call, result ->
             when (call.method) {
@@ -254,6 +255,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        RefreshingWidgetProvider.channel = null
         rotaryChannel = null
         openChannel = null
         LiveNotifier.dart = null

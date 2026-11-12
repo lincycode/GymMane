@@ -289,53 +289,57 @@ Future<bool?> mergeBackupZip(Uint8List zipBytes, {required bool incomingNewer}) 
   fit.persistNow();
   final revision = fit.dataRevision;
   final local = jsonDecode(jsonEncode(Store.finite(fit.toJson()))) as Map<String, dynamic>;
-  final have = MediaStore.names();
-  final added = <String>[];
+  final added = <String>{};
+  var committed = false;
+  try {
+    final localEx = (local['media'] as Map?) ?? const {};
+    final exMedia = <String, String>{};
+    for (final e in ((incoming['media'] as Map?) ?? const {}).entries) {
+      final id = e.key;
+      final path = e.value;
+      if (id is! String || path is! String || localEx.containsKey(id)) continue;
+      final bytes = archive.findFile(path)?.readBytes();
+      if (bytes == null) return null;
+      final base = await MediaStore.saveSynced(MediaStore.extOf(path), bytes, added);
+      if (base == null) return null;
+      exMedia[id] = base;
+    }
+    incoming['media'] = exMedia;
 
-  final localEx = (local['media'] as Map?) ?? const {};
-  final exMedia = <String, String>{};
-  for (final e in ((incoming['media'] as Map?) ?? const {}).entries) {
-    final id = e.key;
-    final path = e.value;
-    if (id is! String || path is! String || localEx.containsKey(id)) continue;
-    final bytes = archive.findFile(path)?.readBytes();
-    if (bytes == null) continue;
-    final base = await MediaStore.saveBytes(id, MediaStore.extOf(path), bytes);
-    if (base == null) continue;
-    exMedia[id] = base;
-    added.add(base);
+    // Rename only the incoming snapshot, so equal filenames on two devices
+    // cannot redirect an existing local record to somebody else's photo.
+    final used = stringsIn(mergeStates(local, incoming, incomingNewer: incomingNewer));
+    final renames = <String, String>{};
+    for (final g in mediaGroups) {
+      final map = incoming[g];
+      if (map is! Map) continue;
+      for (final e in map.entries) {
+        if (e.key is! String || e.value is! String || !used.contains(e.key)) continue;
+        final bytes = archive.findFile(e.value as String)?.readBytes();
+        if (bytes == null) return null;
+        final base = await MediaStore.saveSynced(MediaStore.extOf(e.value as String), bytes, added);
+        if (base == null) return null;
+        renames[e.key as String] = base;
+      }
+    }
+    final renamed = renameStrings(incoming, renames) as Map<String, dynamic>;
+    final out = mergeStates(local, renamed, incomingNewer: incomingNewer);
+    if (fit.dataRevision != revision || fit.session?.complete == false) return null;
+    if (sameState(local, out)) {
+      committed = true;
+      return false;
+    }
+    if (!fit.tryApplyBackup(out)) return null;
+    committed = true;
+    return true;
+  } catch (_) {
+    return null;
+  } finally {
+    final retained = committed ? stringsIn(fit.toJson()) : const <String>{};
+    for (final name in added.difference(retained)) {
+      await MediaStore.delete(name);
+    }
   }
-  incoming['media'] = exMedia;
-
-  final files = <String, String>{};
-  for (final g in mediaGroups) {
-    final map = incoming[g];
-    if (map is! Map) continue;
-    map.forEach((k, v) {
-      if (k is String && v is String && v.isNotEmpty) files[k] = v;
-    });
-  }
-
-  final merged = mergeStates(local, incoming, incomingNewer: incomingNewer);
-  if (sameState(local, merged) && added.isEmpty) return false;
-
-  final used = stringsIn(merged);
-  final renames = <String, String>{};
-  for (final e in files.entries) {
-    if (have.contains(e.key) || !used.contains(e.key)) continue;
-    final bytes = archive.findFile(e.value)?.readBytes();
-    if (bytes == null) continue;
-    final base = await MediaStore.saveBytes('sync', MediaStore.extOf(e.value), bytes);
-    if (base == null) continue;
-    renames[e.key] = base;
-    added.add(base);
-  }
-  final out = renameStrings(merged, renames) as Map<String, dynamic>;
-  if (fit.dataRevision == revision && fit.session?.complete != false && fit.tryApplyBackup(out)) return true;
-  for (final name in added) {
-    await MediaStore.delete(name);
-  }
-  return null;
 }
 
 ArchiveFile? _findJson(Archive a) {

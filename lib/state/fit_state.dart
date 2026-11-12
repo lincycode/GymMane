@@ -384,13 +384,6 @@ class FitState extends FitCore
     sessionPaused = data['livePaused'] as bool? ?? false;
     final started = data['liveStart'] as String?;
     final since = started == null ? null : DateTime.tryParse(started);
-    if (!sessionPaused && since != null && DateTime.now().difference(since) > const Duration(hours: 6)) {
-      _elapsedBefore += const Duration(hours: 3).inSeconds;
-      sessionPaused = true;
-      _runningSince = null;
-      resetRoute('home');
-      return;
-    }
     if (sessionPaused || since == null) {
       _runningSince = null;
     } else {

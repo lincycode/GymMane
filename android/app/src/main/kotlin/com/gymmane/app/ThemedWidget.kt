@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetProvider
+import io.flutter.plugin.common.MethodChannel
 import java.util.Calendar
 import java.util.Locale
 
@@ -49,7 +50,20 @@ fun dayStamp(day: Calendar): String = String.format(
 
 fun weekdayIndex(day: Calendar) = (day.get(Calendar.DAY_OF_WEEK) + 5) % 7
 
-abstract class DayWidgetProvider : HomeWidgetProvider() {
+abstract class RefreshingWidgetProvider : HomeWidgetProvider() {
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        // No second Flutter engine: use live state if the app is running;
+        // otherwise the launcher uses the cache seeded on the last app start.
+        channel?.invokeMethod("added", javaClass.simpleName)
+    }
+
+    companion object {
+        var channel: MethodChannel? = null
+    }
+}
+
+abstract class DayWidgetProvider : RefreshingWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action in rollover) {
             val manager = AppWidgetManager.getInstance(context)

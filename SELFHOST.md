@@ -152,10 +152,15 @@ From then on:
 
 How merging works:
 
-- **Nothing is lost.** A workout, note, food or routine that exists on either side ends up on both.
-- **The same item edited on both sides:** the most recent copy wins.
+- Workouts, notes, foods and routines with different identifiers are kept from both sides.
+- **The same item edited on both sides:** conflicts use snapshot ordering, not per-record edit times.
+  The phone keeps local conflicts until its current state has been backed up; this also applies before
+  its first backup. Otherwise a newer remote snapshot can update the item. The server compares against
+  its actual save time and retries if a browser edit occurs during import.
 - **Deleting doesn't travel.** Merging never removes anything, so delete it on both sides.
-- Settings follow the most recent copy.
+- Settings follow the selected snapshot, including preferences reset to their defaults.
+- Failed imports are retried, and required photos must be saved before the snapshot is accepted.
+  Identical photos are reused without replacing different files that happen to share a name.
 
 The server also keeps a daily copy of its data in `history`, just in case.
 

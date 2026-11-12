@@ -29,6 +29,7 @@ class StateStore {
   Directory get _history => Directory('$dir/history');
 
   Snapshot? _cache;
+  Future<void> _writes = Future.value();
 
   Future<void> open() async {
     await Directory(dir).create(recursive: true);
@@ -63,9 +64,16 @@ class StateStore {
     }
   }
 
-  Future<WriteResult> write(String text, {int? baseRev, String source = 'web'}) async {
+  Future<WriteResult> write(String text, {int? baseRev, String source = 'web'}) {
+    // Check the revision inside the queue, after the preceding write has committed.
+    final next = _writes.then((_) => _write(text, baseRev: baseRev, source: source));
+    _writes = next.then<void>((_) {}, onError: (Object _, StackTrace _) {});
+    return next;
+  }
+
+  Future<WriteResult> _write(String text, {int? baseRev, required String source}) async {
     final now = current;
-    if (baseRev != null && now.rev != 0 && baseRev != now.rev) return WriteResult.conflict(now.rev);
+    if (baseRev != null && baseRev != now.rev) return WriteResult.conflict(now.rev);
     final rev = now.rev + 1;
     final at = DateTime.now().toUtc();
     await _keepHistory(now);

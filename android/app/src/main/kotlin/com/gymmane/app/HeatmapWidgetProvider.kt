@@ -4,9 +4,8 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetProvider
 
-class HeatmapWidgetProvider : HomeWidgetProvider() {
+class HeatmapWidgetProvider : RefreshingWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,

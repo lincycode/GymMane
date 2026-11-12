@@ -38,6 +38,7 @@ import '../screens/tool_detail_screen.dart';
 import '../screens/tools_screen.dart';
 import '../screens/train_screen.dart';
 import '../services/auto_backup.dart';
+import '../services/home_widget_bridge.dart';
 import '../services/device_kind.dart';
 import '../services/health_steps.dart';
 import '../services/incoming_share.dart';
@@ -361,7 +362,10 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
         state == AppLifecycleState.detached) {
       fit.persistNow();
     }
-    if (state == AppLifecycleState.paused) AutoBackup.instance.onLeave();
+    if (state == AppLifecycleState.paused) {
+      AutoBackup.instance.onLeave();
+      HomeWidgetBridge.prepareForLauncher();
+    }
     if (state == AppLifecycleState.resumed) {
       fit.rollNutritionDay();
       NutritionWidgets.takePending();

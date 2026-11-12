@@ -77,6 +77,26 @@ void main() {
     expect(fit.sessionElapsed, frozen, reason: 'en pausa el reloj no corre ni estando muerta');
   });
 
+  test('a workout older than six hours retains its actual elapsed time and sets', () {
+    startAndLog();
+    fit.persistNow();
+    final raw = Store.instance.load();
+    raw['liveElapsed'] = 125;
+    raw['liveStart'] = DateTime.now().subtract(const Duration(hours: 8)).toIso8601String();
+    Store.instance.save(raw);
+    fit.session = null;
+    fit.loadFromStore();
+    for (var i = 0; i < 2; i++) {
+      expect(fit.sessionElapsed, inInclusiveRange(28925, 28930));
+      expect(fit.sessionPaused, isFalse);
+      expect(fit.route, 'session');
+      final logged = fit.session!.exercises.first.sets.first;
+      expect((logged.reps, logged.weight, logged.done), (8, 72.5, true));
+      expect(fit.sessions, isEmpty);
+      killAndReopen();
+    }
+  });
+
   test('a rest still running comes back with the time it really has left', () {
     startAndLog();
     fit.startRest();

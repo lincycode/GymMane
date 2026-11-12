@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:archive/archive.dart';
+import 'package:sync/sync.dart';
 
 import 'server/server_link.dart';
 
@@ -74,6 +76,24 @@ class MediaStore {
     } catch (_) {
       return null;
     }
+  }
+
+  static Future<String?> saveSynced(String ext, Uint8List bytes, Set<String> added) async {
+    if (_dir == null || remote) return null;
+    return saveSyncMedia(
+      bytes: bytes,
+      fingerprint: getCrc32(bytes),
+      extension: ext,
+      read: (name) async {
+        final file = File('$_dir/$name');
+        return await file.exists() ? await file.readAsBytes() : null;
+      },
+      write: (name, data) async {
+        added.add(name);
+        await File('$_dir/$name').writeAsBytes(data, flush: true);
+        return true;
+      },
+    );
   }
 
   static Future<void> delete(String basename) async {
