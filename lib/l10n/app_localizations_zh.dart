@@ -7514,6 +7514,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ownCheckUpdates => '检查更新';
 
   @override
+  String get ownChangelog => '更新日志';
+
+  @override
+  String get ownChangelogInstalled => '当前安装版本';
+
+  @override
+  String get ownChangelogBundled => '内置日志最新版本';
+
+  @override
+  String get ownChangelogMerged => '本包已合入上游';
+
+  @override
+  String get ownChangelogGitHub => '在 GitHub 查看最新发布';
+
+  @override
+  String get ownChangelogUnavailable => '暂无离线日志，可前往 GitHub 查看发布记录。';
+
+  @override
   String get ownUpdateChecking => '正在检查新版本…';
 
   @override

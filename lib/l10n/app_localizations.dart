@@ -13742,6 +13742,42 @@ abstract class AppLocalizations {
   /// **'Check for updates'**
   String get ownCheckUpdates;
 
+  /// No description provided for @ownChangelog.
+  ///
+  /// In en, this message translates to:
+  /// **'Changelog'**
+  String get ownChangelog;
+
+  /// No description provided for @ownChangelogInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed version'**
+  String get ownChangelogInstalled;
+
+  /// No description provided for @ownChangelogBundled.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest in this log'**
+  String get ownChangelogBundled;
+
+  /// No description provided for @ownChangelogMerged.
+  ///
+  /// In en, this message translates to:
+  /// **'Upstream included in this build'**
+  String get ownChangelogMerged;
+
+  /// No description provided for @ownChangelogGitHub.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest releases on GitHub'**
+  String get ownChangelogGitHub;
+
+  /// No description provided for @ownChangelogUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No offline notes available. View releases on GitHub.'**
+  String get ownChangelogUnavailable;
+
   /// No description provided for @ownUpdateChecking.
   ///
   /// In en, this message translates to:

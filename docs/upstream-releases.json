@@ -1,0 +1,66 @@
+[
+  {
+    "version": "2.1.0",
+    "date": "2026-11-08",
+    "zh": [
+      "饮食测试版支持粘贴 AI 生成的餐单，补剂可记录剂量与库存。",
+      "新增轻量训练、左右侧次数，以及按次数查看重量纪录。",
+      "改进训练方案编辑、历史记录录入与耳机计时提示。"
+    ],
+    "en": [
+      "Paste AI-generated meals into the nutrition beta and track supplement doses and stock.",
+      "Log light sessions and left/right reps, and see weight records by rep count.",
+      "Improved routine editing, past workout entry, and headphone-only timer sounds."
+    ]
+  },
+  {
+    "version": "2.0.0",
+    "date": "2026-11-04",
+    "zh": [
+      "个人资料下拉可查看训练月报，并分享月度卡片。",
+      "新增自动进阶、减量周和保留连练的休息日。",
+      "加入休息语音提示测试版、自定义通知铃声和性能模式。"
+    ],
+    "en": [
+      "Pull down on your profile for a monthly recap and shareable cards.",
+      "Added automatic progression, deload weeks, and days off that preserve your streak.",
+      "Added beta rest voice cues, custom notification sounds, and performance modes."
+    ]
+  },
+  {
+    "version": "1.9.0",
+    "date": "2026-11-02",
+    "zh": [
+      "新增计时循环训练、逐组备注和运动项目记录。",
+      "记录睡眠与精力，支持按日期范围导出报告，并可将训练写入 Health Connect。"
+    ],
+    "en": [
+      "Added timed circuits, per-set notes, and sport logging.",
+      "Added sleep and energy check-ins, date-range reports, and workout export to Health Connect."
+    ]
+  },
+  {
+    "version": "1.8.0",
+    "date": "2026-10-31",
+    "zh": [
+      "新增 Health Connect 健康页、训练纪录奖杯和健身房通行证。",
+      "动作可独立选择公斤或磅，轮换可安排休息日，并支持自定义进阶。"
+    ],
+    "en": [
+      "Added a Health Connect view, in-workout record trophies, and a gym pass.",
+      "Choose kg or lb per exercise, add rest days to rotations, and customize progression."
+    ]
+  },
+  {
+    "version": "1.7.0",
+    "date": "2026-10-25",
+    "zh": [
+      "新增文件夹自动备份、保存周计划和归档训练方案。",
+      "可为单个动作配置进阶规则，支持簇组及有氧热量记录。"
+    ],
+    "en": [
+      "Added automatic folder backups, saved weekly plans, and routine archiving.",
+      "Added per-exercise progression rules, cluster sets, and cardio calorie logging."
+    ]
+  }
+]

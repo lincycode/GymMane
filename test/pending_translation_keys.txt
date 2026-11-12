@@ -88,3 +88,9 @@ ownDisplayEffects
 ownNutritionKeepRecords
 ownBackupFolderSync
 ownBackupFolderSyncHint
+ownChangelog
+ownChangelogInstalled
+ownChangelogBundled
+ownChangelogMerged
+ownChangelogGitHub
+ownChangelogUnavailable

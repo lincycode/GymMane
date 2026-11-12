@@ -11,6 +11,7 @@ import '../theme/app_theme.dart';
 import '../widgets/liquid_notch.dart';
 import '../widgets/ui_kit.dart';
 import 'app_update_dialog.dart';
+import 'changelog_screen.dart';
 
 const kAppVersion = ownAppVersion;
 
@@ -63,6 +64,17 @@ class AboutScreen extends StatelessWidget {
           style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
         ),
       ],
+      const SizedBox(height: 8),
+      ListTile(
+        key: const ValueKey('open-changelog'),
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(PhosphorIconsRegular.listBullets, size: 20, color: gc.text),
+        title: Text(t.ownChangelog, style: AppTheme.f(14, color: gc.text)),
+        trailing: Icon(PhosphorIconsRegular.caretRight, size: 16, color: gc.textSecondary),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const ChangelogScreen()),
+        ),
+      ),
       const SizedBox(height: 24),
       Text(t.ownAttribution, style: AppTheme.f(14, color: gc.textSecondary, height: 1.4)),
       const SizedBox(height: 8),

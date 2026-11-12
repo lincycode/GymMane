@@ -56,6 +56,9 @@ flutter:
   generate: true
 
   assets:
+    - own.properties
+    - docs/releases/
+    - docs/upstream-releases.json
     - assets/brand/enogym_foreground.png
     - assets/brand/enogym_icon.png
     - assets/img/

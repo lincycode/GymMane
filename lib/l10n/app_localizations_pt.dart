@@ -7901,6 +7901,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get ownCheckUpdates => 'Check for updates';
 
   @override
+  String get ownChangelog => 'Changelog';
+
+  @override
+  String get ownChangelogInstalled => 'Installed version';
+
+  @override
+  String get ownChangelogBundled => 'Latest in this log';
+
+  @override
+  String get ownChangelogMerged => 'Upstream included in this build';
+
+  @override
+  String get ownChangelogGitHub => 'Latest releases on GitHub';
+
+  @override
+  String get ownChangelogUnavailable => 'No offline notes available. View releases on GitHub.';
+
+  @override
   String get ownUpdateChecking => 'Checking for updates…';
 
   @override
