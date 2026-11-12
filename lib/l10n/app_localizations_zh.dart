@@ -7600,6 +7600,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ownOfflineTrainingWhy => '训练记录保存在本机，无需账号。仅手动检查和下载更新时联网。';
+
+  @override
+  String get duplicateExercise => '复制';
+
+  @override
+  String exerciseCopyName(String name) {
+    return '$name（副本）';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -15043,4 +15051,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get alarmStyleSoundHint => '使用鬧鐘音量、遵循手機靜音模式，或只顯示通知。';
+
+  @override
+  String get duplicateExercise => '複製';
+
+  @override
+  String exerciseCopyName(String name) {
+    return '$name（副本）';
+  }
 }

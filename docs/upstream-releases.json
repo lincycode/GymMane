@@ -1,5 +1,19 @@
 [
   {
+    "version": "2.2.0",
+    "date": "2026-11-12",
+    "zh": [
+      "新增可自托管的 Web 版、宽屏布局和共享文件夹同步。",
+      "训练支持次数区间、动作间与左右侧休息、复制动作及独立距离单位。",
+      "热身组不再计入力量纪录和训练量，CSV 导出增加组类型与 RIR；修复步数统计与部分 Mali GPU 显示。"
+    ],
+    "en": [
+      "Added a self-hosted web app, desktop layouts, and shared-folder sync.",
+      "Added rep ranges, rest between exercises and sides, exercise duplication, and per-exercise distance units.",
+      "Excluded warm-up sets from strength records and working volume; CSV includes set type and RIR. Fixed step totals and rendering on some Mali GPUs."
+    ]
+  },
+  {
     "version": "2.1.0",
     "date": "2026-11-08",
     "zh": [

@@ -15,7 +15,7 @@ Enoch 维护的 Android 训练记录工具。可以安排每周训练，按组�
 
 ## 上游同步
 
-已合并原作者 GymMane 主分支 `f7fd2ba`，包括可自托管的 Web 版、宽屏布局、Wear OS 更新和 Android 步数修复。自托管说明见 [SELFHOST.md](SELFHOST.md)。EnoGym 的 Android 版仍可离线使用，共享文件夹同步默认关闭。
+已合并原作者 GymMane **v2.2.0**（`a4f6601`），包括可自托管的 Web 版、宽屏布局、动作复制、热身组统计修正和 Android 步数修复。自托管说明见 [SELFHOST.md](SELFHOST.md)。EnoGym 的 Android 版仍可离线使用，共享文件夹同步默认关闭。
 
 ## 安装与更新
 

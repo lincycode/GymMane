@@ -13909,6 +13909,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Training stays on your phone, with no account. Only manual update checks and downloads use the internet.'**
   String get ownOfflineTrainingWhy;
+
+  /// No description provided for @duplicateExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get duplicateExercise;
+
+  /// No description provided for @exerciseCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (copy)'**
+  String exerciseCopyName(String name);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

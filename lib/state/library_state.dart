@@ -290,6 +290,7 @@ mixin LibraryState on FitCore {
     List<String> secondary = const [],
     List<String> aliases = const [],
     String kind = '',
+    String art = '',
   }) {
     final id = 'c${DateTime.now().microsecondsSinceEpoch}-${_customSeq++}';
     customExercises.add(Exercise(
@@ -299,7 +300,7 @@ mixin LibraryState on FitCore {
       secondary: _cleanSecondary(primary, secondary),
       equipment: equipment,
       difficulty: difficulty,
-      art: '',
+      art: art,
       steps: _cleanSteps(steps),
       mode: kExerciseModeIds.contains(mode) ? mode : '',
       aliases: _cleanAliases(name, aliases),

@@ -7957,4 +7957,12 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get ownOfflineTrainingWhy =>
       'Training stays on your phone, with no account. Only manual update checks and downloads use the internet.';
+
+  @override
+  String get duplicateExercise => 'ডুপ্লিকেট';
+
+  @override
+  String exerciseCopyName(String name) {
+    return '$name (কপি)';
+  }
 }

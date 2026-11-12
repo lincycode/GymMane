@@ -2295,5 +2295,8 @@
   "ownUpdateDownload": "下载更新",
   "ownUpdateInstall": "安装更新",
   "ownOfflineTraining": "离线训练",
-  "ownOfflineTrainingWhy": "训练记录保存在本机，无需账号。仅手动检查和下载更新时联网。"
+  "ownOfflineTrainingWhy": "训练记录保存在本机，无需账号。仅手动检查和下载更新时联网。",
+
+  "duplicateExercise": "复制",
+  "exerciseCopyName": "{name}（副本）"
 }

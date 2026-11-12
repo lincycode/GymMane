@@ -1,6 +1,6 @@
 # EnoGym 维护说明
 
-个人版始于 GymMane v2.1.0，当前已合入 upstream/main 的 f7fd2baf984375a45dad8b0651f02bf11eb145a4（2026-11-12 核实），保留上游 Flutter 结构与离线数据格式。个人版的下载和更新使用本仓库的 GitHub Releases。原版介绍、商店资料和下载渠道见 [InlitX/GymMane](https://github.com/InlitX/GymMane)。
+个人版始于 GymMane v2.1.0，当前已合入 GymMane v2.2.0 的 a4f660153567ae300f6daa002615f572708117eb（2026-11-12 核实），保留上游 Flutter 结构与离线数据格式。个人版的下载和更新使用本仓库的 GitHub Releases。原版介绍、商店资料和下载渠道见 [InlitX/GymMane](https://github.com/InlitX/GymMane)。
 
 ## 使用与范围
 
