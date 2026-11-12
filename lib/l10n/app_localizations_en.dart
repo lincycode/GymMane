@@ -5626,7 +5626,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsGroupHome => 'Home and extras';
 
   @override
-  String get settingsGroupData => 'Data and help';
+  String get settingsGroupData => 'Data and app';
 
   @override
   String get healthAllowAll => 'Turn all on';
@@ -7648,6 +7648,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noteLinkInvalid => 'That address doesn\'t look right';
+
+  @override
+  String get ownDisplayEffects => 'Display effects';
+
+  @override
+  String get ownBackgroundBlur => 'Background blur';
+
+  @override
+  String get ownNutritionKeepRecords => 'Turning this off keeps your existing records.';
 
   @override
   String get ownCheckUpdates => 'Check for updates';

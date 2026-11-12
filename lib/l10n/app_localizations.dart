@@ -10053,7 +10053,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsGroupData.
   ///
   /// In en, this message translates to:
-  /// **'Data and help'**
+  /// **'Data and app'**
   String get settingsGroupData;
 
   /// No description provided for @healthAllowAll.
@@ -13397,6 +13397,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That address doesn\'t look right'**
   String get noteLinkInvalid;
+
+  /// No description provided for @ownDisplayEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Display effects'**
+  String get ownDisplayEffects;
+
+  /// No description provided for @ownBackgroundBlur.
+  ///
+  /// In en, this message translates to:
+  /// **'Background blur'**
+  String get ownBackgroundBlur;
+
+  /// No description provided for @ownNutritionKeepRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'Turning this off keeps your existing records.'**
+  String get ownNutritionKeepRecords;
 
   /// No description provided for @ownCheckUpdates.
   ///

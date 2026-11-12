@@ -8,6 +8,7 @@ import '../l10n/l10n.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import 'glass.dart';
 
 class StartCountdown extends StatefulWidget {
   const StartCountdown({super.key, required this.until});
@@ -93,6 +94,7 @@ class _StartCountdownState extends State<StartCountdown> with TickerProviderStat
             fit: StackFit.expand,
             children: [
               BackdropFilter(
+                enabled: blurEffects,
                 filter: ui.ImageFilter.blur(sigmaX: 22 * veil, sigmaY: 22 * veil),
                 child: ColoredBox(color: gc.bg.withValues(alpha: 0.72 * veil)),
               ),

@@ -21,22 +21,6 @@ class DeviceKind {
     }
   }
 
-  static Future<double> maxRefresh() async {
-    if (kIsWeb || !Platform.isAndroid) return 60;
-    try {
-      return await _channel.invokeMethod<double>('maxRefresh') ?? 60;
-    } catch (_) {
-      return 60;
-    }
-  }
-
-  static Future<void> setHighRefresh(bool on) async {
-    if (kIsWeb || !Platform.isAndroid) return;
-    try {
-      await _channel.invokeMethod<void>('setHighRefresh', {'on': on});
-    } catch (_) {}
-  }
-
   static Future<bool> isWatch() async {
     if (kIsWeb || !Platform.isAndroid) return false;
     try {

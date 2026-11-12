@@ -124,7 +124,6 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
       final open = await NutritionWidgets.takeOpen();
       if (open != null) _openFromWidget(open);
       if (await HealthSteps.takeUsage()) _showStepsInfo();
-      await fit.readDisplay();
       await _offerLiteMode();
     });
   }
@@ -196,7 +195,10 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
       cancelLabel: t.lowEndKeep,
       confirmLabel: t.lowEndLiteOn,
     );
-    if (off) fit.setPerfLevel('lite');
+    if (off && mounted) {
+      fit.setBlur(false);
+      fit.setCalmMotion(true);
+    }
   }
 
   bool _onScroll(ScrollNotification n) {
@@ -215,7 +217,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
     _syncSnap();
     if (_blurred != null) {
       _blurAgain?.cancel();
-      _blurAgain = Timer(Duration(milliseconds: fineEffects ? 160 : 350), _queueBlur);
+      _blurAgain = Timer(const Duration(milliseconds: 350), _queueBlur);
     }
   }
 
@@ -267,8 +269,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
       if (!mounted || sheetRecede.value <= 0.001 || !blurEffects) return;
       final box = _appKey.currentContext?.findRenderObject();
       if (box is! RenderRepaintBoundary || !box.hasSize) return;
-      final scale = fineEffects ? 0.5 : 0.3;
-      final ratio = MediaQuery.devicePixelRatioOf(context) * scale;
+      final ratio = MediaQuery.devicePixelRatioOf(context) * 0.3;
       try {
         final small = box.toImageSync(pixelRatio: ratio);
         final sigma = 2 * ratio;
@@ -711,7 +712,7 @@ class _CollapsedBar extends StatelessWidget {
                       child: Transform.scale(
                         scale: 1.22 - 0.22 * p,
                         child: ImageFiltered(
-                          enabled: soft > 0.3,
+                          enabled: blurEffects && soft > 0.3,
                           imageFilter: ui.ImageFilter.blur(sigmaX: soft, sigmaY: soft),
                           child: Text(
                             titleCase(title!),

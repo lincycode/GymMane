@@ -114,25 +114,22 @@ void main() {
       expect(fit.calmMotion, isTrue);
     });
 
-    test('#307 los niveles de rendimiento mueven cada parte y tocar una lo deja personalizado', () {
-      fit.maxRefresh = 120;
-      fit.setPerfLevel('max');
-      expect((fit.blurOn, fit.fineOn, fit.highRefresh, fit.calmMotion), (true, true, true, false));
-      expect(fit.perfLevel, 'max');
+    test('independent display effects survive persistence and older backups', () {
+      fit.applyBackup({'blur': false, 'calm': true, 'fine': true, 'hz': true});
+      expect((fit.blurOn, fit.calmMotion), (false, true));
+      expect(fit.toJson(), isNot(contains('fine')));
+      expect(fit.toJson(), isNot(contains('hz')));
+
+      fit.setBlur(true);
+      expect((fit.blurOn, fit.calmMotion), (true, true));
       fit.persistNow();
       fit.loadFromStore();
-      expect(fit.perfLevel, 'max');
-      fit.setFine(false);
-      expect(fit.perfLevel, 'custom');
-      fit.setPerfLevel('lite');
-      expect((fit.blurOn, fit.fineOn, fit.highRefresh, fit.calmMotion), (false, false, false, true));
-      expect(fit.perfLevel, 'lite');
-      fit.maxRefresh = 60;
-      fit.setPerfLevel('max');
-      fit.setHighRefresh(false);
-      expect(fit.perfLevel, 'max', reason: 'sin pantalla rápida, Máximo no depende de los Hz');
-      fit.setPerfLevel('balanced');
-      expect(fit.perfLevel, 'balanced');
+      expect((fit.blurOn, fit.calmMotion), (true, true));
+
+      fit.setCalmMotion(false);
+      expect((fit.blurOn, fit.calmMotion), (true, false));
+      fit.applyBackup({'onboarded': true});
+      expect((fit.blurOn, fit.calmMotion), (true, false));
     });
   });
 

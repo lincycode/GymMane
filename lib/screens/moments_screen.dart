@@ -15,6 +15,7 @@ import '../widgets/entrance.dart';
 import '../widgets/sheet_page.dart';
 import '../widgets/dialogs.dart';
 import '../widgets/file_thumb.dart';
+import '../widgets/glass.dart';
 import '../widgets/photo_source_sheet.dart';
 import '../widgets/ui_kit.dart';
 
@@ -361,6 +362,7 @@ class _PhotoView extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: BackdropFilter(
+                    enabled: blurEffects,
                     filter: ui.ImageFilter.blur(sigmaX: 20 * v, sigmaY: 20 * v),
                     child: ColoredBox(color: gc.pageBg.withValues(alpha: 0.62 * v)),
                   ),

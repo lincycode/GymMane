@@ -102,7 +102,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     if (first != null && fit.activePlaceId != first) fit.setActivePlace(first);
     if (_slow) {
-      fit.setPerfLevel(_blur ? 'balanced' : 'lite');
       fit.setBlur(_blur);
       fit.setCalmMotion(!_motion);
       fit.markLowEndAsked();
@@ -367,84 +366,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: SizedBox(width: 22, child: Icon(icon, size: 19, color: color ?? gc.textSecondary)),
       );
 
-  Widget _welcome(GymColors gc) {
-    return LayoutBuilder(
-      builder: (context, box) => SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: box.maxHeight - 40),
+  Widget _welcome(GymColors gc) => Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _in(
-                0,
-                Center(
-                  child: Image.asset('assets/img/runner.png',
-                      height: 196, opacity: const AlwaysStoppedAnimation(0.9)),
-                ),
-              ),
-              const SizedBox(height: 26),
-              _in(
-                1,
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(t.welcomeKicker.toUpperCase(),
-                      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
-                ),
-              ),
-              const SizedBox(height: 8),
-              _in(
-                2,
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(ownAppName,
-                      style: AppTheme.f(44, weight: FontWeight.w800, color: gc.text, height: 1)),
-                ),
-              ),
-              const SizedBox(height: 12),
-              _in(
-                3,
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(t.welcomeBlurb,
-                      style: AppTheme.f(14.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.5)),
-                ),
-              ),
-              const SizedBox(height: 22),
-              _in(
-                4,
-                _group(gc, [
-                  _promise(gc, PhosphorIconsRegular.gift, t.freeForever, t.freeForeverWhy),
-                  _promise(gc, PhosphorIconsRegular.wifiSlash, t.ownOfflineTraining, t.ownOfflineTrainingWhy),
-                  _promise(gc, PhosphorIconsRegular.export, t.yoursToTake, t.yoursToTakeWhy),
-                ]),
-              ),
+              _in(0, Image.asset('assets/img/runner.png', height: 180, excludeFromSemantics: true)),
+              const SizedBox(height: 24),
+              _in(1, Text(ownAppName,
+                  textAlign: TextAlign.center,
+                  style: AppTheme.f(38, weight: FontWeight.w800, color: gc.text))),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _promise(GymColors gc, IconData icon, String title, String why) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(padding: const EdgeInsets.only(top: 1), child: _rowIcon(gc, icon)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: AppTheme.f(14.5, weight: FontWeight.w600, color: gc.text)),
-                  const SizedBox(height: 3),
-                  Text(why,
-                      style: AppTheme.f(12.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
-                ],
-              ),
-            ),
-          ],
         ),
       );
 

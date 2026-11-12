@@ -31,7 +31,6 @@ class HomeWidgetBridge {
   static bool _groupReady = false;
   static Timer? _debounce;
   static Future<void>? _job;
-  static String? _allPainted;
   static final Set<String> _forced = {};
 
   static void update() {
@@ -61,13 +60,13 @@ class HomeWidgetBridge {
 
   static Future<void> _paint() async {
     try {
-      final today = _stamp(DateTime.now());
-      final everyone = _allPainted != today;
-      final installed = _ios || everyone
+      final widgets = _ios ? null : await HomeWidget.getInstalledWidgets();
+      final installed = widgets == null
           ? null
           : {
               ..._forced,
-              for (final w in await HomeWidget.getInstalledWidgets()) w.androidClassName?.split('.').last,
+              for (final widget in widgets)
+                if (widget.androidClassName case final name?) name.split('.').last,
             };
       _forced.clear();
       if (installed != null && installed.isEmpty) return;
@@ -87,8 +86,6 @@ class HomeWidgetBridge {
       final todaySize = _ios ? const Size(155, 155) : const Size(120, 120);
       const weekSize = Size(320, 150);
       final week = [for (var i = 0; i < 7; i++) fit.isDayDone(i) && !fit.isDayPartial(i)];
-      final levels = fit.heatmapWeeksFor(26);
-      final heat = fit.muscleHeatOver(bodyDays);
       final plannedToday = fit.todayRoutine != null;
 
       final views = <(String, String, Size, Widget Function(GymColors))>[
@@ -98,7 +95,7 @@ class HomeWidgetBridge {
           heatmapSize,
           (gc) => HeatmapWidgetView(
                 gc: gc,
-                levels: levels,
+                levels: fit.heatmapWeeksFor(26),
                 streak: fit.currentStreak,
                 size: heatmapSize,
                 framed: framed,
@@ -123,7 +120,7 @@ class HomeWidgetBridge {
           bodySize,
           (gc) => BodyWidgetView(
                 gc: gc,
-                intensity: heat,
+                intensity: fit.muscleHeatOver(bodyDays),
                 days: bodyDays,
                 size: bodySize,
                 framed: framed,
@@ -194,7 +191,6 @@ class HomeWidgetBridge {
         await NutritionWidgets.paint(render: _render, wants: wants, day: day, night: night, framed: framed);
       }
       final now = DateTime.now();
-      if (everyone) _allPainted = today;
       await HomeWidget.saveWidgetData<String>('today_stamp', _stamp(now));
       final plan = [
         for (var d = 1; d <= 7; d++) fit.routineOn(now.add(Duration(days: d - now.weekday))) != null ? '1' : '0',

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 bool blurEffects = true;
-bool fineEffects = false;
 
 final sheetRecede = ValueNotifier<double>(0);
 
@@ -250,7 +249,7 @@ class _EdgeBlurState extends State<EdgeBlur> {
   }
 
   List<ui.ImageFilter> _layers(ui.FragmentProgram program, double dpr) {
-    final key = (widget.height, widget.top, widget.sigma, dpr, fineEffects);
+    final key = (widget.height, widget.top, widget.sigma, dpr);
     if (_filters != null && _filtersFor == key) return _filters!;
     _dropShaders();
     ui.ImageFilter layer(double sigma, double from, double to) {
@@ -267,9 +266,7 @@ class _EdgeBlurState extends State<EdgeBlur> {
     }
 
     _filtersFor = key;
-    return _filters = fineEffects
-        ? [layer(widget.sigma * 0.35, 0.2, 1), layer(widget.sigma, 0.08, 0.66)]
-        : [layer(widget.sigma * 0.8, 0.06, 0.82)];
+    return _filters = [layer(widget.sigma * 0.8, 0.06, 0.82)];
   }
 
   @override

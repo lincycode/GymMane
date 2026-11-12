@@ -131,11 +131,6 @@ class MainActivity : FlutterActivity() {
                     result.success(am.isLowRamDevice || info.totalMem < 3_500_000_000L)
                 }
                 "headphones" -> result.success(headphonesConnected())
-                "maxRefresh" -> result.success(maxRefreshRate())
-                "setHighRefresh" -> {
-                    setHighRefresh(call.argument<Boolean>("on") ?: false)
-                    result.success(null)
-                }
                 else -> result.notImplemented()
             }
         }
@@ -146,9 +141,6 @@ class MainActivity : FlutterActivity() {
         VoiceBridge.attach(this, MethodChannel(messenger, VoiceBridge.CHANNEL))
         UpdateBridge.attach(this, MethodChannel(messenger, UpdateBridge.CHANNEL))
     }
-
-    private fun currentDisplay(): android.view.Display? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) display else @Suppress("DEPRECATION") windowManager.defaultDisplay
 
     private fun headphonesConnected(): Boolean {
         return try {
@@ -167,28 +159,6 @@ class MainActivity : FlutterActivity() {
         } catch (_: Exception) {
             false
         }
-    }
-
-    private fun maxRefreshRate(): Double {
-        val d = currentDisplay() ?: return 60.0
-        return d.supportedModes.maxOfOrNull { it.refreshRate.toDouble() } ?: d.refreshRate.toDouble()
-    }
-
-    private fun setHighRefresh(on: Boolean) {
-        val d = currentDisplay() ?: return
-        val params = window.attributes
-        if (on) {
-            val now = d.mode
-            val best = d.supportedModes
-                .filter { it.physicalWidth == now.physicalWidth && it.physicalHeight == now.physicalHeight }
-                .maxByOrNull { it.refreshRate } ?: return
-            params.preferredDisplayModeId = best.modeId
-            params.preferredRefreshRate = best.refreshRate
-        } else {
-            params.preferredDisplayModeId = 0
-            params.preferredRefreshRate = 0f
-        }
-        window.attributes = params
     }
 
     @Deprecated("Deprecated in Java")

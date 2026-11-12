@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../services/beeper.dart';
 import '../theme/app_theme.dart';
+import 'glass.dart';
 
 @immutable
 class LiquidNotchFrame {
@@ -206,7 +207,7 @@ class _LiquidNotchState extends State<LiquidNotch> with SingleTickerProviderStat
                                 child: Opacity(
                                   opacity: frame.opacity,
                                   child: ImageFiltered(
-                                    enabled: frame.opacity < 1 && !_reduced,
+                                    enabled: blurEffects && frame.opacity < 1 && !_reduced,
                                     imageFilter: ui.ImageFilter.blur(
                                       sigmaX: (1 - frame.opacity) * 3,
                                       sigmaY: (1 - frame.opacity) * 3,

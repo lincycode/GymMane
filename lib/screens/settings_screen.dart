@@ -43,21 +43,17 @@ import '../widgets/photo_source_sheet.dart';
 import '../widgets/profile_avatar.dart';
 import '../widgets/report_sheet.dart';
 import '../widgets/ruler_picker.dart';
-import '../widgets/settings_showcase.dart';
 import '../widgets/sheet_page.dart';
 import '../widgets/steps_card.dart';
 import '../widgets/svg_icon.dart';
 import '../widgets/timer_panel.dart';
 import '../widgets/ui_kit.dart';
 import '../widgets/voice_sheet.dart';
-import '../widgets/widget_showcase.dart';
 import 'profile_screen.dart';
 import 'strava_sheet.dart';
 
 const _kRepoUrl = 'https://github.com/InlitX/GymMane';
-const _kBugUrl = '$_kRepoUrl/issues/new?labels=bug';
 const _kFeatureUrl = '$_kRepoUrl/issues/new?labels=enhancement';
-const _kKofiUrl = 'https://ko-fi.com/inlitx';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key, this.section});
@@ -68,7 +64,6 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final gc = context.gc;
     final id = section;
-    WidgetShowcase.warm(context);
     if (id == null) return _SettingsHome(screen: this);
     return RiseScope(
       id: 'settings-$id',
@@ -167,27 +162,6 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
 
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => _performanceSheet(context),
-              child: _prefRow(
-                gc,
-                PhosphorIconsRegular.lightning,
-                t.perfSetting,
-                Row(mainAxisSize: MainAxisSize.min, children: [
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 128),
-                    child: Text(_perfName(fit.perfLevel),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.right,
-                        style: AppTheme.f(13, weight: FontWeight.w600, color: gc.textSecondary)),
-                  ),
-                  const SizedBox(width: 6),
-                  Icon(PhosphorIconsRegular.caretRight, size: 15, color: gc.textTertiary),
-                ]),
-              ),
-            ),
             _choiceRow(
               context,
               gc,
@@ -203,8 +177,13 @@ class SettingsScreen extends StatelessWidget {
               hint: t.textSizeHint,
             ),
           ]),
-          const SizedBox(height: 22),
-          const LookShowcase(),
+          _Flash(label: t.ownDisplayEffects, child: _subhead(gc, t.ownDisplayEffects)),
+          _card(gc, [
+            _switchSetting(gc, PhosphorIconsRegular.drop, t.ownBackgroundBlur,
+                fit.blurOn, fit.setBlur, key: const ValueKey('background-blur-setting')),
+            _switchSetting(gc, PhosphorIconsRegular.waveSine, t.calmMotionSetting,
+                fit.calmMotion, fit.setCalmMotion, key: const ValueKey('reduce-motion-setting')),
+          ]),
         ];
       case 'training':
         return [
@@ -539,8 +518,6 @@ class SettingsScreen extends StatelessWidget {
                   ],
 
           ]),
-          const SizedBox(height: 22),
-          const AlertsShowcase(),
         ];
       case 'home':
         return [
@@ -581,8 +558,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
 
           ]),
-          const SizedBox(height: 22),
-          const HomeExtrasShowcase(),
         ];
       case 'beta':
         return [
@@ -592,47 +567,9 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => fit.setNutritionBeta(!fit.nutritionBeta),
                     child: _prefRow(gc, PhosphorIconsRegular.forkKnife, t.nutritionBeta,
                         TinySwitch(on: fit.nutritionBeta),
-                        hint: t.nutritionBetaHint,
-                        badge: BetaTag(t.sectionBeta, small: true)),
+                        hint: t.ownNutritionKeepRecords),
                   ),
 
-          ]),
-          const SizedBox(height: 28),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(4, 0, 0, 12),
-            child: Text(t.nutritionAboutTitle.toUpperCase(),
-                style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
-          ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 18),
-            decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(26)),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              for (final (icon, title, body) in [
-                (PhosphorIconsRegular.barbell, t.nutritionAboutWhatTitle, t.nutritionAboutWhat),
-                (PhosphorIconsRegular.shieldCheck, t.nutritionAboutScanTitle, t.nutritionAboutScan),
-                (PhosphorIconsRegular.deviceMobile, t.nutritionAboutLocalTitle, t.nutritionAboutLocal),
-                (PhosphorIconsRegular.flask, t.nutritionAboutBetaTitle, t.nutritionAboutBeta),
-              ])
-                Padding(
-                  padding: const EdgeInsets.only(top: 14),
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    _rowIcon(gc, icon),
-                    Expanded(
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        const SizedBox(height: 2),
-                        Text(title, style: AppTheme.f(14.5, weight: FontWeight.w700, color: gc.text)),
-                        const SizedBox(height: 3),
-                        Text(body,
-                            style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary, height: 1.45)),
-                      ]),
-                    ),
-                  ]),
-                ),
-            ]),
-          ),
-          const SizedBox(height: 12),
-          _linkGroup(gc, [
-            (PhosphorIconsRegular.githubLogo, t.nutritionAboutSuggest, () => _open(context, '$_kRepoUrl/issues')),
           ]),
         ];
       case 'widgets':
@@ -644,8 +581,6 @@ class SettingsScreen extends StatelessWidget {
               (PhosphorIconsRegular.checkCircle, t.addTodayWidget, () => _addWidget(context, 'TodayWidgetProvider')),
               (PhosphorIconsRegular.calendarCheck, t.addWeekWidget, () => _addWidget(context, 'WeekWidgetProvider')),
           ], hints: [t.widgetHintActivity, t.widgetHintStats, t.widgetHintBody, t.widgetHintToday, t.widgetHintWeek]),
-          const SizedBox(height: 22),
-          const WidgetShowcase(),
         ];
       case 'data':
         return [
@@ -664,36 +599,7 @@ class SettingsScreen extends StatelessWidget {
           ], danger: AutoBackup.instance.supported ? 6 : 5),
         ];
       default:
-        return [
-          _linkGroup(gc, [
-              (PhosphorIconsRegular.bug, t.reportBug, () => _open(context, _kBugUrl)),
-              (PhosphorIconsRegular.lightbulb, t.requestFeature, () => _open(context, _kFeatureUrl)),
-              (PhosphorIconsRegular.githubLogo, t.starOnGithub, () => _open(context, _kRepoUrl)),
-              (PhosphorIconsRegular.coffee, t.ownSupportOriginal, () => _open(context, _kKofiUrl)),
-          ], hints: [t.supportHintBug, t.supportHintFeature, t.supportHintStar, t.supportHintCoffee]),
-          const SizedBox(height: 28),
-          Center(
-            child: ExcludeSemantics(
-              child: Image.asset(
-                'assets/img/support-cat.png',
-                width: 300,
-                filterQuality: FilterQuality.medium,
-              ),
-            ),
-          ),
-          const SizedBox(height: 22),
-          Text(t.supportThanksTitle,
-              textAlign: TextAlign.center,
-              style: AppTheme.f(22, weight: FontWeight.w800, color: gc.text, height: 1.2)),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(t.supportThanksBody,
-                textAlign: TextAlign.center,
-                style: AppTheme.f(14, weight: FontWeight.w500, color: gc.textSecondary, height: 1.45)),
-          ),
-          const SizedBox(height: 22),
-        ];
+        return const [];
     }
   }
 
@@ -717,7 +623,7 @@ class SettingsScreen extends StatelessWidget {
         'widgets' => t.sectionWidgets,
         'beta' => t.sectionBeta,
         'data' => t.sectionData,
-        _ => titleCase(t.support),
+        _ => t.settings,
       };
 
   static String sectionTitleOf(String id) => _sectionTitle(id);
@@ -733,8 +639,10 @@ class SettingsScreen extends StatelessWidget {
         (t.heatRangeSetting, PhosphorIconsRegular.calendarDots),
         (t.heatmapLabelsSetting, PhosphorIconsRegular.gridNine),
         (t.background, PhosphorIconsRegular.image),
-        (t.perfSetting, PhosphorIconsRegular.lightning),
         (t.textSizeSetting, PhosphorIconsRegular.textAa),
+        (t.ownDisplayEffects, PhosphorIconsRegular.slidersHorizontal),
+        (t.ownBackgroundBlur, PhosphorIconsRegular.drop),
+        (t.calmMotionSetting, PhosphorIconsRegular.waveSine),
       ]),
       _Category('training', PhosphorIconsRegular.barbell, _sectionTitle('training'), [
         (t.restTimer, PhosphorIconsRegular.timer),
@@ -796,17 +704,24 @@ class SettingsScreen extends StatelessWidget {
         (t.clearWorkouts, PhosphorIconsRegular.barbell),
         (t.resetData, PhosphorIconsRegular.trash),
       ]),
-      _Category('support', PhosphorIconsRegular.heart, _sectionTitle('support'), [
-        (t.reportBug, PhosphorIconsRegular.bug),
-        (t.requestFeature, PhosphorIconsRegular.lightbulb),
-        (t.starOnGithub, PhosphorIconsRegular.githubLogo),
-        (t.buyCoffee, PhosphorIconsRegular.coffee),
-      ]),
       _Category('about', PhosphorIconsRegular.info, t.aboutGymmane, [(t.aboutGymmane, r)]),
     ];
   }
 
   static void _openCategory(String id) => id == 'about' ? fit.goAbout() : fit.pushRoute('preferences/$id');
+
+  Widget _switchSetting(GymColors gc, IconData icon, String label, bool value,
+      ValueChanged<bool> onChanged, {required Key key}) => _Flash(
+        label: label,
+        child: SwitchListTile(
+          key: key,
+          value: value,
+          onChanged: onChanged,
+          contentPadding: EdgeInsets.zero,
+          secondary: _rowIcon(gc, icon),
+          title: Text(label, style: AppTheme.f(14.5, weight: FontWeight.w500, color: gc.text)),
+        ),
+      );
 
   Widget _prefRow(GymColors gc, IconData icon, String label, Widget control, {String? hint, Widget? badge}) {
     if (hint == null) {
@@ -945,80 +860,6 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           );
-        },
-      ),
-    );
-  }
-
-  static String _perfName(String level) => switch (level) {
-        'lite' => t.perfLite,
-        'balanced' => t.perfBalanced,
-        'max' => t.perfMax,
-        _ => t.perfCustom,
-      };
-
-  void _performanceSheet(BuildContext context) {
-    fit.readDisplay();
-    showAppSheet<void>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (sheet) => AnimatedBuilder(
-        animation: fit,
-        builder: (sheet, _) {
-          final gc = sheet.gc;
-          final level = fit.perfLevel;
-          final hz = fit.maxRefresh.round();
-          Widget toggle(IconData icon, String label, String hint, bool on, VoidCallback flip) => GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  HapticFeedback.selectionClick();
-                  flip();
-                },
-                child: _prefRow(gc, icon, label, TinySwitch(on: on), hint: hint),
-              );
-          return AppSheet(children: [
-            SheetTitle(t.perfSetting, subtitle: t.perfSheetHint),
-            const SizedBox(height: 16),
-            OptionGroup([
-              for (final l in SettingsState.perfLevels)
-                OptionItem(
-                  _perfName(l),
-                  icon: switch (l) {
-                    'lite' => PhosphorIconsRegular.leaf,
-                    'balanced' => PhosphorIconsRegular.scales,
-                    _ => PhosphorIconsRegular.lightning,
-                  },
-                  detail: switch (l) {
-                    'lite' => t.perfLiteHint,
-                    'balanced' => t.perfBalancedHint,
-                    _ => fit.canHighRefresh ? t.perfMaxHint(hz) : t.perfMaxHintNoHz,
-                  },
-                  selected: level == l,
-                  onTap: () {
-                    HapticFeedback.selectionClick();
-                    fit.setPerfLevel(l);
-                  },
-                ),
-            ]),
-            _subhead(gc, t.perfTweak, top: 22),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(22)),
-              child: Column(children: [
-                toggle(PhosphorIconsRegular.drop, t.blurSetting, t.blurSettingHint, fit.blurOn,
-                    () => fit.setBlur(!fit.blurOn)),
-                if (fit.blurOn)
-                  toggle(PhosphorIconsRegular.dropHalf, t.perfFine, t.perfFineHint, fit.fineOn,
-                      () => fit.setFine(!fit.fineOn)),
-                if (fit.canHighRefresh)
-                  toggle(PhosphorIconsRegular.deviceMobile, t.perfHz(hz), t.perfHzHint, fit.highRefresh,
-                      () => fit.setHighRefresh(!fit.highRefresh)),
-                toggle(PhosphorIconsRegular.waveSine, t.calmMotionSetting, t.calmMotionHint, fit.calmMotion,
-                    () => fit.setCalmMotion(!fit.calmMotion)),
-              ]),
-            ),
-          ]);
         },
       ),
     );
@@ -2553,7 +2394,7 @@ class _SettingsHomeState extends State<_SettingsHome> {
                             for (final (g, label) in [
                               (const {'general', 'training', 'alerts'}, t.settingsGroupApp),
                               (const {'home', 'widgets', 'beta'}, t.settingsGroupHome),
-                              (const {'data', 'support', 'about'}, t.settingsGroupData),
+                              (const {'data', 'about'}, t.settingsGroupData),
                             ]) ...[
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(4, 6, 0, 10),
@@ -2624,7 +2465,7 @@ class _SettingsHomeState extends State<_SettingsHome> {
                       scale: scale,
                       alignment: Alignment.topLeft,
                       child: ImageFiltered(
-                        enabled: blur > 0.3,
+                        enabled: blurEffects && blur > 0.3,
                         imageFilter: ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur),
                         child: Text(titleCase(t.settings),
                             style: AppTheme.f(_titleSize,

@@ -83,3 +83,6 @@ noFrequentExercises
 frequentExercisesHint
 exitFrequentExercises
 muscleAdductors
+ownBackgroundBlur
+ownDisplayEffects
+ownNutritionKeepRecords

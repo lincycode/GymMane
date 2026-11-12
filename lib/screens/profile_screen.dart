@@ -174,17 +174,15 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (fit.gamification) ...[
-                      Rise(
-                        index: 1,
-                        child: _box(gc,
-                            title: t.awardsTitle,
-                            count: '${fit.awardCount}',
-                            onMore: fit.goAwards,
-                            child: const SizedBox(height: 82, child: MedalShelf(size: 54))),
-                      ),
-                      const SizedBox(height: 30),
-                    ],
+                    Rise(
+                      index: 1,
+                      child: _box(gc,
+                          title: t.historyTitle,
+                          count: fit.sessions.isEmpty ? null : '${fit.sessions.length}',
+                          onMore: fit.sessions.isEmpty ? null : fit.goHistory,
+                          child: _year(gc)),
+                    ),
+                    const SizedBox(height: 30),
                     Rise(
                       index: 2,
                       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -195,10 +193,21 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                         _photoCards(gc),
                       ]),
                     ),
-                    const SizedBox(height: 30),
-                    if (fit.passOn) ...[
+                    if (fit.gamification) ...[
+                      const SizedBox(height: 30),
                       Rise(
                         index: 3,
+                        child: _box(gc,
+                            title: t.awardsTitle,
+                            count: '${fit.awardCount}',
+                            onMore: fit.goAwards,
+                            child: const SizedBox(height: 82, child: MedalShelf(size: 54))),
+                      ),
+                    ],
+                    if (fit.passOn) ...[
+                      const SizedBox(height: 30),
+                      Rise(
+                        index: 4,
                         child: _box(gc,
                             title: t.gymPass,
                             count: fit.gymPasses.length > 1 ? '${fit.gymPasses.length}' : null,
@@ -210,16 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                   : GymPassCarousel(key: ValueKey(fit.gymPasses.length)),
                             )),
                       ),
-                      const SizedBox(height: 30),
                     ],
-                    Rise(
-                      index: 4,
-                      child: _box(gc,
-                          title: t.historyTitle,
-                          count: fit.sessions.isEmpty ? null : '${fit.sessions.length}',
-                          onMore: fit.sessions.isEmpty ? null : fit.goHistory,
-                          child: _year(gc)),
-                    ),
                   ],
                 ),
               ),

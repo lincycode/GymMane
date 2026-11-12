@@ -7476,6 +7476,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noteLinkInvalid => 'That address doesn\'t look right';
 
   @override
+  String get ownDisplayEffects => 'Display effects';
+
+  @override
+  String get ownBackgroundBlur => 'Background blur';
+
+  @override
+  String get ownNutritionKeepRecords => 'Turning this off keeps your existing records.';
+
+  @override
   String get ownCheckUpdates => 'Check for updates';
 
   @override

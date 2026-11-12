@@ -785,7 +785,7 @@ class ProgressScreen extends StatelessWidget {
                       right: -28 * v,
                       bottom: -28 * v,
                       child: ImageFiltered(
-                        enabled: v > 0.01,
+                        enabled: blurEffects && v > 0.01,
                         imageFilter: ui.ImageFilter.blur(sigmaX: 14 * v, sigmaY: 14 * v, tileMode: TileMode.mirror),
                         child: Transform.scale(
                           scale: 1 + 0.8 * v,

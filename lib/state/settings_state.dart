@@ -50,9 +50,6 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   bool blurOn = true;
   String textSize = 'normal';
   bool calmMotion = false;
-  bool fineOn = false;
-  bool highRefresh = false;
-  double maxRefresh = 60;
   bool showMiniBody = true;
   bool askCheckIn = true;
   bool muscleTune = true;
@@ -467,53 +464,6 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     blurOn = on;
     blurEffects = on;
     _persist();
-    notifyListeners();
-  }
-
-  static const perfLevels = ['lite', 'balanced', 'max'];
-
-  bool get canHighRefresh => maxRefresh > 61;
-
-  String get perfLevel {
-    final refresh = highRefresh && canHighRefresh;
-    if (!blurOn && !fineOn && !refresh && calmMotion) return 'lite';
-    if (blurOn && !fineOn && !refresh && !calmMotion) return 'balanced';
-    if (blurOn && fineOn && (refresh || !canHighRefresh) && !calmMotion) return 'max';
-    return 'custom';
-  }
-
-  void setPerfLevel(String level) {
-    if (!perfLevels.contains(level)) return;
-    final max = level == 'max';
-    blurOn = level != 'lite';
-    blurEffects = blurOn;
-    calmMotion = level == 'lite';
-    fineOn = max;
-    fineEffects = max;
-    highRefresh = max;
-    DeviceKind.setHighRefresh(highRefresh);
-    _persist();
-    notifyListeners();
-  }
-
-  void setFine(bool on) {
-    fineOn = on;
-    fineEffects = on;
-    _persist();
-    notifyListeners();
-  }
-
-  void setHighRefresh(bool on) {
-    highRefresh = on;
-    DeviceKind.setHighRefresh(on);
-    _persist();
-    notifyListeners();
-  }
-
-  Future<void> readDisplay() async {
-    final hz = await DeviceKind.maxRefresh();
-    if (hz == maxRefresh) return;
-    maxRefresh = hz;
     notifyListeners();
   }
 

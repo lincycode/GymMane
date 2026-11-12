@@ -28,7 +28,6 @@ import '../models/progress_shot.dart';
 import '../models/workout.dart';
 import '../services/alarm_store.dart';
 import '../services/beeper.dart';
-import '../services/device_kind.dart';
 import '../services/exercise_match.dart';
 import '../services/food_library.dart';
 import '../services/health_metrics.dart';
@@ -318,10 +317,6 @@ class FitState extends FitCore
     final size = data['textSize'];
     textSize = SettingsState.textSizes.contains(size) ? size as String : 'normal';
     calmMotion = data['calm'] as bool? ?? false;
-    fineOn = data['fine'] as bool? ?? false;
-    fineEffects = fineOn;
-    highRefresh = data['hz'] as bool? ?? false;
-    if (highRefresh) DeviceKind.setHighRefresh(true);
     showMiniBody = data['miniBody'] as bool? ?? true;
     askCheckIn = data['checkIn'] as bool? ?? true;
     muscleTune = data['mTune'] as bool? ?? true;
@@ -568,8 +563,6 @@ class FitState extends FitCore
         if (!blurOn) 'blur': false,
         if (textSize != 'normal') 'textSize': textSize,
         if (calmMotion) 'calm': true,
-        if (fineOn) 'fine': true,
-        if (highRefresh) 'hz': true,
         if (!showMiniBody) 'miniBody': false,
         if (!askCheckIn) 'checkIn': false,
         if (!muscleTune) 'mTune': false,
@@ -778,10 +771,6 @@ class FitState extends FitCore
     showRecommended = true;
     textSize = 'normal';
     calmMotion = false;
-    fineOn = false;
-    fineEffects = false;
-    if (highRefresh) DeviceKind.setHighRefresh(false);
-    highRefresh = false;
     showWeekStats = true;
     showRoutineRow = true;
     homeOrder = List.of(kHomeBlocks);

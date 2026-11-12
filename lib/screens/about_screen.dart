@@ -1,23 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../app/own_build.dart';
-import '../catalog/exercise_catalog.dart';
 import '../l10n/l10n.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
-import '../widgets/entrance.dart';
+import '../widgets/liquid_notch.dart';
 import '../widgets/ui_kit.dart';
 import 'app_update_dialog.dart';
 
 const kAppVersion = ownAppVersion;
-const _kAuthor = 'InlitX';
-const _kAuthorUrl = 'https://github.com/InlitX';
-const _kRepoUrl = 'https://github.com/InlitX/GymMane';
-const _kKofiUrl = 'https://ko-fi.com/inlitx';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -25,245 +20,65 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
-    return RiseScope(
-      id: 'about',
-      once: false,
-      child: SafeArea(
+    return SafeArea(
       bottom: false,
-      child: SingleChildScrollView(
-        clipBehavior: Clip.none,
+      child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: riseAll([
-            ScreenHeader(
-              title: t.about,
-              onBack: fit.backFromAbout,
-              titleSize: 18,
-              titleSpacing: 1,
-            ),
-            const SizedBox(height: 18),
-            _hero(gc),
-            const SizedBox(height: 16),
-            Text('${t.ownMaintainer} · $ownMaintainer',
-                textAlign: TextAlign.center,
-                style: AppTheme.f(14, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
-            const SizedBox(height: 20),
-            if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ...[
-              OutlinedButton.icon(
-                key: const ValueKey('check-app-updates'),
-                onPressed: () => showDialog<void>(context: context, builder: (_) => const AppUpdateDialog()),
-                icon: const Icon(PhosphorIconsRegular.downloadSimple, size: 20),
-                label: Text(t.ownCheckUpdates),
-                style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-              ),
-              const SizedBox(height: 18),
-            ],
-            _group(gc, [
-              (PhosphorIconsRegular.gift, t.freeForever, t.freeForeverWhy),
-              (PhosphorIconsRegular.wifiSlash, t.ownOfflineTraining, t.ownOfflineTrainingWhy),
-              (PhosphorIconsRegular.export, t.yoursToTake, t.yoursToTakeWhy),
-            ]),
-            const SizedBox(height: 18),
-            _sectionLabel(gc, t.whatsInside),
-            const SizedBox(height: 8),
-            _group(gc, [
-              (PhosphorIconsRegular.barbell, t.exercisesInside(kExercises.length),
-                  t.exercisesInsideWhy),
-              (PhosphorIconsRegular.calculator, t.calculatorsInside, t.calculatorsInsideWhy),
-              (PhosphorIconsRegular.chartLineUp, t.mathInside, t.mathInsideWhy),
-            ]),
-            const SizedBox(height: 22),
-            Text(t.aboutBlurb,
-                textAlign: TextAlign.center,
-                style: AppTheme.f(12.5, weight: FontWeight.w500, color: gc.textTertiary, height: 1.6)),
-            const SizedBox(height: 20),
-            _credits(gc),
-            const SizedBox(height: 16),
-            Text(t.ownAttribution,
-                textAlign: TextAlign.center,
-                style: AppTheme.f(14, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
-          ]),
-        ),
-      ),
-      ),
-    );
-  }
-
-  Widget _sectionLabel(GymColors gc, String label) => Text(label.toUpperCase(),
-      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4));
-
-  Widget _hero(GymColors gc) {
-    return Container(
-      height: 178,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: gc.bgRaised,
-        borderRadius: BorderRadius.circular(22),
-      ),
-      child: Stack(
         children: [
-          Positioned(
-            left: -46,
-            bottom: -56,
-            child: Container(
-              width: 162,
-              height: 162,
-              decoration: BoxDecoration(color: gc.accentSoft, shape: BoxShape.circle),
-            ),
-          ),
-          Positioned(
-            left: 128,
-            top: -42,
-            child: Container(
-              width: 88,
-              height: 88,
-              decoration: BoxDecoration(color: gc.emberSoft, shape: BoxShape.circle),
-            ),
-          ),
-          Positioned(
-            right: 6,
-            top: 14,
-            bottom: 14,
-            child: Opacity(
-              opacity: 0.6,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(22),
+          ScreenHeader(title: t.about, onBack: fit.backFromAbout, titleSize: 18, titleSpacing: 1),
+          const SizedBox(height: 24),
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
                 child: ColoredBox(
                   color: const Color(0xFF0C0B0A),
-                  child: Image.asset('assets/brand/enogym_foreground.png', fit: BoxFit.fitHeight),
+                  child: Image.asset(
+                    'assets/brand/enogym_foreground.png',
+                    width: 64,
+                    height: 64,
+                    cacheWidth: (64 * MediaQuery.devicePixelRatioOf(context)).round(),
+                    excludeFromSemantics: true,
+                  ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(22),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(ownAppName,
-                    style: AppTheme.f(26, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.5)),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: gc.bgRaised2,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Text(t.version(kAppVersion),
-                      style: AppTheme.f(11.5, weight: FontWeight.w600, color: gc.textSecondary)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(ownAppName, style: AppTheme.f(24, weight: FontWeight.w800, color: gc.text)),
+                    Text(t.version(kAppVersion), style: AppTheme.f(14, color: gc.textSecondary)),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _group(GymColors gc, List<(IconData, String, String)> rows) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: gc.bgRaised,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          for (int i = 0; i < rows.length; i++)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-              decoration: BoxDecoration(
-                border: i < rows.length - 1
-                    ? Border(bottom: BorderSide(color: gc.border.withValues(alpha: 0.6)))
-                    : null,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 1, right: 14),
-                    child: SizedBox(
-                      width: 22,
-                      child: Icon(rows[i].$1, size: 19, color: gc.textSecondary),
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(rows[i].$2, style: AppTheme.f(14.5, weight: FontWeight.w600, color: gc.text)),
-                        const SizedBox(height: 3),
-                        Text(rows[i].$3,
-                            style: AppTheme.f(12.5,
-                                weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+          if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ...[
+            const SizedBox(height: 20),
+            OutlinedButton.icon(
+              key: const ValueKey('check-app-updates'),
+              onPressed: () => showDialog<void>(context: context, builder: (_) => const AppUpdateDialog()),
+              icon: const Icon(PhosphorIconsRegular.downloadSimple, size: 20),
+              label: Text(t.ownCheckUpdates),
+              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
             ),
-        ],
-      ),
-    );
-  }
-
-  Widget _credits(GymColors gc) {
-    final rows = <(IconData, String, String, String, Color?)>[
-      (PhosphorIconsRegular.githubLogo, t.ownSourceCode, 'lincycode/GymMane', ownSourceUrl, null),
-      (PhosphorIconsFill.heart, t.ownOriginalAuthor, _kAuthor, _kAuthorUrl, gc.accent),
-      (PhosphorIconsRegular.githubLogo, t.ownOriginalSource, 'InlitX/GymMane', _kRepoUrl, null),
-      (PhosphorIconsRegular.coffee, t.ownSupportOriginal, 'ko-fi.com/inlitx', _kKofiUrl, null),
-    ];
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: gc.bgRaised,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          for (int i = 0; i < rows.length; i++)
+          ],
+          const SizedBox(height: 24),
+          Text(t.ownAttribution, style: AppTheme.f(14, color: gc.textSecondary, height: 1.4)),
+          const SizedBox(height: 8),
+          for (final (label, url) in [
+            (t.ownOriginalAuthor, 'https://github.com/InlitX'),
+            (t.ownOriginalSource, 'https://github.com/InlitX/GymMane'),
+            (t.ownSourceCode, ownSourceUrl),
+          ])
             Semantics(
-              button: true,
               link: true,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => _open(rows[i].$4),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
-                    border: i < rows.length - 1
-                        ? Border(bottom: BorderSide(color: gc.border.withValues(alpha: 0.6)))
-                        : null,
-                  ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 14),
-                        child: SizedBox(
-                          width: 22,
-                          child: Icon(rows[i].$1, size: 19, color: rows[i].$5 ?? gc.textSecondary),
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(rows[i].$2.toUpperCase(),
-                                style: AppTheme.f(10,
-                                    weight: FontWeight.w700, color: gc.textSecondary, letterSpacing: 1.3)),
-                            const SizedBox(height: 4),
-                            Text(rows[i].$3,
-                                style: AppTheme.f(15.5, weight: FontWeight.w700, color: gc.text)),
-                          ],
-                        ),
-                      ),
-                      Icon(PhosphorIconsRegular.arrowUpRight, size: 15, color: gc.textTertiary),
-                    ],
-                  ),
-                ),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(label, style: AppTheme.f(14, color: gc.text)),
+                trailing: Icon(PhosphorIconsRegular.arrowUpRight, size: 16, color: gc.textSecondary),
+                onTap: () => _open(context, url),
               ),
             ),
         ],
@@ -271,9 +86,13 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _open(String url) async {
+  Future<void> _open(BuildContext context, String url) async {
+    var opened = false;
     try {
-      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      opened = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } catch (_) {}
+    if (!opened && context.mounted) {
+      showNotchToast(context, t.cantOpenLink, icon: PhosphorIconsFill.warningCircle, accent: context.gc.danger);
+    }
   }
 }

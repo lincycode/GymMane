@@ -5430,7 +5430,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsGroupHome => '首页与扩展';
 
   @override
-  String get settingsGroupData => '数据与帮助';
+  String get settingsGroupData => '数据与应用';
 
   @override
   String get healthAllowAll => '全部开启';
@@ -7337,6 +7337,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noteLinkInvalid => '请输入有效的网址';
+
+  @override
+  String get ownDisplayEffects => '显示效果';
+
+  @override
+  String get ownBackgroundBlur => '背景模糊';
+
+  @override
+  String get ownNutritionKeepRecords => '关闭后保留已有记录。';
 
   @override
   String get ownCheckUpdates => '检查更新';
