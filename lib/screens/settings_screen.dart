@@ -144,6 +144,21 @@ class SettingsScreen extends StatelessWidget {
                     fit.setThemePref,
                     hint: t.themeAutoHint,
                   ),
+                  KeyedSubtree(
+                    key: const ValueKey('settings-light-palette'),
+                    child: _choiceRow(
+                      context,
+                      gc,
+                      PhosphorIconsRegular.leaf,
+                      t.ownLightPalette,
+                      [
+                        ('sage', t.ownPaletteSage, PhosphorIconsRegular.leaf),
+                        ('original', t.ownPaletteOriginal, PhosphorIconsRegular.sun),
+                      ],
+                      () => fit.lightPalette,
+                      fit.setLightPalette,
+                    ),
+                  ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () => _editLanguage(context),
@@ -755,6 +770,7 @@ class SettingsScreen extends StatelessWidget {
     return [
       _Category('general', PhosphorIconsRegular.slidersHorizontal, _sectionTitle('general'), [
         (t.theme, PhosphorIconsRegular.moon),
+        (t.ownLightPalette, PhosphorIconsRegular.leaf),
         (t.languageLabel, PhosphorIconsRegular.translate),
         (t.unitsLabel, PhosphorIconsRegular.scales),
         (t.weekStartSetting, PhosphorIconsRegular.calendarBlank),

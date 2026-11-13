@@ -7883,4 +7883,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String exerciseCopyName(String name) {
     return '$name (کپی)';
   }
+
+  @override
+  String get ownLightPalette => 'Light palette';
+
+  @override
+  String get ownPaletteSage => 'Sage white';
+
+  @override
+  String get ownPaletteOriginal => 'Original warm neutral';
 }

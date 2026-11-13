@@ -8027,4 +8027,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String exerciseCopyName(String name) {
     return '$name (Kopie)';
   }
+
+  @override
+  String get ownLightPalette => 'Light palette';
+
+  @override
+  String get ownPaletteSage => 'Sage white';
+
+  @override
+  String get ownPaletteOriginal => 'Original warm neutral';
 }

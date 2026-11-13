@@ -71,6 +71,27 @@ void main() {
       fit.setThemePref('dark');
     });
 
+    test('light palette persists independently of brightness and round trips in backups', () {
+      fit.setThemePref('amoled');
+      fit.setLightPalette('original');
+      fit.persistNow();
+      fit.lightPalette = 'sage';
+      fit.loadFromStore();
+      expect(fit.lightPalette, 'original');
+      expect(fit.themePref, 'amoled');
+      final backup = fit.toJson();
+      fit.setLightPalette('sage');
+      fit.applyBackup(backup);
+      expect(fit.lightPalette, 'original');
+      fit.setLightPalette('unknown');
+      expect(fit.lightPalette, 'original');
+      fit.applyBackup({'theme': 'light'});
+      expect(fit.lightPalette, 'sage');
+      fit.applyBackup({'theme': 'system', 'lightPalette': 42});
+      expect(fit.lightPalette, 'sage');
+      expect(fit.themePref, 'system');
+    });
+
     test('the rest alarm style is kept and handed to the alarm', () {
       fit.setAlarmStyle('silent');
       expect(RestAlarm.instance.style, 'silent');

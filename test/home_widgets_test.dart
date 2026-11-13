@@ -13,7 +13,7 @@ void main() {
     expect(tester.takeException(), isNull);
   }
 
-  for (final (name, gc) in [('dark', GymColors.dark), ('light', GymColors.light)]) {
+  for (final (name, gc) in [('dark', GymColors.dark), ('light', GymColors.light), ('original', GymColors.lightOriginal)]) {
     testWidgets('the four home widgets draw in $name without overflowing', (tester) async {
       await draw(tester, HeatmapWidgetView(gc: gc, levels: List.filled(182, 2), streak: 12));
       await draw(tester,

@@ -98,3 +98,6 @@ remainingRepsTitle
 remainingRepsUnit
 remainingRepsHint
 effortDisplayHint
+ownLightPalette
+ownPaletteSage
+ownPaletteOriginal

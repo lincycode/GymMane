@@ -7620,6 +7620,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String exerciseCopyName(String name) {
     return '$name（副本）';
   }
+
+  @override
+  String get ownLightPalette => '浅色配色';
+
+  @override
+  String get ownPaletteSage => '鼠尾草白';
+
+  @override
+  String get ownPaletteOriginal => '原版暖米灰';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

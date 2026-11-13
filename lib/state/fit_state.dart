@@ -234,6 +234,7 @@ class FitState extends FitCore
   }
 
   void _loadToggles(Map<String, dynamic> data) {
+    lightPalette = data['lightPalette'] == 'original' ? 'original' : 'sage';
     demoSize = data['demo'] as String? ?? 'large';
     demoLoop = data['demoLoop'] as String? ?? 'always';
     sessionLayout = data['layout'] == 'list' ? 'list' : 'cards';
@@ -540,6 +541,7 @@ class FitState extends FitCore
         'profile': profile.toJson(),
         'dark': dark,
         'theme': themePref,
+        'lightPalette': lightPalette,
         'units': units,
         'language': language,
         'rest': restSeconds,
@@ -769,6 +771,7 @@ class FitState extends FitCore
     modeOverride.clear();
     secondaryOverride.clear();
     _builtInExercises = null;
+    lightPalette = 'sage';
     demoSize = 'large';
     demoLoop = 'always';
     sessionLayout = 'cards';

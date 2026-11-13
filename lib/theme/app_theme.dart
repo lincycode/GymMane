@@ -11,7 +11,9 @@ class AppTheme {
 
   static ThemeData get dark => _build(Brightness.dark, GymColors.dark);
   static ThemeData get amoled => _build(Brightness.dark, GymColors.amoled);
-  static ThemeData get light => _build(Brightness.light, GymColors.light);
+  static ThemeData get light => lightFor('sage');
+
+  static ThemeData lightFor(String palette) => _build(Brightness.light, GymColors.lightFor(palette));
 
   static ThemeData _build(Brightness brightness, GymColors gc) {
     final base = ThemeData(brightness: brightness, useMaterial3: true, fontFamily: sans);

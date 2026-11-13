@@ -6,6 +6,7 @@ const List<String> kHomeBlocks = ['weekdays', 'steps', 'week', 'routines', 'acti
 
 mixin SettingsState on FitCore, ToolsState, LibraryState {
   String themePref = 'dark';
+  String lightPalette = 'sage';
 
   bool get dark => themePref == 'system'
       ? PlatformDispatcher.instance.platformBrightness == Brightness.dark
@@ -132,6 +133,14 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   void _applyLanguage(String code) {
     setAppLanguage(code);
     language = appLanguage;
+  }
+
+  void setLightPalette(String palette) {
+    if (!['sage', 'original'].contains(palette) || palette == lightPalette) return;
+    lightPalette = palette;
+    _persist();
+    _refreshWidgets();
+    notifyListeners();
   }
 
   void setThemePref(String pref) {

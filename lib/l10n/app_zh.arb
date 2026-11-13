@@ -2302,5 +2302,8 @@
   "ownOfflineTrainingWhy": "训练记录保存在本机，无需账号。仅手动检查和下载更新时联网。",
 
   "duplicateExercise": "复制",
-  "exerciseCopyName": "{name}（副本）"
+  "exerciseCopyName": "{name}（副本）",
+  "ownLightPalette": "浅色配色",
+  "ownPaletteSage": "鼠尾草白",
+  "ownPaletteOriginal": "原版暖米灰"
 }

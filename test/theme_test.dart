@@ -26,6 +26,15 @@ void main() {
       return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
     }
 
+    test('original warm palette remains available and invalid choices use sage', () {
+      expect(GymColors.lightFor('original'), same(GymColors.lightOriginal));
+      expect(GymColors.lightOriginal.bg, const Color(0xFFF7F4F0));
+      expect(GymColors.lightOriginal.ember, const Color(0xFF1A1713));
+      expect(GymColors.lightOriginal.accent, const Color(0xFF9E4E27));
+      expect(GymColors.lightFor('sage'), same(GymColors.light));
+      expect(GymColors.lightFor('unknown'), same(GymColors.light));
+    });
+
     test('light neutrals use a restrained sage tint', () {
       for (final c in [GymColors.light.bg, GymColors.light.bgRaised2, GymColors.light.border]) {
         final hsl = HSLColor.fromColor(c);

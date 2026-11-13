@@ -13945,6 +13945,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} (copy)'**
   String exerciseCopyName(String name);
+
+  /// No description provided for @ownLightPalette.
+  ///
+  /// In en, this message translates to:
+  /// **'Light palette'**
+  String get ownLightPalette;
+
+  /// No description provided for @ownPaletteSage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sage white'**
+  String get ownPaletteSage;
+
+  /// No description provided for @ownPaletteOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Original warm neutral'**
+  String get ownPaletteOriginal;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -70,6 +70,7 @@ void main() {
     fit.setProfilePhoto(png);
     fit.setUnits('lb');
     fit.setThemeLight();
+    fit.setLightPalette('original');
     fit.setBgDim(0.4);
     await fit.setBgPhoto(await source('bg.png'));
     fit.setTrainReminder(7 * 60 + 30);

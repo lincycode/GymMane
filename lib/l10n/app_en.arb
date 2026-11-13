@@ -2628,5 +2628,8 @@
 
   "duplicateExercise": "Duplicate",
   "exerciseCopyName": "{name} (copy)",
-  "@exerciseCopyName": { "placeholders": { "name": { "type": "String" } } }
+  "@exerciseCopyName": { "placeholders": { "name": { "type": "String" } } },
+  "ownLightPalette": "Light palette",
+  "ownPaletteSage": "Sage white",
+  "ownPaletteOriginal": "Original warm neutral"
 }

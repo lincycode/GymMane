@@ -8079,4 +8079,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String exerciseCopyName(String name) {
     return '$name (نسخة)';
   }
+
+  @override
+  String get ownLightPalette => 'Light palette';
+
+  @override
+  String get ownPaletteSage => 'Sage white';
+
+  @override
+  String get ownPaletteOriginal => 'Original warm neutral';
 }

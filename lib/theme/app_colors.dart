@@ -108,6 +108,35 @@ class GymColors extends ThemeExtension<GymColors> {
     danger: Color(0xFFE5674C),
   );
 
+  static GymColors lightFor(String palette) => palette == 'original' ? lightOriginal : light;
+
+  static const lightOriginal = GymColors(
+    pageBg: Color(0xFFFFFEFD),
+    bg: Color(0xFFF7F4F0),
+    bgRaised: Color(0xFFFFFFFF),
+    bgRaised2: Color(0xFFECE8E3),
+    border: Color(0xFFE0DBD5),
+    navBg: Color(0xF2FFFEFD),
+    text: Color(0xFF1A1713),
+    textSecondary: Color(0xFF5F574F),
+    textTertiary: Color(0xFF8A8179),
+    ember: Color(0xFF1A1713),
+    emberDeep: Color(0xFF000000),
+    onEmber: Color(0xFFFFFFFF),
+    emberSoft: Color(0x121A1713),
+    emberShadow: Color(0x1F1A1713),
+    accent: Color(0xFF9E4E27),
+    accentSoft: Color(0x1F9E4E27),
+    brass: Color(0xFF8A6B41),
+    sage: Color(0xFF3D7A52),
+    sageSoft: Color(0x1F3D7A52),
+    mutedFill: Color(0xFFE9E4DE),
+    heatEmpty: Color(0xFFE7E2DC),
+    info: Color(0xFF3268A0),
+    warn: Color(0xFF9A6A12),
+    danger: Color(0xFFC0392B),
+  );
+
   static const light = GymColors(
     pageBg: Color(0xFFF3F7F3),
     bg: Color(0xFFF3F7F3),
