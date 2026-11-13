@@ -20,12 +20,25 @@ void main() {
       '2.1.0-own.8',
       '2.1.0-own.7',
     ]);
+    expect(log.personal.map((note) => note.date), [
+      DateTime(2026, 11, 11),
+      DateTime(2026, 11, 11),
+      DateTime(2026, 11, 10),
+      DateTime(2026, 11, 10),
+      DateTime(2026, 11, 10),
+    ]);
     expect(log.personal.first.highlights.single, contains('独立的版本号'));
     expect(log.personal[1].highlights.single, isNot(contains('`')));
     expect(log.personal.last.highlights.first, contains('手动检查 GitHub Releases'));
     expect(log.upstream.first.highlights, isNotEmpty);
     expect(log.upstreamVersion, isNotEmpty);
     expect(log.upstreamCommit, matches(r'^[0-9a-f]{7,40}$'));
+  });
+
+  test('all packaged personal changelog entries have a date', () async {
+    final log = await Changelog.load(rootBundle, installedVersion: 'development', chinese: true);
+    expect(log.personal, isNotEmpty);
+    expect(log.personal.map((note) => note.date), everyElement(isA<DateTime>()));
   });
 
   testWidgets('About opens both histories and Android back returns to About', (tester) async {
@@ -48,7 +61,9 @@ void main() {
       return Changelog.load(rootBundle, installedVersion: ownAppVersion, chinese: false);
     });
     await tester.pumpAndSettle();
-    expect(find.text('v${log!.personal.first.version}'), findsOneWidget);
+    final latest = log!.personal.first;
+    expect(find.text('v${latest.version}'), findsOneWidget);
+    expect(find.text(t.shortDateYear(latest.date!)), findsWidgets);
 
     await tester.tap(find.text('GymMane'));
     await tester.pumpAndSettle();

@@ -55,7 +55,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 「设置 → 关于 → 更新日志」可以离线查看 EnoGym 和 GymMane 的版本记录。EnoGym 卡片显示当前安装版本，GymMane 卡片显示随包收录的最新上游发布；上游标签和合入提交从 `own.properties` 读取。两页都可以直接打开 GitHub 查看最新发布。
 
-- **EnoGym** 复用 `docs/releases/<版本>.md`。每次发版在原文件中用首个 `- ` 列表写简短更新要点，安装和升级说明另起一段。旧版纯段落说明取首段。应用只展示不晚于当前安装版本的条目。
+- **EnoGym** 复用 `docs/releases/<版本>.md`。每版首行用 `YYYY-MM-DD` 记录北京时间日期。GitHub 正式版以发布日为准，仅本地构建的版本使用构建日。首个 `- ` 列表写简短更新要点，安装和升级说明另起一段。旧版纯段落说明取首段。应用只展示不晚于当前安装版本的条目。
 - **GymMane** 有新正式发布时，依据 [原作者发布页](https://github.com/InlitX/GymMane/releases) 在 [上游摘要](upstream-releases.json) 顶部加入新版本、北京时间发布日期和中英文要点。仅合并主分支提交时按常规更新 `own.properties`，无须另造一个发布条目。
 
 从 `2.1.0-own.7` 起，设置 → 关于 → 检查更新提供个人版更新。只有点击检查时才请求 GitHub；不后台轮询、不上传训练记录、不内置 GitHub token。上游 CONTRIBUTING 的禁止联网原则在个人版仅对这一功能例外，训练与本地数据功能保持离线。网络失败可重试或打开 Releases 页面。

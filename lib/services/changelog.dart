@@ -25,6 +25,7 @@ class Changelog {
 
   static const _directory = 'docs/releases/';
   static final _version = RegExp(r'^(\d+)\.(\d+)\.(\d+)(?:-own\.(\d+))?$');
+  static final _dateLine = RegExp(r'^(\d{4}-\d{2}-\d{2})\r?\n');
 
   static Future<Changelog> load(
     AssetBundle bundle, {
@@ -45,7 +46,14 @@ class Changelog {
     versions.sort((a, b) => _compare(_versionKey(b)!, _versionKey(a)!));
     final personal = await Future.wait([
       for (final version in versions)
-        bundle.loadString('$_directory$version.md').then((body) => ReleaseNote(version, _highlights(body))),
+        bundle.loadString('$_directory$version.md').then((body) {
+          final date = _dateLine.firstMatch(body);
+          return ReleaseNote(
+            version,
+            _highlights(body.substring(date?.end ?? 0)),
+            date: date == null ? null : DateTime.tryParse(date[1]!),
+          );
+        }),
     ]);
 
     final upstreamJson = jsonDecode(await bundle.loadString('docs/upstream-releases.json')) as List;
