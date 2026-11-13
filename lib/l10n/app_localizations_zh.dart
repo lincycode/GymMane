@@ -2953,6 +2953,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get rirHint => '0 表示一次都做不动了，2 表示还能再做两次。';
 
   @override
+  String get remainingRepsTitle => '保持标准动作，还能做几次？';
+
+  @override
+  String get remainingRepsUnit => '次';
+
+  @override
+  String get remainingRepsHint => '下一次做不到位，就选 0。';
+
+  @override
+  String get effortDisplayHint => '按次数的动作直接填还能做几次。这里选择强度的显示方式。';
+
+  @override
   String get addWeekWidget => '添加本周小组件';
 
   @override

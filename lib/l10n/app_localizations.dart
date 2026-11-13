@@ -5588,6 +5588,30 @@ abstract class AppLocalizations {
   /// **'0 is nothing left in the tank, 2 is two reps to spare.'**
   String get rirHint;
 
+  /// No description provided for @remainingRepsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How many more reps with good form?'**
+  String get remainingRepsTitle;
+
+  /// No description provided for @remainingRepsUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'reps'**
+  String get remainingRepsUnit;
+
+  /// No description provided for @remainingRepsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose 0 if your last rep was all you had.'**
+  String get remainingRepsHint;
+
+  /// No description provided for @effortDisplayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For exercises counted in reps, enter how many you had left. This setting chooses how effort scores are displayed.'**
+  String get effortDisplayHint;
+
   /// No description provided for @addWeekWidget.
   ///
   /// In en, this message translates to:

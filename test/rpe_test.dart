@@ -1,8 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gymmane/l10n/l10n.dart';
 import 'package:gymmane/models/workout.dart';
+import 'package:gymmane/screens/session_screen.dart';
 import 'package:gymmane/services/local_store.dart';
 import 'package:gymmane/services/workout_import.dart';
 import 'package:gymmane/state/fit_state.dart';
+import 'package:gymmane/theme/app_theme.dart';
+import 'package:gymmane/widgets/ruler_picker.dart';
+import 'package:gymmane/widgets/ui_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -60,6 +66,113 @@ void main() {
       fit.applyBackup(data);
       expect(fit.effortMode, 'rir');
     });
+  });
+
+  testWidgets('set effort takes reps left and follows the last logged set of that exercise', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 1000);
+    addTearDown(tester.view.reset);
+    setAppLanguage('en');
+    fit.setEffortMode('rpe');
+    fit.setDemoSize('off');
+    fit.toggleStartCountdown();
+    fit.setRestSeconds(0);
+    final bench = fit.exerciseById('EIeI8Vf')!;
+    final raise = fit.exerciseById('v1qBec9')!;
+    final routine = Routine('effort-qa', 'Effort', [bench.id, raise.id], sets: {bench.id: 5});
+    fit.startRoutine(routine);
+    final sets = fit.session!.exercises.first.sets;
+
+    await tester.pumpWidget(MaterialApp(
+      theme: AppTheme.light,
+      home: Scaffold(
+        body: AnimatedBuilder(animation: fit, builder: (_, _) => SessionScreen(key: ObjectKey(fit.session))),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    Future<RulerPicker> open(int exercise, int index) async {
+      final cell = find.byKey(ValueKey(('session-effort', exercise, index)));
+      await tester.ensureVisible(cell);
+      await tester.tap(cell);
+      await tester.pumpAndSettle();
+      return tester.widget<RulerPicker>(find.byType(RulerPicker));
+    }
+
+    Future<void> save() async {
+      await tester.tap(find.text(titleCase(t.save)));
+      await tester.pumpAndSettle();
+    }
+
+    final first = await open(0, 0);
+    expect(find.descendant(of: find.byType(BottomSheet), matching: find.text('RPE')), findsOneWidget);
+    expect(find.text(t.remainingRepsTitle), findsOneWidget);
+    expect(find.text('RPE 8'), findsOneWidget);
+    expect(first.value, 2);
+    expect(sets[0].rpe, isNull);
+    await save();
+    expect(sets[0].rpe, 8);
+    final firstCell = tester.widget<Semantics>(find.byKey(const ValueKey(('session-effort', 0, 0))));
+    expect(firstCell.properties.value, '8');
+
+    fit.toggleSet(0, 0);
+    await tester.pumpAndSettle();
+    expect((await open(0, 1)).value, 2);
+    await save();
+    fit.toggleSet(0, 1);
+    await tester.pumpAndSettle();
+
+    (await open(0, 2)).onChanged(0);
+    await tester.pumpAndSettle();
+    expect(find.text('RPE 10'), findsOneWidget);
+    await save();
+    expect(sets[2].rpe, 10);
+
+    expect((await open(0, 3)).value, 0);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(sets[3].rpe, isNull);
+    fit.toggleSet(0, 3);
+    await tester.pumpAndSettle();
+    expect((await open(0, 4)).value, 0, reason: 'skip the unrated fourth set');
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    fit.goToExercise(1);
+    await tester.pumpAndSettle();
+    expect((await open(1, 0)).value, 2);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    fit.goToExercise(0);
+    await tester.pumpAndSettle();
+    expect((await open(0, 0)).value, 2, reason: 'editing a set starts at its own saved value');
+    await tester.tap(find.text(t.none));
+    await tester.pumpAndSettle();
+    expect(sets[0].rpe, isNull);
+    fit.saveAndExit();
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('finishing the last set waits for effort confirmation before writing history', (tester) async {
+    fit.setEffortMode('rpe');
+    fit.toggleStartCountdown();
+    fit.setRestSeconds(0);
+    fit.startRoutine(Routine('effort-qa', 'Effort', ['EIeI8Vf'], sets: {'EIeI8Vf': 1}));
+    fit.toggleSet(0, 0);
+    final edit = fit.editSessionEffort(0, 0, (_, _) async {
+      await Future<void>.delayed(const Duration(seconds: 5));
+      return (rpe: 10.0);
+    });
+    await tester.pump(WorkoutState.effortDelay);
+    expect(fit.session!.complete, isFalse);
+    expect(fit.sessions, isEmpty);
+
+    await tester.pump(const Duration(seconds: 2));
+    await edit;
+    await tester.pump(WorkoutState.finishDelay);
+    expect(fit.sessions.single.exercises.single.sets.single.rpe, 10);
+    fit.saveAndExit();
   });
 
   group('CSV', () {

@@ -1561,6 +1561,44 @@ mixin WorkoutState on FitCore, SettingsState, LibraryState, PlacesState, StatsSt
     notifyListeners();
   }
 
+  Future<void> editSessionEffort(
+    int exIdx,
+    int setIdx,
+    Future<({double? rpe})?> Function(double initialRpe, bool hasValue) pickRpe,
+  ) async {
+    final workout = session;
+    if (workout == null || workout.complete || exIdx < 0 || exIdx >= workout.exercises.length) return;
+    final exercise = workout.exercises[exIdx];
+    if (setIdx < 0 || setIdx >= exercise.sets.length) return;
+    final target = exercise.sets[setIdx];
+    final originalRpe = target.rpe;
+    final previous = exercise.sets.take(setIdx).where((set) => set.counts == target.counts && set.rpe != null).lastOrNull;
+    final initial = originalRpe ?? previous?.rpe ?? 8;
+
+    // A pending auto-finish would log the set before the picker is confirmed.
+    final timer = _advanceTimer;
+    final advanceExercise = timer?.isActive == true ? currentExercise : null;
+    if (advanceExercise != null) timer!.cancel();
+    try {
+      final choice = await pickRpe(initial, originalRpe != null);
+      if (choice == null || session != workout || workout.complete || target.rpe != originalRpe) return;
+      final exerciseIndex = workout.exercises.indexOf(exercise);
+      final setIndex = exercise.sets.indexOf(target);
+      if (exerciseIndex < 0 || setIndex < 0) return;
+      setSessionRpe(exerciseIndex, setIndex, choice.rpe);
+    } finally {
+      if (advanceExercise != null &&
+          session == workout &&
+          !workout.complete &&
+          route == 'session' &&
+          (autoAdvance || sessionLocked) &&
+          currentExercise == advanceExercise &&
+          _advanceTimer == timer) {
+        _advanceWhenDone(workout.currentIndex);
+      }
+    }
+  }
+
   void setSessionRpe(int exIdx, int setIdx, double? rpe) {
     final s = session;
     if (s == null || exIdx >= s.exercises.length) return;

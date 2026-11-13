@@ -3093,6 +3093,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get rirHint => '0 heißt, keine Wiederholung mehr, 2 heißt, zwei wären noch gegangen.';
 
   @override
+  String get remainingRepsTitle => 'How many more reps with good form?';
+
+  @override
+  String get remainingRepsUnit => 'reps';
+
+  @override
+  String get remainingRepsHint => 'Choose 0 if your last rep was all you had.';
+
+  @override
+  String get effortDisplayHint =>
+      'For exercises counted in reps, enter how many you had left. This setting chooses how effort scores are displayed.';
+
+  @override
   String get addWeekWidget => 'Wochen-Widget hinzufügen';
 
   @override

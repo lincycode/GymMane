@@ -94,3 +94,7 @@ ownChangelogBundled
 ownChangelogMerged
 ownChangelogGitHub
 ownChangelogUnavailable
+remainingRepsTitle
+remainingRepsUnit
+remainingRepsHint
+effortDisplayHint

@@ -3078,6 +3078,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get rirHint => '0 é não conseguir fazer mais nenhuma; 2, que sobravam duas.';
 
   @override
+  String get remainingRepsTitle => 'How many more reps with good form?';
+
+  @override
+  String get remainingRepsUnit => 'reps';
+
+  @override
+  String get remainingRepsHint => 'Choose 0 if your last rep was all you had.';
+
+  @override
+  String get effortDisplayHint =>
+      'For exercises counted in reps, enter how many you had left. This setting chooses how effort scores are displayed.';
+
+  @override
   String get addWeekWidget => 'Adicionar widget da semana';
 
   @override

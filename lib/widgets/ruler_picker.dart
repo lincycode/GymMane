@@ -262,6 +262,9 @@ Future<double?> askRuler(
   bool vertical = false,
   String? hint,
   String? clearLabel,
+  String? confirmLabel,
+  String? valueLabel,
+  String Function(double value)? previewLabel,
 }) {
   var current = value.clamp(min, max).toDouble();
   final decimals = step == step.roundToDouble() ? 0 : (step < 0.1 || step * 10 != (step * 10).roundToDouble() ? 2 : 1);
@@ -319,12 +322,12 @@ Future<double?> askRuler(
                 ),
                 Semantics(
                   button: true,
-                  label: title,
+                  label: valueLabel ?? title,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () async {
                       final typed = await askNumber(sheet,
-                          title: title, initial: show(current), decimal: step != step.roundToDouble());
+                          title: valueLabel ?? title, initial: show(current), decimal: step != step.roundToDouble());
                       if (typed == null) return;
                       setSheet(() => current = (typed.clamp(min, max) * 100).round() / 100);
                     },
@@ -336,6 +339,13 @@ Future<double?> askRuler(
                 ),
               ]),
               const SizedBox(height: 10),
+              if (valueLabel != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(valueLabel,
+                      textAlign: TextAlign.center,
+                      style: AppTheme.f(14, weight: FontWeight.w700, color: gc.textSecondary)),
+                ),
               if (vertical)
                 Row(children: [
                   Expanded(child: Center(child: reading)),
@@ -343,6 +353,12 @@ Future<double?> askRuler(
                 ])
               else ...[
                 Center(child: reading),
+                if (previewLabel != null) ...[
+                  const SizedBox(height: 3),
+                  Text(previewLabel(current),
+                      textAlign: TextAlign.center,
+                      style: AppTheme.f(14, weight: FontWeight.w800, color: gc.accent)),
+                ],
                 const SizedBox(height: 18),
                 ruler,
               ],
@@ -353,7 +369,7 @@ Future<double?> askRuler(
                     style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textTertiary, height: 1.4)),
               ],
               const SizedBox(height: 18),
-              PrimaryButton(label: t.set, onTap: () => Navigator.of(sheet).pop(current)),
+              PrimaryButton(label: confirmLabel ?? t.set, onTap: () => Navigator.of(sheet).pop(current)),
               if (clearLabel != null)
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,

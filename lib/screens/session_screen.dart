@@ -1634,18 +1634,22 @@ class SessionScreen extends StatelessWidget {
 
   bool _showsEffort(String mode) => fit.logRpe && mode != 'cardio';
 
+  String _formatEffort(double value) => fmt((value * 100).round() / 100);
+
   Widget _effortCell(GymColors gc, int exIdx, int j, SessionSet st, String mode, bool locked) {
     final ex = fit.session?.exercises[exIdx];
     final waiting = ex != null && _asksEffort(ex, j, mode);
     final rpe = st.rpe;
+    final shown = rpe == null ? null : _formatEffort(fit.usesRir ? 10 - rpe : rpe);
     return Builder(
       builder: (ctx) => Semantics(
+        key: ValueKey(('session-effort', exIdx, j)),
         button: true,
         label: fit.usesRir ? 'RIR' : 'RPE',
-        value: rpe == null ? null : fmt(fit.usesRir ? 10 - rpe : rpe),
+        value: shown,
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: locked ? null : () => _editEffort(ctx, exIdx, j, rpe),
+          onTap: locked ? null : () => _editEffort(ctx, exIdx, j, timed: mode == 'time'),
           child: SizedBox(
             height: 44,
             child: Center(
@@ -1663,7 +1667,7 @@ class SessionScreen extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  rpe == null ? '–' : fmt(fit.usesRir ? 10 - rpe : rpe),
+                  shown ?? '–',
                   style: AppTheme.f(14,
                       weight: FontWeight.w700, color: rpe == null ? gc.textTertiary : gc.text),
                 ),
@@ -1675,20 +1679,29 @@ class SessionScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _editEffort(BuildContext context, int exIdx, int j, double? rpe) async {
-    final rir = fit.usesRir;
-    final v = await askRuler(context,
-        title: rir ? 'RIR' : 'RPE',
-        value: rir ? 10 - (rpe ?? 8) : rpe ?? 8,
-        min: rir ? 0 : 1,
-        max: rir ? 9 : 10,
+  Future<void> _editEffort(BuildContext context, int exIdx, int j, {required bool timed}) {
+    final inReserve = !timed || fit.usesRir;
+    final title = timed && inReserve ? 'RIR' : 'RPE';
+    return fit.editSessionEffort(exIdx, j, (initialRpe, hasValue) async {
+      final value = await askRuler(
+        context,
+        title: title,
+        value: inReserve ? 10 - initialRpe : initialRpe,
+        min: inReserve ? 0 : 1,
+        max: inReserve ? 9 : 10,
         step: 0.5,
         majorEvery: 2,
-        format: (v) => fmt(v),
-        hint: rir ? t.rirHint : t.rpeHint,
-        clearLabel: rpe == null ? null : t.none);
-    if (v == null) return;
-    fit.setSessionRpe(exIdx, j, v.isNaN ? null : (rir ? 10 - v : v));
+        format: _formatEffort,
+        hint: timed ? (inReserve ? t.rirHint : t.rpeHint) : t.remainingRepsHint,
+        clearLabel: hasValue ? t.none : null,
+        confirmLabel: timed ? null : t.save,
+        valueLabel: timed ? null : t.remainingRepsTitle,
+        unit: timed ? '' : t.remainingRepsUnit,
+        previewLabel: timed ? null : (value) => 'RPE ${_formatEffort(10 - value)}',
+      );
+      if (value == null) return null;
+      return (rpe: value.isNaN ? null : (inReserve ? 10 - value : value));
+    });
   }
 
   Widget _dashedAction(GymColors gc, String label, VoidCallback onTap) => GestureDetector(

@@ -374,8 +374,7 @@ class SettingsScreen extends StatelessWidget {
                     ],
                     () => fit.effortMode,
                     fit.setEffortMode,
-                    hint: t.effortHint,
-                    rowHint: t.effortRowHint,
+                    hint: t.effortDisplayHint,
                   ),
                   _choiceRow(
                     context,
