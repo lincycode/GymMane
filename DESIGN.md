@@ -4,20 +4,22 @@ description: 延续 GymMane 的原生 Android 训练界面与已批准的个人�
 colors:
   brand-pine: "#103D2C"
   brand-cream: "#FFF2D5"
-  light-ember: "#1A1713"
+  light-ember: "#244E3B"
   light-onEmber: "#FFFFFF"
-  light-accent: "#9E4E27"
+  light-accent: "#38634A"
+  light-accentSoft: "#E2EDE3"
   dark-ember: "#FFFFFF"
   dark-onEmber: "#0A0A0A"
   dark-accent: "#D9A184"
   light-sage: "#3D7A52"
   dark-sage: "#8FA377"
-  light-bg: "#F7F4F0"
+  light-bg: "#F3F7F3"
   light-bgRaised: "#FFFFFF"
-  light-bgRaised2: "#ECE8E3"
-  light-border: "#E0DBD5"
-  light-text: "#1A1713"
-  light-textSecondary: "#5F574F"
+  light-bgRaised2: "#E8EEE8"
+  light-border: "#D7E1D8"
+  light-text: "#1E2C24"
+  light-textSecondary: "#54645A"
+  light-textTertiary: "#657569"
   dark-bg: "#0A0A0A"
   dark-bgRaised: "#1C1C1C"
   dark-bgRaised2: "#2B2B2B"
@@ -81,13 +83,13 @@ components:
 
 **Creative North Star: "延续 GymMane 的熟悉训练界面"**
 
-EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用 Enoch 于 2026-11-13 选定的「松绿奶油」全身跑者，延续 GymMane 原始跑者的姿态，统一为松绿底与奶油色剪影。品牌变化不替换应用主题。
+EnoGym 的浅色主题采用 Enoch 于 2026-11-13 对比页面后选定的「鼠尾草白」：浅灰绿背景、白色内容面与深松绿操作。近黑深色、AMOLED、Nunito 字体、圆角内容面、Phosphor 图标与底部导航延续原有实现。个人品牌采用同日选定的「松绿奶油」全身跑者，延续 GymMane 原始跑者的姿态，统一为松绿底与奶油色剪影。
 
 共享界面规则延续现有实现；品牌图标于 2026-11-13 更新为「松绿奶油」，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。
 
 **Key Characteristics:**
 - 保留浅色、深色与 AMOLED 三套既有主题。
-- 主操作使用黑白反差，铜色仍承担界面强调，图标独立使用松绿与奶油色。
+- 浅色主操作使用深松绿与白色反差，界面强调使用灰绿；深色与 AMOLED 保留黑白操作与铜色强调。图标独立使用松绿与奶油色。
 - 内容按圆角容器分组，浮层和底部导航保留原有层次。
 - 品牌图形与个人维护归属并存，原作者署名持续可见。
 
@@ -101,15 +103,15 @@ EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内
 
 ### Primary
 
-`ember` / `onEmber` 是黑白主操作配对；`accent` 是随主题变化的铜色强调。保留源码命名，不能因 `ember` 这个名称把主按钮改成橙色。AMOLED 共享深色强调和文字角色，但主操作的 `onEmber` 使用纯黑。
+`ember` / `onEmber` 在浅色下是深松绿 `#244E3B` 与白色配对，`accent` 为灰绿 `#38634A`，`accentSoft` 为浅绿 `#E2EDE3`。深色与 AMOLED 保留原有黑白主操作和铜色强调。保留源码命名，不能因 `ember` 这个名称把主按钮改成橙色。AMOLED 共享深色强调和文字角色，但主操作的 `onEmber` 使用纯黑。
 
 ### Secondary
 
-`sage` 表达成功反馈，模板添加后的提示沿用这一角色。其余状态色、`brass`、透明叠层、`pageBg` 和 `navBg` 继续从 `GymColors` 读取；这里没有复制完整色表或生成新的色阶。
+`sage` 表达成功反馈，模板添加后的提示沿用这一角色。成功、信息、警告、错误与 `brass` 保留原色；计划卡片的自定义颜色及出勤热力图的独立色阶也保留。透明叠层、`pageBg` 和 `navBg` 继续从 `GymColors` 读取；这里没有复制完整色表或生成新的色阶。
 
 ### Neutral
 
-浅色是暖灰底与白色内容面；深色和 AMOLED 使用各自的近黑底与灰色内容面。`text` 承担正文，`textSecondary` 承担次要但必须辨识的字段与说明。边界使用主题 `border`。
+浅色是浅灰绿 `#F3F7F3` 底与白色内容面，次级内容面为 `#E8EEE8`；深色和 AMOLED 使用各自的近黑底与灰色内容面。`text` 承担正文，`textSecondary` 承担次要但必须辨识的字段与说明。边界使用主题 `border`。鼠尾草白只映射既有颜色角色，不增加绿色区域或改变布局。
 
 **The Theme Roles Rule.** 组件从当前 `context.gc` 取色；品牌 PNG 的松绿与奶油色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。
 
@@ -156,6 +158,6 @@ Display、正文和圆润标题均使用项目内置 Nunito，`disp`、`sans`、
 - **Do** 对新必要文字按实际主题和背景检查可读性，并保留可访问名称与稳定操作定位。
 
 ### Don't:
-- **Don't** 因个人品牌更新而替换 GymMane 的主题、字体、导航或训练流程。
+- **Don't** 因个人品牌更新而改动未获确认的主题、字体、导航或训练流程；本轮只落实已确认的鼠尾草白浅色配色。
 - **Don't** 把本轮页面顺序、局部字号或验证范围误写成全应用规则或完整无障碍合规结论。
 - **Don't** 将旧组件的低对比度三级文字、装饰性眉题或字符图标提升为新增界面规范。

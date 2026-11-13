@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('light theme belongs to the same family as dark', () {
+  group('theme palettes and contrast', () {
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       await Store.instance.init();
@@ -26,25 +26,29 @@ void main() {
       return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
     }
 
-    double warmth(Color c) => (c.r - c.b) * 255;
-
-    test('light neutrals are warm, not cold grey', () {
+    test('light neutrals use a restrained sage tint', () {
       for (final c in [GymColors.light.bg, GymColors.light.bgRaised2, GymColors.light.border]) {
-        expect(warmth(c), greaterThan(6), reason: 'neutro frío: $c');
+        final hsl = HSLColor.fromColor(c);
+        expect(hsl.hue, inInclusiveRange(100, 150));
+        expect(hsl.saturation, lessThan(0.25));
+        expect(hsl.lightness, greaterThan(0.85));
       }
     });
 
     test('every text colour on light is actually readable', () {
-      final bg = GymColors.light.bg;
-      expect(contrast(bg, GymColors.light.text), greaterThan(7), reason: 'principal, AAA');
-      expect(contrast(bg, GymColors.light.textSecondary), greaterThan(4.5), reason: 'secundario, AA');
-
-      expect(contrast(bg, GymColors.light.textTertiary), greaterThan(3), reason: 'terciario');
+      final gc = GymColors.light;
+      for (final bg in [gc.bg, gc.bgRaised, gc.bgRaised2, gc.accentSoft]) {
+        expect(contrast(bg, gc.text), greaterThan(7), reason: 'primary on $bg');
+        expect(contrast(bg, gc.textSecondary), greaterThan(4.5), reason: 'secondary on $bg');
+        expect(contrast(bg, gc.textTertiary), greaterThan(3), reason: 'tertiary on $bg');
+      }
     });
 
-    test('the light accent reads on bone', () {
-
-      expect(contrast(GymColors.light.bg, GymColors.light.accent), greaterThanOrEqualTo(4.5));
+    test('the light accent reads on page, card and selected surfaces', () {
+      final gc = GymColors.light;
+      for (final bg in [gc.bg, gc.bgRaised, gc.accentSoft]) {
+        expect(contrast(bg, gc.accent), greaterThanOrEqualTo(4.5));
+      }
     });
 
     test('dark text stays readable too', () {
