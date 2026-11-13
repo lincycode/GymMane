@@ -36,6 +36,10 @@ import 'sticker_screen.dart';
 class SessionScreen extends StatelessWidget {
   const SessionScreen({super.key});
 
+  static const _headerTopPadding = 12.0;
+  static const _liveBarHeight = 48.0;
+  static const restBannerOffset = _headerTopPadding + _liveBarHeight + 8;
+
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
@@ -44,7 +48,7 @@ class SessionScreen extends StatelessWidget {
       bottom: false,
       child: SingleChildScrollView(
         clipBehavior: Clip.none,
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, _headerTopPadding, 20, 32),
         child: fit.isSessionComplete ? _complete(context, gc) : _active(context, gc),
       ),
     );
@@ -265,7 +269,7 @@ class SessionScreen extends StatelessWidget {
         Positioned.fill(
           child: Column(children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 10),
+              padding: const EdgeInsets.fromLTRB(20, _headerTopPadding, 20, 10),
               child: s.manual ? _manualBar(context, gc, s) : _liveBar(gc, locked),
             ),
             Expanded(
@@ -1227,7 +1231,7 @@ class SessionScreen extends StatelessWidget {
                 onTap: () => _setLock(true),
                 child: SizedBox(
                   width: 44,
-                  height: 48,
+                  height: _liveBarHeight,
                   child: Center(
                     child: Container(
                       width: 36,
@@ -1254,7 +1258,7 @@ class SessionScreen extends StatelessWidget {
               onTap: fit.toggleSessionPause,
               child: SizedBox(
                 width: 48,
-                height: 48,
+                  height: _liveBarHeight,
                 child: Center(
                   child: Container(
                     width: 36,

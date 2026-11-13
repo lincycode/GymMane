@@ -971,21 +971,28 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
     return kind != 'cardio' && kind != 'sport';
   }
 
-  Map<String, double> muscleSetsOver(int days) {
-    final today = _dayKey(DateTime.now());
-    return Map.of(_remember(('setsOver', days), () => _muscleSetsFrom(shiftDays(today, -(days - 1))), today));
+  Iterable<(String, double)> _muscleSetsFor(LoggedExercise exercise) sync* {
+    final sets = exercise.workingSets.length;
+    if (sets == 0 || !countsForMuscles(exercise.id)) return;
+    yield (exercise.primary, sets.toDouble());
+    for (final muscle in _secondaryMusclesForSnapshot(exercise.id, exercise.primary)) {
+      yield (muscle, sets / 2);
+    }
   }
 
-  Map<String, double> _muscleSetsFrom(DateTime start) {
+  Map<String, double> muscleSetsOver(int days) {
+    final today = _dayKey(DateTime.now());
+    return Map.of(_remember(('setsOver', days), () => _muscleSetsInRange(shiftDays(today, 1 - days), today), today));
+  }
+
+  Map<String, double> _muscleSetsInRange(DateTime start, DateTime end) {
     final out = <String, double>{};
     for (final s in sessions) {
-      if (_dayKey(s.day).isBefore(start)) continue;
+      final day = _dayKey(s.day);
+      if (day.isBefore(start) || day.isAfter(end)) continue;
       for (final e in s.exercises) {
-        final n = e.workingSets.length.toDouble();
-        if (n <= 0 || !countsForMuscles(e.id)) continue;
-        out[e.primary] = (out[e.primary] ?? 0) + n;
-        for (final m in _secondaryMusclesForSnapshot(e.id, e.primary)) {
-          out[m] = (out[m] ?? 0) + n / 2;
+        for (final (muscle, sets) in _muscleSetsFor(e)) {
+          out[muscle] = (out[muscle] ?? 0) + sets;
         }
       }
     }
@@ -1031,24 +1038,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
 
   Map<String, double> muscleSetsBetween(DateTime from, DateTime to) {
     final a = _dayKey(from), b = _dayKey(to);
-    return Map.of(_remember(('setsBetween', a, b), () => _muscleSetsBetween(a, b)));
-  }
-
-  Map<String, double> _muscleSetsBetween(DateTime a, DateTime b) {
-    final out = <String, double>{};
-    for (final s in sessions) {
-      final d = _dayKey(s.day);
-      if (d.isBefore(a) || d.isAfter(b)) continue;
-      for (final e in s.exercises) {
-        final n = e.workingSets.length.toDouble();
-        if (n <= 0 || !countsForMuscles(e.id)) continue;
-        out[e.primary] = (out[e.primary] ?? 0) + n;
-        for (final m in _secondaryMusclesForSnapshot(e.id, e.primary)) {
-          out[m] = (out[m] ?? 0) + n / 2;
-        }
-      }
-    }
-    return out;
+    return Map.of(_remember(('setsBetween', a, b), () => _muscleSetsInRange(a, b)));
   }
 
   Map<String, double> muscleHeatBetween(DateTime from, DateTime to) {
@@ -1153,18 +1143,19 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
   }
 
   Map<String, int?> _daysSinceTrained(DateTime today) {
-    final last = <String, DateTime>{};
+    final days = <String, int>{};
     for (final s in sessions) {
-      final day = _dayKey(s.day);
+      final age = daysBetween(s.day, today);
+      if (age < 0) continue;
       for (final e in s.exercises) {
-        if (e.workingSets.isEmpty) continue;
-        final seen = last[e.primary];
-        if (seen == null || day.isAfter(seen)) last[e.primary] = day;
+        for (final (muscle, _) in _muscleSetsFor(e)) {
+          final previous = days[muscle];
+          if (previous == null || age < previous) days[muscle] = age;
+        }
       }
     }
     return {
-      for (final m in kMuscles)
-        m.id: last[m.id] == null ? null : math.max(0, (today.difference(last[m.id]!).inHours / 24).round()),
+      for (final m in kMuscles) m.id: days[m.id],
     };
   }
 

@@ -117,4 +117,21 @@ void main() {
     expect(fit.route, 'settings');
     await tester.pump(const Duration(seconds: 1));
   });
+
+  testWidgets('the narrow bottom bar reserves room on both sides of Start Workout', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    fit.resetRoute('exercises');
+    await tester.pumpWidget(const GymManeApp());
+    await tester.pumpAndSettle();
+
+    final progress = tester.getRect(find.bySemanticsLabel(t.progress));
+    final exercises = tester.getRect(find.bySemanticsLabel(t.exercises).last);
+    final play = tester.getRect(find.bySemanticsLabel(t.startWorkout));
+    expect(progress.width, greaterThanOrEqualTo(48));
+    expect(exercises.width, greaterThanOrEqualTo(48));
+    expect(play.center.dx, 160);
+    expect(play.left - progress.right, greaterThanOrEqualTo(12));
+    expect(exercises.left - play.right, greaterThanOrEqualTo(12));
+  });
 }

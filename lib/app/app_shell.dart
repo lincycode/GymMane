@@ -202,13 +202,11 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
     if (!mounted || s == null || ex == null) return;
     final done = ex.sets.where((st) => st.done).length;
     final next = done < ex.sets.length ? t.liveSet(done + 1, ex.sets.length) : t.liveAllDone;
-    showNotchToast(
+    showRestToast(
       context,
       t.restOverTitle,
       subtitle: '${t.catalogName(ex.id, ex.name)} · $next',
-      icon: PhosphorIconsFill.timer,
-      accent: context.gc.sage,
-      sound: false,
+      topOffset: fit.route == 'session' ? SessionScreen.restBannerOffset : 12,
     );
   }
 
@@ -868,7 +866,10 @@ class _NavBar extends StatefulWidget {
 class _NavBarState extends State<_NavBar> {
   static const height = 68.0;
   static const _preferredItemWidth = 58.0;
+  static const _minItemWidth = 48.0;
   static const _fabW = 48.0;
+  static const _preferredCenterPadding = 12.0;
+  static const _preferredPillWidth = 46.0;
   static const _routes = ['home', 'progress', 'exercises', 'settings'];
 
   double? _dragX;
@@ -887,8 +888,8 @@ class _NavBarState extends State<_NavBar> {
   double _slotX(int i) => switch (i) {
         0 => 0,
         1 => _itemWidth + _gap,
-        2 => 2 * _itemWidth + 3 * _gap + _fabW,
-        _ => 3 * _itemWidth + 4 * _gap + _fabW,
+        2 => _slotW - 2 * _itemWidth - _gap,
+        _ => _slotW - _itemWidth,
       };
 
   void _go(int i) => [fit.goHome, fit.goProgress, fit.goExercises, fit.goSettings][i]();
@@ -929,9 +930,15 @@ class _NavBarState extends State<_NavBar> {
     final gc = context.gc;
     return LayoutBuilder(
         builder: (context, c) {
-          _slotW = c.maxWidth - 28;
-          _itemWidth = ((_slotW - _fabW) / 4).clamp(0.0, _preferredItemWidth);
-          _gap = ((_slotW - 4 * _itemWidth - _fabW) / 4).clamp(0.0, 40.0);
+          const controlsWidth = 4 * _minItemWidth + _fabW;
+          final inset = ((c.maxWidth - controlsWidth) / 2 - _preferredCenterPadding).clamp(0.0, 14.0);
+          _slotW = c.maxWidth - 2 * inset;
+          final centerPadding = ((_slotW - controlsWidth) / 2).clamp(0.0, _preferredCenterPadding);
+          final tabSpace = _slotW - _fabW - 2 * centerPadding;
+          _itemWidth = (tabSpace / 4).clamp(0.0, _preferredItemWidth);
+          _gap = math.max(0.0, (tabSpace - 4 * _itemWidth) / 4);
+          final pillWidth = math.min(_preferredPillWidth, _itemWidth);
+          final pillInset = (_itemWidth - pillWidth) / 2;
           final drag = _dragX;
 
           return Stack(
@@ -954,27 +961,26 @@ class _NavBarState extends State<_NavBar> {
                 ),
               ),
               Positioned(
-                left: 14,
-                right: 14,
+                left: inset,
+                right: inset,
                 top: 0,
                 bottom: 0,
                 child: _LiquidPill(
-                  left: _slotX(_selectedIndex) - _gap * 0.2,
-                  dragLeft: drag == null ? null : drag - _itemWidth / 2 - _gap * 0.2,
-                  width: _itemWidth + _gap * 0.4,
+                  left: _slotX(_selectedIndex) + pillInset,
+                  dragLeft: drag == null ? null : drag - pillWidth / 2,
+                  width: pillWidth,
                   color: gc.text.withValues(alpha: fit.dark ? 0.13 : 0.08),
                 ),
               ),
               Positioned(
-                left: 14,
-                right: 14,
+                left: inset,
+                right: inset,
                 top: 0,
                 bottom: 0,
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onHorizontalDragStart: (d) {
-                    final fab = 2 * _itemWidth + 2 * _gap + _fabW / 2;
-                    if ((d.localPosition.dx - fab).abs() < _fabW / 2 + 4) return;
+                    if ((d.localPosition.dx - _slotW / 2).abs() < _fabW / 2 + 4) return;
                     HapticFeedback.selectionClick();
                     _dragTo(d.localPosition.dx);
                   },
@@ -993,7 +999,7 @@ class _NavBarState extends State<_NavBar> {
                       _item(context, 0, PhosphorIconsRegular.house, PhosphorIconsFill.house, t.home, fit.goHome),
                       _item(context, 1, PhosphorIconsRegular.chartLineUp, PhosphorIconsFill.chartLineUp, t.progress,
                           fit.goProgress),
-                      _fab(context),
+                      Padding(padding: EdgeInsets.symmetric(horizontal: centerPadding), child: _fab(context)),
                       _item(context, 2, PhosphorIconsRegular.barbell, PhosphorIconsFill.barbell, t.exercises,
                           fit.goExercises),
                       _item(context, 3, PhosphorIconsRegular.userCircle, PhosphorIconsFill.userCircle, t.profile.toUpperCase(),
@@ -1062,24 +1068,28 @@ class _NavBarState extends State<_NavBar> {
 
   Widget _fab(BuildContext context) {
     final gc = context.gc;
-    return GestureDetector(
-      onTap: () => _play(context),
-      onLongPress: () => showStartSheet(context),
-      child: Container(
-        width: _fabW,
-        height: _fabW,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [gc.accent, gc.brass],
+    return Semantics(
+      button: true,
+      label: fit.sessionParked ? t.resumeWorkout : t.startWorkout,
+      child: GestureDetector(
+        onTap: () => _play(context),
+        onLongPress: () => showStartSheet(context),
+        child: Container(
+          width: _fabW,
+          height: _fabW,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [gc.accent, gc.brass],
+            ),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(color: gc.accent.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4)),
+            ],
           ),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(color: gc.accent.withValues(alpha: 0.45), blurRadius: 18, offset: const Offset(0, 6)),
-          ],
+          child: Icon(PhosphorIconsFill.play, size: 21, color: gc.bg),
         ),
-        child: Icon(PhosphorIconsFill.play, size: 21, color: gc.bg),
       ),
     );
   }
@@ -1157,7 +1167,7 @@ class _LiquidPillState extends State<_LiquidPill> with TickerProviderStateMixin 
         _shown = l;
         final base = Color.lerp(widget.color, widget.color.withValues(alpha: (widget.color.a * 2.4).clamp(0.0, 1.0)), lift)!;
         final grow = 6 * lift;
-        final inset = 10 + 8 * (1 - squash) - 5 * lift;
+        final inset = 13 + 8 * (1 - squash) - 5 * lift;
         return Stack(
           clipBehavior: Clip.none,
           children: [

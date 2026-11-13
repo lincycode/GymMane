@@ -3,8 +3,10 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../services/beeper.dart';
+import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'glass.dart';
 
@@ -312,6 +314,42 @@ Future<void> showNotchToast(
   VoidCallback? onTap,
   Duration? duration,
   bool sound = true,
+}) => _showToast(
+      context,
+      title,
+      subtitle: subtitle,
+      icon: icon,
+      accent: accent,
+      action: action,
+      onTap: onTap,
+      duration: duration,
+      sound: sound,
+    );
+
+Future<void> showRestToast(
+  BuildContext context,
+  String title, {
+  required String subtitle,
+  required double topOffset,
+}) => _showToast(
+      context,
+      title,
+      subtitle: subtitle,
+      sound: false,
+      restTopOffset: topOffset,
+    );
+
+Future<void> _showToast(
+  BuildContext context,
+  String title, {
+  String? subtitle,
+  IconData? icon,
+  Color accent = const Color(0xFF8FA377),
+  String? action,
+  VoidCallback? onTap,
+  Duration? duration,
+  required bool sound,
+  double? restTopOffset,
 }) {
   final overlay = Overlay.maybeOf(context, rootOverlay: true);
   final words = '$title ${subtitle ?? ''}'.trim().split(RegExp(r'\s+')).length;
@@ -326,6 +364,7 @@ Future<void> showNotchToast(
     duration: duration ?? Duration(milliseconds: math.max(2200, 900 + words * 330)),
     themes: InheritedTheme.capture(from: context, to: overlay.context),
     reducedMotion: MediaQuery.maybeOf(context)?.disableAnimations ?? false,
+    restTopOffset: restTopOffset,
   );
   final session = _sessions[overlay] ??= _ToastSession(overlay);
   session.show(request);
@@ -344,6 +383,7 @@ class _ToastRequest {
     required this.duration,
     required this.themes,
     required this.reducedMotion,
+    required this.restTopOffset,
   });
   final String title;
   final String? subtitle;
@@ -354,7 +394,11 @@ class _ToastRequest {
   final Duration duration;
   final CapturedThemes themes;
   final bool reducedMotion;
+  final double? restTopOffset;
   final done = Completer<void>();
+
+  Duration get entrance =>
+      reducedMotion ? Duration.zero : Duration(milliseconds: restTopOffset == null ? 650 : 320);
 
   void complete() {
     if (!done.isCompleted) done.complete();
@@ -445,8 +489,7 @@ class _ToastHostState extends State<_ToastHost> {
         dismiss();
         return;
       }
-      final entrance = widget.request.reducedMotion ? Duration.zero : const Duration(milliseconds: 650);
-      _timer = Timer(entrance + widget.request.duration, dismiss);
+      _timer = Timer(widget.request.entrance + widget.request.duration, dismiss);
     });
   }
 
@@ -496,44 +539,200 @@ class _ToastHostState extends State<_ToastHost> {
 
   @override
   Widget build(BuildContext context) {
-    final view = View.of(context);
-    final media = MediaQueryData.fromView(view).copyWith(
-      disableAnimations: widget.request.reducedMotion,
+    final request = widget.request;
+    final media = MediaQueryData.fromView(View.of(context)).copyWith(
+      disableAnimations: request.reducedMotion,
       textScaler: MediaQuery.textScalerOf(context),
     );
-    return Positioned.fill(
-      child: widget.request.themes.wrap(
-        MediaQuery(
-          data: media,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final source = sourceFor(media, constraints.maxWidth);
-              final extra = _extraFor(widget.request);
-              return Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: source.bottom + 170 + extra,
-                  child: LiquidNotch(
-                    visible: _visible,
-                    extraHeight: extra,
-                    sourceRect: source,
-                    sourceColor: Colors.black,
-                    pillColor: const Color(0xFF0B0B0B),
-                    onDismissed: () => widget.session.finished(widget.request),
-                    onTap: () {
-                      dismiss();
-                      widget.request.onTap?.call();
-                    },
-                    child: _ToastContent(request: widget.request),
-                  ),
-                ),
-              );
-            },
+    final restTopOffset = request.restTopOffset;
+    final child = restTopOffset == null ? _notch(media) : _restBanner(restTopOffset);
+    return Positioned.fill(child: request.themes.wrap(MediaQuery(data: media, child: child)));
+  }
+
+  Widget _restBanner(double topOffset) => SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 20),
+        bottom: false,
+        child: Padding(
+          padding: EdgeInsets.only(top: topOffset),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: _RestToast(
+              title: widget.request.title,
+              subtitle: widget.request.subtitle!,
+              entrance: widget.request.entrance,
+              visible: _visible,
+              onTap: dismiss,
+              onDismissed: () => widget.session.finished(widget.request),
+            ),
+          ),
+        ),
+      );
+
+  Widget _notch(MediaQueryData media) => LayoutBuilder(
+        builder: (context, constraints) {
+          final request = widget.request;
+          final source = sourceFor(media, constraints.maxWidth);
+          final extra = _extraFor(request);
+          return Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              height: source.bottom + 170 + extra,
+              child: LiquidNotch(
+                visible: _visible,
+                extraHeight: extra,
+                sourceRect: source,
+                pillColor: const Color(0xFF0B0B0B),
+                onDismissed: () => widget.session.finished(request),
+                onTap: () {
+                  dismiss();
+                  request.onTap?.call();
+                },
+                child: _ToastContent(request: request),
+              ),
+            ),
+          );
+        },
+      );
+}
+
+class _RestToast extends StatefulWidget {
+  const _RestToast({
+    required this.title,
+    required this.subtitle,
+    required this.entrance,
+    required this.visible,
+    required this.onTap,
+    required this.onDismissed,
+  });
+
+  final String title, subtitle;
+  final Duration entrance;
+  final bool visible;
+  final VoidCallback onTap, onDismissed;
+
+  @override
+  State<_RestToast> createState() => _RestToastState();
+}
+
+class _RestToastState extends State<_RestToast> with SingleTickerProviderStateMixin {
+  late final _controller = AnimationController(
+    vsync: this,
+    duration: widget.entrance,
+    reverseDuration: widget.entrance == Duration.zero ? Duration.zero : const Duration(milliseconds: 180),
+    value: widget.entrance == Duration.zero ? 1 : 0,
+  );
+  late final _slide = Tween(begin: -8.0, end: 0.0)
+      .chain(CurveTween(curve: Curves.easeOutCubic))
+      .animate(_controller);
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.entrance != Duration.zero) _controller.forward();
+  }
+
+  @override
+  void didUpdateWidget(_RestToast oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.visible && !widget.visible) {
+      _controller.reverse().then((_) {
+        if (mounted) widget.onDismissed();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    return IgnorePointer(
+      ignoring: !widget.visible,
+      child: ExcludeSemantics(
+        excluding: !widget.visible,
+        child: FadeTransition(
+          opacity: _controller,
+          alwaysIncludeSemantics: true,
+          child: AnimatedBuilder(
+            animation: _slide,
+            builder: (context, child) => Transform.translate(offset: Offset(0, _slide.value), child: child),
+            child: Semantics(
+              container: true,
+              liveRegion: true,
+              label: '${widget.title}\n${widget.subtitle}',
+              onTap: widget.onTap,
+              excludeSemantics: true,
+              child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: widget.onTap, child: _card(gc)),
+            ),
           ),
         ),
       ),
     );
   }
+
+  Widget _card(GymColors gc) => ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 332),
+        child: Material(
+          color: gc.bgRaised,
+          elevation: 6,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18), side: BorderSide(color: gc.border)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 10, 16, 10),
+            child: Row(
+              children: [
+                _timerIcon(gc),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: AppTheme.f(14, weight: FontWeight.w800, color: gc.text, height: 1.1),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        widget.subtitle,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTheme.f(12, weight: FontWeight.w600, color: gc.textSecondary, height: 1.2),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  Widget _timerIcon(GymColors gc) => Container(
+        width: 36,
+        height: 36,
+        padding: const EdgeInsets.all(3.5),
+        decoration: BoxDecoration(color: gc.sageSoft, shape: BoxShape.circle),
+        child: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: [
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) => CircularProgressIndicator(
+                value: Curves.easeOut.transform(_controller.value),
+                strokeWidth: 2,
+                strokeCap: StrokeCap.round,
+                color: gc.sage,
+              ),
+            ),
+            Icon(PhosphorIconsFill.timer, size: 15, color: gc.sage),
+          ],
+        ),
+      );
 }
 
 class _ToastContent extends StatelessWidget {

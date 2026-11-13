@@ -85,6 +85,32 @@ void main() {
       expect(fit.untrainedLongest().length, 3);
     });
 
+    test('muscle recency includes secondary work and uses the most recent working set', () {
+      final today = DateTime.now();
+      final raise = fit.exerciseById('v1qBec9')!;
+      expect(raise.secondary, contains('trapezius'));
+      fit.sessions.addAll([
+        LoggedSession(shiftDays(today, -1), 0, [
+          LoggedExercise(raise.id, raise.name, raise.primary, [LoggedSet(10, 12), LoggedSet(10, 12)]),
+        ]),
+        LoggedSession(shiftDays(today, -9), 0, [
+          LoggedExercise('old-shrug', 'Shrug', 'trapezius', [LoggedSet(8, 20)]),
+        ]),
+        LoggedSession(shiftDays(today, 0), 0, [
+          LoggedExercise(raise.id, raise.name, raise.primary, [LoggedSet(10, 5, kind: SetKind.warmup)]),
+        ]),
+        LoggedSession(shiftDays(today, 1), 0, [
+          LoggedExercise('future-shrug', 'Shrug', 'trapezius', [LoggedSet(8, 25)]),
+        ]),
+      ]);
+
+      expect(fit.muscleSetsBetween(shiftDays(today, -6), today)['trapezius'], 1);
+      expect(fit.muscleSetsOver(7)['trapezius'], 1);
+      expect(fit.daysSinceTrained(now: today)['trapezius'], 1);
+      expect(fit.daysSinceTrained(now: today)['shoulders'], 1);
+      expect(fit.untrainedLongest(now: today, atLeast: 2), isNot(contains('trapezius')));
+    });
+
     test('#300 el cardio no suma series al músculo aunque lleve uno', () {
       final run = fit.addCustomExercise(name: 'Escaladora', primary: 'quads', equipment: 'Machine', mode: 'cardio');
       final walk = fit.addCustomExercise(name: 'Cinta', primary: 'quads', equipment: 'Machine', kind: 'cardio');
@@ -97,6 +123,7 @@ void main() {
       final sets = fit.muscleSetsOver(7);
       expect(sets['quads'], isNull);
       expect(sets['chest'], 2);
+      expect(fit.daysSinceTrained(now: now)['quads'], isNull);
       expect(fit.countsForMuscles(bench()), isTrue);
       expect(fit.countsForMuscles(run), isFalse);
       final treadmill = fit.allExercises.firstWhere((e) => fit.kindOf(e) == 'cardio');
