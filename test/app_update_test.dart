@@ -206,6 +206,7 @@ void main() {
     ]);
     await HttpOverrides.runZoned(() async {
       final update = (await AppUpdateService().check())!;
+      expect(client.urls.first, Uri.https('api.github.com', '/repos/lincycode/EnoGym/releases/latest'));
       expect(update.versionName, version);
       expect(update.versionCode, 112);
       expect(update.apkUrl.path, '/repos/$updateRepository/releases/assets/1');

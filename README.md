@@ -4,7 +4,7 @@
 
 Enoch 维护的 Android 训练记录工具。可以安排每周训练，按组记录重量和次数，查看组间休息倒计时，再回顾训练历史。
 
-[下载 EnoGym](https://github.com/lincycode/GymMane/releases/latest) · [维护说明](docs/OWN.md)
+[下载 EnoGym](https://github.com/lincycode/EnoGym/releases/latest) · [维护说明](docs/OWN.md)
 
 ## EnoGym 的改动
 

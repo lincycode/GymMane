@@ -1,6 +1,7 @@
 const ownAppName = 'EnoGym';
 const ownAppVersion = String.fromEnvironment('OWN_VERSION', defaultValue: 'development');
-const ownSourceUrl = 'https://github.com/lincycode/GymMane';
+const ownRepository = 'lincycode/EnoGym';
+const ownSourceUrl = 'https://github.com/$ownRepository';
 const ownMaintainer = 'Enoch';
 
 // Approved pine-and-cream identity; shared with the asset generator.

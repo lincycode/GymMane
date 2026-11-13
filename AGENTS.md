@@ -2,7 +2,7 @@
 
 默认使用简体中文。开始前阅读 README.md、PRODUCT.md、DESIGN.md、CONTRIBUTING.md、docs/OWN.md 和本次相关代码；先检查 Git 状态，保护已有改动。
 
-- 原作者仓库是 `upstream`，个人 fork 是 `origin`。默认分支 `own` 展示 EnoGym，并作为个人版的开发和发布分支。`main` 用于对照上游。个人修改在 `own` 或从其创建的 `codex/` 功能分支完成。长期同步使用 merge，不重写已交付历史。
+- 原作者仓库是 `upstream`（`InlitX/GymMane`），个人独立仓库是 `origin`（`lincycode/EnoGym`）。默认分支 `own` 展示 EnoGym，并作为个人版的开发和发布分支。`main` 用于对照上游。个人修改在 `own` 或从其创建的 `codex/` 功能分支完成。长期同步使用 merge，不重写已交付历史。旧 fork `lincycode/GymMane` 保留历史发布和供旧版升级的 1.0.8。
 - 沿用 GymMane 的 Flutter、FitState、模型、离线存储、主题和训练流程。EnoLift 与 openGym 是参考，不复制其业务模型或素材进来。
 - 每次决定同时考虑 UX 与 AX。优先清楚的布局、准确标签、可访问名称、稳定测试定位，不靠解释文案掩盖交互问题。
 - 候选、模板和预填不等于实际记录；取消预览不写数据。不得静默覆盖周计划、轮换顺序、历史或活动训练。

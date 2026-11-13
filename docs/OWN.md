@@ -72,7 +72,9 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 首次建议安装 `2.1.0-own.8` 或以上。own.7 使用浏览器下载 URL，在本次网络环境中遭遇 GitHub 主站连接超时；own.8 改用公开 Release asset API 和 `Accept: application/octet-stream`，同时校验资源 ID、所属仓库和浏览器 URL，处理官方 CDN 重定向。不添加代理或第三方镜像，仍需设备能访问 GitHub API 和下载 CDN。
 
-更新源固定为公开仓库 `lincycode/GymMane` 的 latest Release。每个 Release 使用 `enogym-v<versionName>` 标签，指向经过验证的 `own` 提交，并包含 arm64 APK、同名 `.sha256` 和 `enogym-update.json`。个人版标签中的 `own` 不代表 GitHub prerelease；正式更新发布为非草稿、非 prerelease。更新清单使用 Android 实际版本码（如 own.7 的 arm64 为 72），不只比较上游版本字符串。
+从 1.0.8 起，更新源是公开仓库 `lincycode/EnoGym` 的 latest Release。1.0.8 的同一份签名 APK 与校验文件发布到两个仓库，并保留为旧仓库 `lincycode/GymMane` 的 latest。旧版通过原地址升级到 1.0.8 后，再从新仓库检查后续版本。原仓库保留历史发布。
+
+每个 Release 使用 `enogym-v<versionName>` 标签，指向经过验证的 `own` 提交，并包含 arm64 APK、同名 `.sha256` 和 `enogym-update.json`。正式更新使用稳定 Release。更新清单使用 Android 实际版本码（如 1.0.8 的 arm64 为 192）。
 
 `2.1.0-own.10` 是过渡版，更新器和发布脚本同时支持 `2.1.0-own.N` 与 `1.0.0` 形式。EnoGym 从 `1.0.0` 开始独立编号。上游版本与提交记录在 `own.properties`。从旧版通过应用内更新切到独立编号，需要先装过渡版。也可以手动覆盖安装独立编号的 APK。Android 版本码沿用同一递增序列。
 
@@ -80,7 +82,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 首次使用需手动覆盖安装包含更新功能的 APK。不能卸载清数据，也不能使用原作者包或 Debug 包来覆盖。真实厂商系统的安装授权与后台行为仍需实机验收。
 
-平时完成验证后，将本次改动提交并推送到 `origin/own`。收到用户明确的发布要求后，再按以下流程创建 GitHub Release，让手机可以在应用里检查更新。
+平时完成验证后，将本次改动提交并推送到 `origin/own`（`lincycode/EnoGym`）。收到用户明确的发布要求后，再按以下流程在同一仓库创建 GitHub Release。
 
 1. 在 `own` 修改，递增 `own.properties` 的 versionName 和 versionCode，保留包名与固定签名。更新 `docs/releases/<版本>.md`。
 2. 运行相关测试、完整分析，使用 `bash scripts/build-own.sh release --no-pub` 构建。仅在依赖已正确准备后使用 `--no-pub`。验证同签名升级和数据保留，审查并提交相关源码。
@@ -117,7 +119,7 @@ Release 包名 `com.echolin.gymmane`，Debug 包名 `com.echolin.gymmane.debug`�
 
 ## 上游同步
 
-- origin: https://github.com/lincycode/GymMane
+- origin: https://github.com/lincycode/EnoGym
 - upstream: https://github.com/InlitX/GymMane
 - `own`：个人版默认分支。GitHub 首页从此分支读取 README。
 - `main`：上游对照分支。本地 `main` 跟踪 `upstream/main`。

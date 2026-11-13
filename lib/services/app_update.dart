@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-const updateRepository = 'lincycode/GymMane';
+import '../app/own_build.dart';
+
+const updateRepository = ownRepository;
 const updateAppId = 'com.echolin.gymmane';
 const updateManifestName = 'enogym-update.json';
 
