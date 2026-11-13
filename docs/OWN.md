@@ -16,17 +16,27 @@
 
 显示名为 **EnoGym**，定制与维护为 **Enoch**。关于页保留「基于 InlitX 开发的 GymMane」、原作者与原项目链接；不能把原有代码和素材的作者改署为个人原创。
 
-启动器图标采用 Enoch 于 2026-11-08 提供的第二张设计：米白跑者与斜体 E 融合，右下角为红色点缀。原稿完整保存在 `assets/brand/enogym_source.png`。内置图像工具只用于分离前景，去掉外部白边和预绘制圆角背景；Android 使用深色底和系统图标遮罩，避免双重圆角或白边。前景、图内负空间与红色元素的构图保留，平台缩放不重绘图案。PNG 元数据记录来源与处理方式。原始 `assets/icon/`、训练插图、字体和成就系统保留，项目许可证与原作者署名保留。
+启动器图标采用 Enoch 于 2026-11-13 选定的 **04「松绿奶油」**：松绿底 `#103D2C` 与奶油色 `#FFF2D5` 全身跑者，延续 GymMane 原始跑者的姿态。透明轮廓经内置图像工具精修，原始生成稿保存在 `assets/brand/enogym_pine_source.png`，提示词保存在同目录 `.prompt.txt`。生成器清理近透明底色残留、统一填色、保留抗锯齿边缘，并统一缩放和留白，不改变跑者轮廓。
+
+- `enogym_icon.png`：512 px 圆角透明图标，供 README、关于页、宽屏侧栏和月度回顾使用。
+- `enogym_foreground.png`：1024 px 透明方形前景；`enogym_monochrome.png` 提供相同轮廓的单色主题图标。
+- `enogym_legacy.png`：旧式 Android 圆角图标；`enogym_square.png`：不带预绘圆角的 iOS 方形底图。
+- `enogym_mark.png`：紧凑的透明剪影，供分享贴纸、PDF 页眉、页脚与水印使用。
+- Android 通知图标、iOS Live Activity、Web favicon、PWA 与 Apple touch icon 由同一生成器派生。Web maskable 使用独立安全区域，不能直接复用圆角图。
+
+颜色与应用内素材路径集中在 `lib/app/own_build.dart`；平台入口配置同步在 `own-launcher-icons.yaml` 与 `pubspec.yaml`，避免默认命令重新生成旧版图标。Android 前景使用 16% inset，正式资源不预绘自适应图标的圆角。更新来源元数据时同步保留 Wear OS complication 自己的功能图标。
+
+此前 Enoch 提供的跑者 E 原稿 `assets/brand/enogym_source.png`、GymMane 原始 `assets/icon/` 及训练装饰插图保持原文件，作为来源和非品牌插图保留；它们不再作为个人版启动器入口。项目许可证、原作者与原项目署名保持。
 
 重新生成图标：
 
 ```bash
 .toolchain/flutter/bin/dart --packages=.dart_tool/package_config.json scripts/generate_brand_assets.dart
 bash scripts/flutter.sh pub run flutter_launcher_icons -f own-launcher-icons.yaml
-.toolchain/flutter/bin/dart --packages=.dart_tool/package_config.json scripts/generate_brand_assets.dart --stamp-android
+.toolchain/flutter/bin/dart --packages=.dart_tool/package_config.json scripts/generate_brand_assets.dart --stamp-platforms
 ```
 
-图标工具使用锁文件中已有的 `image` 传递依赖，不增加应用依赖。`--stamp-android` 补充平台 PNG 的来源元数据，检查深浅背景和实际桌面大小。应用、分享卡片、小组件、通知及导出文档显示 EnoGym；内部存储键、备份格式和组件类名保持原值，旧备份仍可读取。既有用户资料不自动改名，新用户默认名称为 Enoch。
+图标工具使用锁文件中已有的 `image` 传递依赖，不增加应用依赖。`--stamp-platforms` 补充平台 PNG 的来源元数据（保留旧参数 `--stamp-android` 作为兼容别名），检查深浅背景和实际桌面大小。应用、分享卡片、小组件、通知及导出文档显示 EnoGym；内部存储键、备份格式和组件类名保持原值，旧备份仍可读取。既有用户资料不自动改名，新用户默认名称为 Enoch。
 
 ## 构建
 

@@ -38,3 +38,12 @@ gripper in its open and closed positions, under CC BY-SA 4.0.
 
 Nunito, by the Nunito Project Authors, under the SIL Open Font License
 (`assets/fonts/Nunito-OFL.txt`).
+
+## EnoGym icon
+
+The pine-and-cream runner derives from the original GymMane runner identity by
+InlitX. Enoch selected direction 04 on 2026-11-13; its silhouette was refined
+with built-in image generation. The source PNG and prompt are in
+`assets/brand/enogym_pine_source.*`; `scripts/generate_brand_assets.dart`
+normalizes the palette and generates the platform assets. Original GymMane
+assets and the earlier Enoch-provided runner-E source are retained.

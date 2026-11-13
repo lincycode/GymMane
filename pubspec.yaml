@@ -44,10 +44,13 @@ flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icon/ic_1024.png"
-  adaptive_icon_background: "#0C0B0A"
-  adaptive_icon_foreground: "assets/icon/ic_fg_1024.png"
-  min_sdk_android: 21
+  image_path: assets/brand/enogym_legacy.png
+  image_path_ios: assets/brand/enogym_square.png
+  adaptive_icon_background: '#103D2C'
+  adaptive_icon_foreground: assets/brand/enogym_foreground.png
+  adaptive_icon_monochrome: assets/brand/enogym_monochrome.png
+  adaptive_icon_foreground_inset: 16
+  min_sdk_android: 24
 
 flutter:
   config:
@@ -61,6 +64,7 @@ flutter:
     - docs/upstream-releases.json
     - assets/brand/enogym_foreground.png
     - assets/brand/enogym_icon.png
+    - assets/brand/enogym_mark.png
     - assets/img/
     - assets/art/
     - assets/audio/

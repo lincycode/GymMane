@@ -28,15 +28,12 @@ class AboutScreen extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: ColoredBox(
-              color: const Color(0xFF0C0B0A),
-              child: Image.asset(
-                'assets/brand/enogym_foreground.png',
-                width: 64,
-                height: 64,
-                cacheWidth: (64 * MediaQuery.devicePixelRatioOf(context)).round(),
-                excludeFromSemantics: true,
-              ),
+            child: Image.asset(
+              ownBrandIcon,
+              width: 64,
+              height: 64,
+              cacheWidth: (64 * MediaQuery.devicePixelRatioOf(context)).round(),
+              excludeFromSemantics: true,
             ),
           ),
           const SizedBox(width: 16),

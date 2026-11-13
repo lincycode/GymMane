@@ -2,6 +2,8 @@
 name: EnoGym
 description: 延续 GymMane 的原生 Android 训练界面与已批准的个人品牌。
 colors:
+  brand-pine: "#103D2C"
+  brand-cream: "#FFF2D5"
   light-ember: "#1A1713"
   light-onEmber: "#FFFFFF"
   light-accent: "#9E4E27"
@@ -79,19 +81,23 @@ components:
 
 **Creative North Star: "延续 GymMane 的熟悉训练界面"**
 
-EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用 Enoch 提供的米白跑者 E 与红色点缀；这次身份调整没有建立第二套视觉体系。
+EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用 Enoch 于 2026-11-13 选定的「松绿奶油」全身跑者，延续 GymMane 原始跑者的姿态，统一为松绿底与奶油色剪影。品牌变化不替换应用主题。
 
-本文件记录 `2.1.0-own.5` 已实现的共享规则，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。
+共享界面规则延续现有实现；品牌图标于 2026-11-13 更新为「松绿奶油」，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。
 
 **Key Characteristics:**
 - 保留浅色、深色与 AMOLED 三套既有主题。
-- 主操作使用黑白反差，铜色仍承担界面强调，图标使用米白与红色。
+- 主操作使用黑白反差，铜色仍承担界面强调，图标独立使用松绿与奶油色。
 - 内容按圆角容器分组，浮层和底部导航保留原有层次。
 - 品牌图形与个人维护归属并存，原作者署名持续可见。
 
 品牌素材来源、派生方式及署名规则统一见 [OWN.md](docs/OWN.md#个人品牌与署名)，不另建重复品牌手册。计划页的任务顺序见 [surface brief](.impeccable/surfaces/lib-screens-routines-screen-dart.md)，不提升为所有页面的布局规则。
 
 ## Colors
+
+### Brand
+
+松绿 `#103D2C` 与奶油 `#FFF2D5` 只用于品牌图标；实现常量与素材路径集中在 `lib/app/own_build.dart`，生成器共用这些常量。正式图标采用约 76% 高度的全身剪影，背景不预绘阴影、渐变或内框。Android 自适应图标交给系统裁切，Web maskable 版本单独保留更大安全区域。
 
 ### Primary
 
@@ -105,7 +111,7 @@ EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内
 
 浅色是暖灰底与白色内容面；深色和 AMOLED 使用各自的近黑底与灰色内容面。`text` 承担正文，`textSecondary` 承担次要但必须辨识的字段与说明。边界使用主题 `border`。
 
-**The Theme Roles Rule.** 组件从当前 `context.gc` 取色；品牌 PNG 的米白与红色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。
+**The Theme Roles Rule.** 组件从当前 `context.gc` 取色；品牌 PNG 的松绿与奶油色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。
 
 **The Required Labels Rule.** 本轮计划分组与 About 归属字段使用 `textSecondary`；新增必要标签不能因沿用 `textTertiary` 就省略对实际背景的可读性检查。
 
@@ -127,7 +133,7 @@ Display、正文和圆润标题均使用项目内置 Nunito，`disp`、`sans`、
 
 ## Shapes
 
-`SoftCard`、sheet 与 pill 使用上方记录的共享默认圆角。关于页品牌图标使用 16，模板列表项使用 16；这是既有调用方式，不应为了整齐而全部归一。sheet 只对顶部圆角处理。保留真实的 Phosphor 和已有 SVG path 图标；启动器前景使用 `assets/brand/enogym_foreground.png`，关于页使用同一前景加深色底，按显示尺寸解码。
+`SoftCard`、sheet 与 pill 使用上方记录的共享默认圆角。关于页品牌图标使用 16，模板列表项使用 16；这是既有调用方式，不应为了整齐而全部归一。sheet 只对顶部圆角处理。保留真实的 Phosphor 和已有 SVG path 图标；启动器前景使用 `assets/brand/enogym_foreground.png`，关于页、宽屏侧栏与月度回顾使用同一 `assets/brand/enogym_icon.png`，按显示尺寸解码。README 使用同一图像；通知与 Android 主题图标使用同轮廓的单色版本。
 
 ## Components
 
@@ -146,7 +152,7 @@ Display、正文和圆润标题均使用项目内置 Nunito，`disp`、`sans`、
 
 ### Do:
 - **Do** 沿用当前主题、Nunito、Phosphor 与现有共享组件，保持原训练、计时和成就界面的视觉连续性。
-- **Do** 保留 EnoGym / Enoch 身份、跑者 E 素材来源及原作者与原项目署名。
+- **Do** 保留 EnoGym / Enoch 身份、松绿跑者素材来源及原作者与原项目署名。
 - **Do** 对新必要文字按实际主题和背景检查可读性，并保留可访问名称与稳定操作定位。
 
 ### Don't:

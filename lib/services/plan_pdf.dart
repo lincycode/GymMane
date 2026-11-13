@@ -52,7 +52,7 @@ String _slug(String s) =>
     s.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '-').replaceAll(RegExp(r'^-+|-+$'), '');
 
 Future<Uint8List> buildPlanPdf(List<Routine> routines, {bool week = false, DateTime? now}) async {
-  final runner = await _loadImage('assets/img/runner.png');
+  final runner = await _loadImage(ownBrandMark);
   final arts = <String, ExerciseArtData>{};
   for (final r in routines) {
     for (final id in r.exerciseIds) {
@@ -537,23 +537,12 @@ class _PlanDoc {
   }
 
   void _logo(Canvas c, Rect r) {
-    c.drawRRect(RRect.fromRectAndRadius(r, Radius.circular(r.width * 0.24)), Paint()..color = const Color(0xFF0B0B0B));
+    c.drawRRect(RRect.fromRectAndRadius(r, Radius.circular(r.width * 0.24)), Paint()..color = const Color(ownBrandBackground));
     final src = Rect.fromLTWH(0, 0, runner.width.toDouble(), runner.height.toDouble());
-    final h = r.height * 0.72;
+    final h = r.height * 0.76;
     final w = h * src.width / src.height;
     final dst = Rect.fromCenter(center: r.center, width: w, height: h);
-    c.saveLayer(dst, Paint());
     c.drawImageRect(runner, src, dst, Paint()..filterQuality = FilterQuality.high);
-    c.drawRect(
-        dst,
-        Paint()
-          ..blendMode = BlendMode.srcIn
-          ..shader = const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFEBC1A3), Color(0xFFB98A6E)],
-          ).createShader(dst));
-    c.restore();
   }
 
   void paintPage(Canvas c, int index) {

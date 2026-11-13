@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-08T15:11:36.253030+00:00",
+  "generatedAt": "2026-11-13T09:45:00+00:00",
   "title": "Design System: EnoGym",
   "extensions": {
     "nativePlatform": {
@@ -122,22 +122,35 @@
         "source": "lib/widgets/ui_kit.dart; lib/screens/program_template_sheet.dart",
         "description": "共享顶部圆角与安全区；模板正文滚动，确认操作处于滚动区外。"
       }
-    ]
+    ],
+    "brand": {
+      "name": "Pine and Cream Runner",
+      "approvedOn": "2026-11-13",
+      "colors": {
+        "pine": "#103D2C",
+        "cream": "#FFF2D5"
+      },
+      "sourceOfTruth": "lib/app/own_build.dart",
+      "source": "assets/brand/enogym_pine_source.png",
+      "icon": "assets/brand/enogym_icon.png",
+      "generator": "scripts/generate_brand_assets.dart",
+      "scope": "Approved icon identity only; existing application theme preserved."
+    }
   },
   "components": [],
   "narrative": {
     "northStar": "延续 GymMane 的熟悉训练界面",
-    "overview": "EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用 Enoch 提供的米白跑者 E 与红色点缀；这次身份调整没有建立第二套视觉体系。\n\n本文件记录 `2.1.0-own.5` 已实现的共享规则，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。",
+    "overview": "EnoGym 延续原有的暖中性浅色、近黑深色、Nunito 字体、圆角内容面、Phosphor 图标与底部导航。个人品牌采用 Enoch 于 2026-11-13 选定的「松绿奶油」全身跑者，延续 GymMane 原始跑者的姿态，统一为松绿底与奶油色剪影。品牌变化不替换应用主题。\n\n共享界面规则延续现有实现；品牌图标于 2026-11-13 更新为「松绿奶油」，不定义全应用重新设计。主题以 [GymColors](lib/theme/app_colors.dart)、字体以 [AppTheme](lib/theme/app_theme.dart)、组件以 [ui_kit.dart](lib/widgets/ui_kit.dart) 为实现来源；冲突时先核对代码和真实渲染，再同步文档。上方 `px` 仅用于可移植格式，原生实现使用 Flutter logical pixels；字形大小还受应用文字缩放影响。",
     "keyCharacteristics": [
       "保留浅色、深色与 AMOLED 三套既有主题。",
-      "主操作使用黑白反差，铜色仍承担界面强调，图标使用米白与红色。",
+      "主操作使用黑白反差，铜色仍承担界面强调，图标独立使用松绿与奶油色。",
       "内容按圆角容器分组，浮层和底部导航保留原有层次。",
       "品牌图形与个人维护归属并存，原作者署名持续可见。"
     ],
     "rules": [
       {
         "name": "The Theme Roles Rule",
-        "body": "组件从当前 `context.gc` 取色；品牌 PNG 的米白与红色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。",
+        "body": "组件从当前 `context.gc` 取色；品牌 PNG 的松绿与奶油色不替换界面主题角色，也不要求深浅主题使用同一个十六进制值。",
         "section": "colors"
       },
       {
@@ -148,7 +161,7 @@
     ],
     "dos": [
       "Do 沿用当前主题、Nunito、Phosphor 与现有共享组件，保持原训练、计时和成就界面的视觉连续性。",
-      "Do 保留 EnoGym / Enoch 身份、跑者 E 素材来源及原作者与原项目署名。",
+      "Do 保留 EnoGym / Enoch 身份、松绿跑者素材来源及原作者与原项目署名。",
       "Do 对新必要文字按实际主题和背景检查可读性，并保留可访问名称与稳定操作定位。"
     ],
     "donts": [

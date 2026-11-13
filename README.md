@@ -1,4 +1,4 @@
-<img src="assets/brand/enogym_icon.png" width="96" alt="EnoGym 应用图标" />
+<img src="assets/brand/enogym_icon.png" width="96" height="96" alt="EnoGym 松绿奶油跑者图标" />
 
 # EnoGym
 

@@ -405,7 +405,7 @@ class _Sticker extends StatelessWidget {
 
   Widget _mark({double size = 12}) => Row(mainAxisSize: MainAxisSize.min, children: [
         Image.asset(
-          'assets/img/runner.png',
+          ownBrandMark,
           height: size + 5,
           color: color.withValues(alpha: 0.9),
           colorBlendMode: BlendMode.srcIn,

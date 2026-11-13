@@ -8,6 +8,8 @@ import 'package:flutter/rendering.dart' show RenderRepaintBoundary;
 import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import 'own_build.dart';
+
 import '../l10n/l10n.dart';
 import '../screens/about_screen.dart';
 import '../screens/ai_plan_screen.dart';
@@ -1330,11 +1332,11 @@ class _Sidebar extends StatelessWidget {
           child: Row(children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset('assets/img/app_icon.png', width: 34, height: 34, filterQuality: FilterQuality.medium),
+              child: Image.asset(ownBrandIcon, width: 34, height: 34, filterQuality: FilterQuality.medium, excludeFromSemantics: true),
             ),
             const SizedBox(width: 11),
             Expanded(
-              child: Text('GymMane',
+              child: Text(ownAppName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTheme.f(19, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.4)),
